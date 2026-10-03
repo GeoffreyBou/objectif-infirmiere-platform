@@ -21,3 +21,7 @@ add_action('show_user_profile', ['OI_Admin', 'user_packs']);
 add_action('edit_user_profile', ['OI_Admin', 'user_packs']);
 add_action('personal_options_update', ['OI_Admin', 'save_user']);
 add_action('edit_user_profile_update', ['OI_Admin', 'save_user']);
+require_once OI_DIR . 'includes/class-api.php';
+require_once OI_DIR . 'includes/class-app.php';
+add_action('rest_api_init', ['OI_API', 'register']);
+add_shortcode('objectif_infirmiere', ['OI_App', 'render']);

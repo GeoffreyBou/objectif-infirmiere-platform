@@ -1,0 +1,49 @@
+<?php
+defined('ABSPATH') || exit;
+final class OI_API {
+    public static function register(): void {
+        register_rest_route('oi/v1', '/catalog', ['methods' => 'GET', 'permission_callback' => '__return_true', 'callback' => [self::class, 'catalog']]);
+        foreach (['/fiches' => 'listing', '/fiches/(?P<id>\d+)' => 'fiche'] as $route => $callback) {
+            register_rest_route('oi/v1', $route, ['methods' => 'GET', 'permission_callback' => [self::class, 'auth'], 'callback' => [self::class, $callback]]);
+        }
+        add_filter('rest_post_dispatch', [self::class, 'private_response'], 10, 3);
+    }
+    public static function auth(): bool|WP_Error {
+        return is_user_logged_in() ? true : new WP_Error('oi_auth', 'Connectez-vous pour accéder à vos révisions.', ['status' => 401]);
+    }
+    public static function private_response($response, $server, $request) {
+        if (str_starts_with($request->get_route(), '/oi/v1/')) {
+            $response->header('Cache-Control', 'private, no-store, max-age=0');
+            $response->header('Vary', 'Cookie');
+        }
+        return $response;
+    }
+    public static function catalog(): array {
+        return array_map(fn($p) => ['id' => $p->ID, 'title' => $p->post_title, 'description' => wp_strip_all_tags($p->post_content), 'available' => (bool)get_post_meta($p->ID, 'oi_price', true)], get_posts(['post_type' => 'oi_pack', 'post_status' => 'publish', 'numberposts' => 100]));
+    }
+    public static function summary(WP_Post $p): array {
+        $terms = [];
+        foreach (OI_Model::TAX as $tax) {
+            $found = wp_get_post_terms($p->ID, 'oi_' . $tax);
+            $terms[$tax] = is_wp_error($found) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $found);
+        }
+        return ['id' => $p->ID, 'title' => $p->post_title, 'terms' => $terms, 'updated' => $p->post_modified_gmt];
+    }
+    public static function listing(WP_REST_Request $r): array {
+        $allowed = OI_Model::allowed(get_current_user_id());
+        $args = ['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => $allowed ?: [0], 'posts_per_page' => 20, 'paged' => max(1, absint($r['page'])), 'orderby' => 'title', 'order' => 'ASC'];
+        if ($r['q']) { $args['s'] = substr(sanitize_text_field($r['q']), 0, 150); }
+        if ($r['semestre']) { $args['tax_query'] = [['taxonomy' => 'oi_semestre', 'field' => 'term_id', 'terms' => absint($r['semestre'])]]; }
+        $query = new WP_Query($args);
+        $semesters = get_terms(['taxonomy' => 'oi_semestre', 'object_ids' => $allowed ?: [0], 'hide_empty' => true]);
+        return ['items' => array_map([self::class, 'summary'], $query->posts), 'total' => $query->found_posts, 'pages' => $query->max_num_pages, 'semesters' => is_wp_error($semesters) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $semesters)];
+    }
+    public static function fiche(WP_REST_Request $r): array|WP_Error {
+        $id = absint($r['id']);
+        if (!OI_Model::can_read(get_current_user_id(), $id)) { return new WP_Error('oi_forbidden', 'Cette fiche ne fait pas partie de vos accès.', ['status' => 403]); }
+        $post = get_post($id);
+        $related = get_posts(['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => OI_Model::allowed(get_current_user_id()), 'post__not_in' => [$id], 'posts_per_page' => 4, 'orderby' => 'title', 'order' => 'ASC']);
+        // Native blocks are rendered; no arbitrary shortcodes from protected content are executed.
+        return self::summary($post) + ['content' => wp_kses_post(do_blocks($post->post_content)), 'related' => array_map([self::class, 'summary'], $related)];
+    }
+}
