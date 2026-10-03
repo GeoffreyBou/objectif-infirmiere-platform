@@ -2,7 +2,7 @@
 
 ## Vérifié dans l'environnement local
 
-- WordPress 6.8.3 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.3.
+- WordPress 7.1.2 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.5. Les 68 assertions serveur et 12 tests navigateur ont été réexécutés avec succès après alignement sur la version OVH.
 - Plugin activé, désactivation/réactivation sans destruction des données, setup relancé sans réinstallation ni duplication des dix fiches.
 - Images officielles épinglées par digest, TLS et checksums conservés. Proxy HTTPS cloud et CA système utilisés par la configuration locale uniquement.
 - Syntaxe PHP de tous les fichiers et JavaScript vérifiée.
@@ -30,7 +30,7 @@ La production répond en HTTPS et annonce PHP 8.3. Le compte dev-agent est maint
 - Produit et prix TEST configurés, webhook réel joignable/relais CLI, achat TEST de bout en bout.
 - Compte et définition de mot de passe depuis un email réellement délivré ; SMTP OVH.
 - Réponse Responses/File Search réellement sourcée et consommation associée. Indexation réelle vérifiée, réponse refusée.
-- Compatibilité avec WordPress/thème/extensions OVH, règles de cache, cron et sauvegarde/restauration.
+- Comportement réel sur OVH : règles de cache, cron, configuration serveur et sauvegarde/restauration. La version WordPress et le thème actif ont été reproduits et testés en local.
 - Paiements production, remboursements/annulations et abonnements : non pris en charge dans cette version.
 - Validation éditoriale et référentiel IFSI officiel, médias premium, procédures RGPD spécifiques, tests Safari natif et charge/performances production.
 

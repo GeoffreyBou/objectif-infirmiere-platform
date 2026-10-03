@@ -30,4 +30,12 @@ if ! scripts/dc.sh run --rm cli wp core is-installed; then
   scripts/dc.sh run --rm cli wp option update home http://127.0.0.1:8080
   scripts/dc.sh run --rm cli wp option update siteurl http://127.0.0.1:8080
 fi
+# Named volumes can retain an older core when the pinned image changes.
+if [[ "$(scripts/dc.sh wp core version)" != "7.1.2" ]]; then
+  umask 077
+  scripts/dc.sh wp db export - > .runtime/pre-core-upgrade.sql
+  scripts/dc.sh wp core update --version=7.1.2
+  scripts/dc.sh wp core update-db
+  scripts/dc.sh wp core verify-checksums
+fi
 scripts/dc.sh run --rm cli wp plugin activate objectif-infirmiere

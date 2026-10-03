@@ -29,7 +29,7 @@ Reproduire la lecture avec `python3 scripts/inventory-ovh.py`. Le script privil�
 
 - Sauvegarde de la base et des fichiers, avec restauration vérifiable.
 - Correction HTTPS de siteurl et vérification du login, des médias et des redirections.
-- Compatibilité locale avec la version WordPress 7.1.2 : les tests du prototype ont été exécutés sur 6.8.3, pas encore sur cette version exacte.
+- Compatibilité locale vérifiée sur WordPress 7.1.2 et Twenty Twenty-Five 1.5 : 68 assertions serveur et 12 tests navigateur réussis. Cela ne remplace pas les vérifications de configuration OVH.
 - Limites PHP, base, cron, emails/SMTP et cache : pas entièrement accessibles par l'inventaire REST natif.
 - Méthode d'installation de l'archive propriétaire : l'accès API ne fournit pas d'accès au système de fichiers ni une sauvegarde intégrale. Installation ZIP depuis l'administration ou accès serveur sécurisé à organiser.
 

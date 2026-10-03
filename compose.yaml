@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 40
   wordpress:
-    image: wordpress:6.8.3-php8.3-apache@sha256:30bff39330d1693b0ce13d32fc9b7bb67193064f040b7d60d3494e136fa599d4
+    image: wordpress:7.1.2-php8.3-apache@sha256:d8987130fa95e2790668e20cc532603362b0bc95729310bfaf6ab7f12b35dc93
     ports: ["127.0.0.1:8080:80"]
     extra_hosts: ["${OI_PROXY_HOST:-oi-proxy-unused}:${OI_PROXY_IP:-127.0.0.1}"]
     depends_on:
