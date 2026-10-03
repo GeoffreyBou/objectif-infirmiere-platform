@@ -10,6 +10,19 @@ from pathlib import Path
 Path('.runtime/local.env').write_text('\n'.join(f'{k}={secrets.token_hex(24)}' for k in ['OI_LOCAL_DB_PASSWORD','OI_LOCAL_ROOT_PASSWORD','OI_LOCAL_ADMIN_PASSWORD'])+'\n')
 PY
 fi
+# Reuse the platform HTTPS proxy and system trust, without printing credentials.
+python3 - <<'PY_PROXY'
+import os,socket
+from pathlib import Path
+from urllib.parse import urlparse
+p=urlparse(os.environ.get('HTTPS_PROXY') or os.environ.get('HTTP_PROXY') or '')
+lines=[]
+if p.hostname:
+    lines=[f'OI_PROXY_HOST={p.hostname}',f'OI_PROXY_IP={socket.gethostbyname(p.hostname)}']
+Path('.runtime/proxy.env').write_text('\n'.join(lines)+'\n')
+Path('.runtime/cloud-trust.php').write_text("<?php\ndefined('ABSPATH') || exit;\nadd_filter('http_request_args', function ($args) { $args['sslcertificates']='/etc/ssl/certs/ca-certificates.crt'; return $args; });\n")
+Path('.runtime/cloud-trust.php').chmod(0o644)
+PY_PROXY
 scripts/dc.sh up -d --wait db wordpress
 if ! scripts/dc.sh run --rm cli wp core is-installed; then
   # Password remains in a local private file, never in tracked files or logs.

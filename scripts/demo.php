@@ -1,5 +1,6 @@
 <?php
 // Explicit demo installer, never run automatically on OVH.
+if (!in_array(wp_parse_url(get_option('siteurl'), PHP_URL_HOST), ['127.0.0.1', 'localhost'], true)) { throw new RuntimeException('Démonstration autorisée uniquement sur WordPress local.'); }
 if (get_option('oi_demo_seeded')) { echo "Démonstration déjà installée.\n"; return; }
 $topics = [
  ['Furosémide','Médicament','Le furosémide est un diurétique de l’anse. La surveillance porte notamment sur la diurèse, la pression artérielle et les paramètres prescrits.','Pourquoi surveiller la kaliémie sous furosémide ?',['Pour repérer une perte de potassium','Pour mesurer la glycémie'],[0],'La diurèse peut favoriser les pertes de potassium. Interpréter avec la situation clinique et les prescriptions.'],
