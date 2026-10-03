@@ -10,6 +10,7 @@
 defined('ABSPATH') || exit;
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
+require_once OI_DIR . 'includes/class-log.php';
 require_once OI_DIR . 'includes/class-model.php';
 require_once OI_DIR . 'includes/class-admin.php';
 register_activation_hook(__FILE__, ['OI_Model', 'activate']);
@@ -25,3 +26,11 @@ require_once OI_DIR . 'includes/class-api.php';
 require_once OI_DIR . 'includes/class-app.php';
 add_action('rest_api_init', ['OI_API', 'register']);
 add_shortcode('objectif_infirmiere', ['OI_App', 'render']);
+
+require_once OI_DIR . 'includes/class-storage.php';
+require_once OI_DIR . 'includes/class-limit.php';
+require_once OI_DIR . 'includes/class-stripe.php';
+add_action('rest_api_init', ['OI_Stripe', 'register']);
+add_action('init', function () { if ((int)get_option('oi_schema_version') !== 2) { OI_Storage::migrate(); } });
+
+add_action('after_password_reset', function ($user) { delete_user_meta($user->ID, 'oi_account_setup_pending'); });

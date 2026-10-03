@@ -25,13 +25,14 @@ final class OI_Model {
     public static function activate(): void {
         add_role('oi_etudiant', 'Étudiant Objectif Infirmière', ['read' => true]);
         self::register();
+        OI_Storage::migrate();
     }
     public static function ids(mixed $value): array {
         if (!is_array($value)) { return []; }
         return array_values(array_unique(array_filter(array_map('absint', $value))));
     }
     public static function packs(int $user): array {
-        return self::ids(get_user_meta($user, 'oi_packs', true));
+        return self::ids(array_merge(self::ids(get_user_meta($user, 'oi_packs', true)), class_exists('OI_Storage') ? OI_Storage::paid_packs($user) : []));
     }
     public static function allowed(int $user): array {
         if (!$user) { return []; }

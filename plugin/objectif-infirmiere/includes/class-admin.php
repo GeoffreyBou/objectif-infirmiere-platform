@@ -38,6 +38,10 @@ final class OI_Admin {
     public static function save_user(int $id): void {
         if (!current_user_can('manage_options') || !current_user_can('edit_user', $id) || !isset($_POST['oi_user_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['oi_user_nonce'])), 'oi_user_packs')) { return; }
         $packs = OI_Model::ids(explode(',', sanitize_text_field(wp_unslash($_POST['oi_packs'] ?? ''))));
-        update_user_meta($id, 'oi_packs', array_values(array_filter($packs, fn($pack) => get_post_type($pack) === 'oi_pack')));
+        $next = array_values(array_filter($packs, fn($pack) => get_post_type($pack) === 'oi_pack'));
+        $before = OI_Model::ids(get_user_meta($id, 'oi_packs', true));
+        update_user_meta($id, 'oi_packs', $next);
+        foreach (array_diff($next, $before) as $pack) { OI_Log::event('pack_granted_manual', ['user_id'=>$id, 'pack_id'=>$pack]); }
+        foreach (array_diff($before, $next) as $pack) { OI_Log::event('pack_revoked_manual', ['user_id'=>$id, 'pack_id'=>$pack]); }
     }
 }
