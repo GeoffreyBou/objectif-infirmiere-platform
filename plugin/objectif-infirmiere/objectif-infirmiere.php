@@ -38,6 +38,30 @@ add_action('save_post_oi_fiche', ['OI_AI', 'queue']);
 add_action('oi_sync_fiche', ['OI_AI', 'sync']);
 add_action('trashed_post', ['OI_AI', 'queue']);
 
+require_once OI_DIR . 'includes/class-revision.php';
+add_action('rest_api_init', ['OI_Revision', 'register']);
+require_once OI_DIR . 'includes/class-settings.php';
+add_action('admin_menu', ['OI_Settings', 'menu']);
+add_action('admin_init', ['OI_Settings', 'register']);
+add_action('admin_post_oi_sync', ['OI_Settings', 'sync']);
+add_action('add_meta_boxes', function () { add_meta_box('oi-quiz', 'Quiz de la fiche', ['OI_Settings', 'quiz_box'], 'oi_fiche'); });
+add_action('save_post_oi_fiche', ['OI_Settings', 'save_quiz']);
+add_filter('template_include', function ($template) {
+    if (is_singular('page') && trim(get_post()->post_content) === '[objectif_infirmiere]') {
+        return OI_DIR . 'templates/app.php';
+    }
+    return $template;
+});
 
 add_filter('pre_delete_post', ['OI_AI', 'before_delete'], 10, 2);
+
+add_filter('show_admin_bar', function ($show) { return in_array('oi_etudiant', wp_get_current_user()->roles, true) ? false : $show; });
+add_action('admin_init', function () {
+    if (!wp_doing_ajax() && in_array('oi_etudiant', wp_get_current_user()->roles, true)) { wp_safe_redirect(home_url('/')); exit; }
+});
+
 add_action('after_password_reset', function ($user) { delete_user_meta($user->ID, 'oi_account_setup_pending'); });
+
+add_action('updated_post_meta', function ($meta_id, $post_id, $key, $value) {
+    if ($key === 'oi_ai_status' && str_ends_with((string)$value, '_failed')) { OI_Log::event('ai_sync_error', ['fiche_id'=>$post_id]); }
+}, 10, 4);

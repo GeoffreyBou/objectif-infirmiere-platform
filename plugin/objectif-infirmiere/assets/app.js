@@ -5,9 +5,15 @@
   const view = document.querySelector('#oi-view');
   const catalog = document.querySelector('#oi-catalog');
   let page = 1;
+  let favoritesOnly = false;
   let activeFiche = null;
   const api = async (path, data) => {
-    const response = await fetch(OI.api + path, {credentials:'same-origin', headers:{'X-WP-Nonce':OI.nonce, ...(data ? {'Content-Type':'application/json'} : {})}, ...(data ? {method:'POST',body:JSON.stringify(data)} : {})});
+    const [route, query=''] = path.split('?');
+    const url = new URL(OI.api, window.location.href);
+    if (url.searchParams.has('rest_route')) url.searchParams.set('rest_route', url.searchParams.get('rest_route') + route);
+    else url.pathname += route;
+    for (const [key,value] of new URLSearchParams(query)) url.searchParams.set(key,value);
+    const response = await fetch(url, {credentials:'same-origin', headers:{'X-WP-Nonce':OI.nonce, ...(data ? {'Content-Type':'application/json'} : {})}, ...(data ? {method:'POST',body:JSON.stringify(data)} : {})});
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || 'Une erreur est survenue. Réessayez.');
     return result;
@@ -16,11 +22,13 @@
   const card = item => `<button class="oi-card" data-fiche="${Number(item.id)}"><span class="oi-eyebrow">${esc(item.terms?.semestre?.map(t=>t.name).join(' · ') || 'FICHE DE RÉVISION')}</span><h3>${esc(item.title)}</h3><span>Ouvrir la fiche →</span></button>`;
   async function dashboard() {
     activeFiche = null;
+    favoritesOnly = false;
+    page = 1;
     const data = await api('fiches');
-    view.innerHTML = `<section class="oi-welcome"><span class="oi-eyebrow">MON ESPACE ÉTUDIANT</span><h1>Bonjour ${esc(OI.name)}.</h1><p>Avancez à votre rythme, une notion à la fois.</p></section><div id="oi-progress"></div><nav class="oi-tabs"><button data-home>Mes fiches</button><button data-favorites>Mes favoris</button><button data-ai>Conseiller IA</button></nav><form id="oi-search" class="oi-search"><label for="oi-query">Rechercher dans mes fiches</label><div><input id="oi-query" type="search" placeholder="Une notion, un médicament…" maxlength="150"><button>Rechercher</button></div><label for="oi-semester">Semestre</label><select id="oi-semester"><option value="">Tous les semestres</option>${data.semesters.map(s=>`<option value="${Number(s.id)}">${esc(s.name)}</option>`).join('')}</select></form><p id="oi-status" role="status"></p><div id="oi-results" class="oi-grid">${data.items.map(card).join('') || '<p>Aucune fiche accessible. Votre pack sera visible après confirmation de votre achat.</p>'}</div><div id="oi-pagination"></div><div id="oi-catalog"></div>`;
+    view.innerHTML = `<section class="oi-welcome"><span class="oi-eyebrow">MON ESPACE ÉTUDIANT</span><h1>Bonjour ${esc(OI.name)}.</h1><p>Avancez à votre rythme, une notion à la fois.</p></section><div id="oi-progress"></div><p class="oi-muted">Mes accès : ${data.packs.map(p=>esc(p.title)).join(', ') || 'Aucun pack actif'}</p><nav class="oi-tabs"><button data-home>Mes fiches</button><button data-favorites>Mes favoris</button><button data-ai>Conseiller IA</button></nav><form id="oi-search" class="oi-search"><label for="oi-query">Rechercher dans mes fiches</label><div><input id="oi-query" type="search" placeholder="Une notion, un médicament…" maxlength="150"><button>Rechercher</button></div><label for="oi-semester">Semestre</label><select id="oi-semester"><option value="">Tous les semestres</option>${data.semesters.map(s=>`<option value="${Number(s.id)}">${esc(s.name)}</option>`).join('')}</select></form><p id="oi-status" role="status"></p><div id="oi-results" class="oi-grid">${data.items.map(card).join('') || '<p>Aucune fiche accessible. Votre pack sera visible après confirmation de votre achat.</p>'}</div><div id="oi-pagination"></div><div id="oi-catalog"></div>`;
     pagination(data);
     if (data.progress) progress(data.progress);
-    document.querySelector('#oi-search').addEventListener('submit', e=>{e.preventDefault(); page=1; search().catch(error);});
+    document.querySelector('#oi-search').addEventListener('submit', e=>{e.preventDefault(); page=1; favoritesOnly=false; search().catch(error);});
     showCatalog(document.querySelector('#oi-catalog')).catch(error);
   }
   function progress(p) {
@@ -29,7 +37,7 @@
   function pagination(data) {
     document.querySelector('#oi-pagination').innerHTML = `<p>${Number(data.total)} fiches · Page ${page} / ${Math.max(1,Number(data.pages))}</p>${page>1?'<button data-page="-1">Précédent</button>':''}${page<data.pages?'<button data-page="1">Suivant</button>':''}`;
   }
-  async function search(favorites=false) {
+  async function search(favorites=favoritesOnly) {
     const q = document.querySelector('#oi-query')?.value || '';
     const semester = document.querySelector('#oi-semester')?.value || '';
     const data = await api(`fiches?page=${page}&q=${encodeURIComponent(q)}&semestre=${encodeURIComponent(semester)}${favorites?'&favorites=1':''}`);
@@ -82,11 +90,14 @@
       if (b.hasAttribute('data-home')) await dashboard();
       if (b.dataset.fiche) await fiche(Number(b.dataset.fiche));
       if (b.dataset.page) {page+=Number(b.dataset.page);await search();}
-      if (b.hasAttribute('data-favorites')) {page=1;await search(true);}
+      if (b.hasAttribute('data-favorites')) {page=1;favoritesOnly=true;await search(true);}
       if (b.hasAttribute('data-ai')) chat();
       if (b.dataset.state && activeFiche) {
-        await api(`fiches/${activeFiche.id}/state`,{field:b.dataset.state,value:!activeFiche.state?.[b.dataset.state]});
-        await fiche(activeFiche.id);
+        b.disabled=true;
+        try {
+          await api(`fiches/${activeFiche.id}/state`,{field:b.dataset.state,value:!activeFiche.state?.[b.dataset.state]});
+          await fiche(activeFiche.id);
+        } finally { b.disabled=false; }
       }
       if (b.dataset.buy) {
         b.disabled=true;
