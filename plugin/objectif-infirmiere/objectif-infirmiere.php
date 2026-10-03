@@ -32,5 +32,12 @@ require_once OI_DIR . 'includes/class-limit.php';
 require_once OI_DIR . 'includes/class-stripe.php';
 add_action('rest_api_init', ['OI_Stripe', 'register']);
 add_action('init', function () { if ((int)get_option('oi_schema_version') !== 2) { OI_Storage::migrate(); } });
+require_once OI_DIR . 'includes/class-ai.php';
+add_action('rest_api_init', ['OI_AI', 'register']);
+add_action('save_post_oi_fiche', ['OI_AI', 'queue']);
+add_action('oi_sync_fiche', ['OI_AI', 'sync']);
+add_action('trashed_post', ['OI_AI', 'queue']);
 
+
+add_filter('pre_delete_post', ['OI_AI', 'before_delete'], 10, 2);
 add_action('after_password_reset', function ($user) { delete_user_meta($user->ID, 'oi_account_setup_pending'); });
