@@ -10,4 +10,4 @@
 - Favoris, consultations, progression, quiz corrigés côté serveur et watermark minimal.
 - Tests serveur et navigateur, configuration locale Docker, archive plugin et guide OVH/Stripe/OpenAI.
 
-Les tests automatisés utilisent des API simulées. Validation réelle supplémentaire : Stripe authentifié TEST ; dix documents indexés dans OpenAI. Responses est refusé avec 401 invalid_api_key sur le binding réseau, réponse réelle non validée. Aucune installation OVH ni activation des paiements production.
+Les tests automatisés utilisent des API simulées. Validation réelle supplémentaire : Stripe authentifié TEST, prix de 39 EUR configuré et Checkout réel créé ; dix documents indexés dans OpenAI. Responses est refusé avec 401 invalid_api_key sur le binding réseau, réponse réelle non validée. Aucune installation OVH ni activation des paiements production.

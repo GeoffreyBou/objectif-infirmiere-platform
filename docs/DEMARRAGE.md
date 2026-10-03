@@ -9,6 +9,8 @@
 5. Dans les paramètres sécurisés de l'environnement cloud, fournissez cette clé pour le secret `OI_STRIPE_SECRET_KEY`. Ne partagez pas sa valeur dans le chat.
 6. Dans le catalogue Stripe de ce même environnement test, créez un produit et un prix ponctuel. Copiez les identifiants `prod_…` et `price_…` dans le pack WordPress, pas dans le code. Le prix facturé est toujours celui de Stripe.
 
+Le pack local de démonstration est désormais associé au prix TEST `price_1UMTv1GTCUb35N377JAmJRo1` (39 EUR), produit `prod_VNENG1CFfM706H`. La création Checkout réelle a réussi. Ces identifiants ne sont pas des secrets ; ils restent configurables dans le pack, sans modification de la logique du plugin.
+
 ## 2. OpenAI — clé API
 
 1. Connectez-vous à https://platform.openai.com/ et sélectionnez votre projet.
