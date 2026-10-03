@@ -25,3 +25,12 @@ Première correction simple à tenter par le propriétaire : WordPress → Régl
 Extensions installées/actives et versions, version administrative WordPress, thème actif et parent, limites PHP, base de données, cron, configuration emails, cache, sauvegarde et restaurabilité. Ne pas considérer l'inventaire terminé sur la seule base des informations publiques.
 
 Aucun plugin installé/activé, aucune configuration du site, aucun contenu et aucune donnée distante modifiés durant cet inventaire.
+
+
+## Après réenregistrement des permaliens
+
+La route `/wp-json/wp/v2/users/me` répond maintenant en JSON WordPress, sans 404. L'authentification retourne toujours HTTP 401 `rest_not_logged_in`, comme avec `/index.php/wp-json/`. Les permaliens ont donc rétabli la route standard sans résoudre l'authentification.
+
+Prochaine vérification : transmettre l'en-tête HTTP Basic complet dans le secret réseau `OI_WP_AUTHORIZATION`, plutôt qu'encoder localement un mot de passe pouvant être un placeholder du proxy. Il s'agit d'une hypothèse à tester, pas d'une cause confirmée. Le fichier local `docs/outils/preparer-acces-wordpress.html` prépare cet en-tête sans réseau ni stockage. Le résultat est un identifiant sensible à renseigner uniquement dans les secrets sécurisés, jamais dans le chat.
+
+Le script `python3 scripts/inventory-ovh.py` utilise directement ce nouveau binding, ou l'ancien en fallback. Il ne fait que des GET, refuse les redirections et conserve la vérification TLS. Il filtre les réponses pour ne pas afficher les emails, mots de passe ou en-têtes d'authentification. Aucune configuration distante n'est modifiée par ce script.
