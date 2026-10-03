@@ -16,6 +16,7 @@ test('connexion, recherche, lecture, favoris, révision, quiz et panne IA',async
  const revised=page.locator('[data-state="revised"]');if(await revised.getAttribute('aria-pressed')!=='true'){await revised.click();}await expect(revised).toHaveAttribute('aria-pressed','true');
  await page.locator('#oi-quiz-form input[value="0"]').check();await page.getByRole('button',{name:'Voir ma correction'}).click();await expect(page.locator('#oi-quiz-result')).toContainText('1 / 1');
  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1);expect(overflow).toBeFalsy();
+ await page.route(url=>url.pathname.endsWith('/oi/v1/ai') || url.searchParams.get('rest_route')==='/oi/v1/ai',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({code:'oi_ai_config',message:'Le Conseiller IA n’est pas encore configuré. Vos fiches restent accessibles.'})}));
  await page.getByRole('button',{name:'Poser une question sur cette fiche'}).click();await page.locator('#oi-question').fill('Pourquoi surveiller la kaliémie ?');await page.getByRole('button',{name:'Poser ma question',exact:true}).click();await expect(page.locator('#oi-status')).toContainText('pas encore configuré');
  await page.getByRole('button',{name:'Mes révisions',exact:false}).click();await expect(page.locator('#oi-results .oi-card')).toHaveCount(10);
  await page.getByRole('button',{name:'Mes favoris'}).click();await expect(page.locator('#oi-results .oi-card')).toHaveCount(1);

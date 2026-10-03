@@ -2,7 +2,7 @@
 
 Prototype WordPress propriétaire : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
 
-Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Aucun déploiement distant effectué. Aucun paiement réel ni appel OpenAI réel validé tant que les secrets ne sont pas injectés.
+Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Aucun déploiement distant effectué. Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Aucun paiement complet ni réponse Responses réelle validé : pas de prix Stripe TEST ni secret webhook, et Responses refuse la clé via le proxy (401 invalid_api_key).
 
 ## Démarrage local
 

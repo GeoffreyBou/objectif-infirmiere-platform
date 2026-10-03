@@ -12,11 +12,13 @@
 - Permissions : pas de contenu sans pack, brouillon interdit, autre étudiant refusé, native REST absent, nonce absent/falsifié refusé, URL directe sans fuite du corps de fiche, cache privé sans stockage.
 - Paiement : HMAC falsifié/expiré, non payé, mauvais prix, session live et pack invalide rejetés ; compte créé, second achat sans doublon, rejeu sans seconde transaction. Transport Stripe et email simulés, aucune carte débitée.
 - IA : upload/association/indexation, remplacement, reprise après erreur d'association sans duplication, filtre par document autorisé et hash courant, citation étrangère rejetée, quota atomique, erreurs API et indépendance des fiches. Transport OpenAI simulé, pas de réponse médicale réelle validée.
-- Connectivité HTTPS de WordPress local vers Stripe vérifiée par réponse 401 sans authentification, avec TLS activé. Ne prouve pas l'accès d'une clé.
+- Authentification Stripe réelle avec la clé réseau fournie : Balance confirme `livemode=false` (TEST) ; liste Prices accessible, zéro prix dans cet environnement.
+- Authentification OpenAI réelle sur Models, Files et Vector Stores : `gpt-4.1-mini` disponible ; vector store local créé avec expiration après 7 jours d’inactivité, 10 fichiers réellement indexés (`completed=10`, `failed=0`).
+- Responses réellement essayé avec une question contextualisée et une requête minimale : `401 invalid_api_key`. Même erreur depuis WordPress et Python hors Docker, alors que Models et Vector Stores continuent de fonctionner. Blocage de génération externe, pas diagnostiqué comme un défaut de l’interface ni comme simple droit manquant. Ne pas demander automatiquement une deuxième clé : vérifier l’application du binding/proxy et la validité de la clé sur Responses.
 
 ## Corrigé lors des tests
 
-Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténation naïve d'un deuxième `?` pour les paramètres de recherche. La construction utilise désormais URL/URLSearchParams pour les deux configurations WordPress. Les tests HTTP du navigateur exercent cette forme réelle.
+Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténation naïve d'un deuxième `?` pour les paramètres de recherche. La construction utilise désormais URL/URLSearchParams pour les deux configurations WordPress. Les tests HTTP du navigateur exercent cette forme réelle. Le test de panne IA intercepte sa réponse dans le navigateur pour rester déterministe sans appels facturés ; les tests serveur et l’essai réel distinct documentent l’intégration.
 
 ## Observation publique OVH
 
@@ -24,10 +26,10 @@ La production https://app-dev.objectif-infirmiere.fr/ répond en HTTPS, annonce 
 
 ## Restant à valider avant commercialisation
 
-- Secrets effectivement injectés dans le runtime, authentification et droits Stripe/OpenAI réels.
+- Secret HMAC webhook réel et prix Stripe TEST ; autorisation/propagation du binding OpenAI sur Responses.
 - Produit et prix TEST configurés, webhook réel joignable/relais CLI, achat TEST de bout en bout.
 - Compte et définition de mot de passe depuis un email réellement délivré ; SMTP OVH.
-- Vector Store du projet, indexation réelle, réponse File Search réellement sourcée et coûts.
+- Réponse Responses/File Search réellement sourcée et consommation associée. Indexation réelle vérifiée, réponse refusée.
 - Compatibilité avec WordPress/thème/extensions OVH, règles de cache, cron et sauvegarde/restauration.
 - Paiements production, remboursements/annulations et abonnements : non pris en charge dans cette version.
 - Validation éditoriale et référentiel IFSI officiel, médias premium, procédures RGPD spécifiques, tests Safari natif et charge/performances production.

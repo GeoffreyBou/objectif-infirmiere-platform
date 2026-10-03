@@ -16,7 +16,7 @@
 3. Ouvrez https://platform.openai.com/api-keys puis Create new secret key.
 4. La clé doit permettre Responses, l'upload/suppression Files et la création/gestion Vector Stores. Si vous utilisez une clé restreinte, ces opérations doivent être autorisées.
 5. Enregistrez sa valeur dans le secret cloud `OI_OPENAI_API_KEY`, jamais dans le chat.
-6. Créez un Vector Store dans le projet OpenAI, renseignez son ID `vs_…` dans Objectif Infirmière → Réglages. Le modèle par défaut est `gpt-4.1-mini`, modifiable. Vérifier sa disponibilité dans votre projet.
+6. Un Vector Store dédié aux dix fiches locales a déjà été créé et renseigné pendant la validation (expiration après 7 jours d’inactivité). Pour la production autorisée, créer un Vector Store distinct dans le projet OpenAI, renseigner son ID `vs_…` dans Objectif Infirmière → Réglages. Le modèle par défaut est `gpt-4.1-mini`, modifiable. Vérifier sa disponibilité dans votre projet.
 7. Lancez la synchronisation depuis Objectif Infirmière → IA et synchronisation. Attendez l'état `completed` pour les fiches. WP-Cron doit tourner régulièrement.
 
 Les clés créées dans Stripe/OpenAI doivent également être enregistrées dans la configuration sécurisée de l'environnement : leur création n'injecte pas leur valeur automatiquement. Les bindings réseau sont destinés à `api.stripe.com` et `api.openai.com`. Si des valeurs sont remplacées par le proxy, celui-ci doit aussi être accessible depuis le runtime WordPress local ; vérifier cela sans afficher les clés.

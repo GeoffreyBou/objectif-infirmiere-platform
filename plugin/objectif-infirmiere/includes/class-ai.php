@@ -12,7 +12,7 @@ final class OI_AI {
         $code = wp_remote_retrieve_response_code($response);
         if ($method === 'DELETE' && $code === 404) { return ['deleted'=>true]; }
         $data = json_decode(wp_remote_retrieve_body($response),true);
-        if ($code>=300 || !is_array($data)) { OI_Log::event('openai_response_error'); return new WP_Error('oi_ai_response','La demande IA n’a pas abouti. Vos fiches restent accessibles.',['status'=>502,'upstream_status'=>$code]); }
+        if ($code>=300 || !is_array($data)) { if ($code !== 404) { OI_Log::event('openai_response_error'); } return new WP_Error('oi_ai_response','La demande IA n’a pas abouti. Vos fiches restent accessibles.',['status'=>502,'upstream_status'=>$code]); }
         return $data;
     }
     public static function hash(int $id): string {
@@ -24,6 +24,7 @@ final class OI_AI {
         if (!wp_next_scheduled('oi_sync_fiche',[$id])) { wp_schedule_single_event(time()+5,'oi_sync_fiche',[$id]); }
     }
     public static function sync(int $id): void {
+        if (get_post_type($id) !== 'oi_fiche') { return; }
         $store = get_option('oi_vector_store','');
         if (!$store || !OI_Stripe::secret('OI_OPENAI_API_KEY')) { update_post_meta($id,'oi_ai_status','configuration_missing'); return; }
         global $wpdb;

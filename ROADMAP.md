@@ -17,7 +17,7 @@ Pas d'installation WordPress existante ni d'accès à la production OVH dans l'e
 - Lot 1 : implémenté et validé localement (16 assertions).
 - Lot 2 : implémenté et validé localement (8 assertions + parcours navigateur).
 - Lot 3 : implémenté en TEST ; 15 assertions avec Stripe/email simulés. Achat réel et email délivré en attente.
-- Lot 4 : implémenté ; 16 assertions avec OpenAI simulé. Indexation et réponse réelles en attente de clé/projet/vector store.
+- Lot 4 : implémenté ; 16 assertions avec OpenAI simulé. Indexation réelle des 10 fiches vérifiée ; Responses bloqué par 401 invalid_api_key via le binding/proxy, à résoudre avant validation de la réponse.
 - Lot 5 : implémenté et validé localement (13 assertions + navigateur).
 - Lot 6 : contrôles syntaxe/permissions/nonces/cache/responsive, packaging et documentation faits. Audit de charge, conformité RGPD, média premium, Safari réel et compatibilité production restant à réaliser.
 
