@@ -13,13 +13,14 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None  # Never forward credentials to a different URL.
 
 def main():
-    authorization = os.environ.get('OI_WP_AUTHORIZATION', '')
-    if not authorization:
-        password = os.environ.get('OI_WP_APPLICATION_PASSWORD', '')
-        if not password:
-            print('Accès WordPress non configuré.')
-            return 2
+    password = os.environ.get('OI_WP_APPLICATION_PASSWORD', '')
+    if password:
         authorization = 'Basic ' + base64.b64encode(('dev-agent:' + password).encode()).decode()
+    else:
+        authorization = os.environ.get('OI_WP_AUTHORIZATION', '')
+    if not authorization:
+        print('Accès WordPress non configuré.')
+        return 2
     opener = urllib.request.build_opener(NoRedirect)
 
     def read(path):

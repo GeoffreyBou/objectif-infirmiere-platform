@@ -20,9 +20,9 @@
 
 Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténation naïve d'un deuxième `?` pour les paramètres de recherche. La construction utilise désormais URL/URLSearchParams pour les deux configurations WordPress. Les tests HTTP du navigateur exercent cette forme réelle. Le test de panne IA intercepte sa réponse dans le navigateur pour rester déterministe sans appels facturés ; les tests serveur et l’essai réel distinct documentent l’intégration.
 
-## Observation publique OVH
+## Inventaire OVH authentifié
 
-La production https://app-dev.objectif-infirmiere.fr/ répond en HTTPS, annonce PHP 8.3 et expose le thème Twenty Twenty-Five dans son HTML. Sa balise publique annonce WordPress 7.1.2 ; cela doit être confirmé depuis l'administration. Aucun accès administratif, shell ou DB fourni, aucun fichier distant modifié. L'inventaire des extensions privées et la compatibilité exacte de cette installation ne sont pas encore établis.
+La production répond en HTTPS et annonce PHP 8.3. Le compte dev-agent est maintenant authentifié administrateur via le mot de passe d'application corrigé. WordPress 7.1.2 confirmé par wp.getOptions, thème actif Twenty Twenty-Five 1.5, Akismet 5.7 et Hello Dolly 1.7.2 installés mais inactifs. REST users/me, plugins, themes et settings lus avec succès. Siteurl est HTTP tandis que home est HTTPS ; Santé du site signale cette incohérence. Voir docs/INVENTAIRE-OVH.md. Aucun fichier, réglage, plugin ou contenu distant modifié.
 
 ## Restant à valider avant commercialisation
 
