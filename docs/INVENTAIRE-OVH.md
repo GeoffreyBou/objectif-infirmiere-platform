@@ -1,4 +1,4 @@
-# Inventaire OVH — accès administratif validé
+# Inventaire OVH — application de revue déployée
 
 Site de production : https://app-dev.objectif-infirmiere.fr/.
 Compte : `dev-agent`, rôle administrator et capacité manage_options confirmés via REST. Authentification HTTP Basic valide avec le secret réseau OI_WP_APPLICATION_PASSWORD. Aucun secret stocké dans le dépôt.
@@ -11,13 +11,13 @@ Compte : `dev-agent`, rôle administrator et capacité manage_options confirmés
 | PHP | 8.3 annoncé par le serveur ; patch non exposé |
 | Thème actif | Twenty Twenty-Five 1.5, sans thème enfant |
 | Autres thèmes | Twenty Twenty-Four 1.5 et Twenty Twenty-Three 1.6, inactifs |
-| Extensions | Akismet 5.7 et Hello Dolly 1.7.2, tous deux inactifs |
+| Extensions | Objectif Infirmière 0.1.0 et UpdraftPlus 1.26.8 actifs ; Akismet et Hello Dolly inactifs |
 | REST | /wp-json/ et /index.php/wp-json/ répondent ; lecture authentifiée de users/me, plugins, themes et settings réussie |
-| Adresse WordPress (siteurl) | http://app-dev.objectif-infirmiere.fr |
+| Adresse WordPress (siteurl) | https://app-dev.objectif-infirmiere.fr |
 | Adresse du site (home) | https://app-dev.objectif-infirmiere.fr |
 | Fuseau horaire | Chaîne vide, décalage UTC 0 |
 
-Le test natif Santé du site `https-status` répond recommended, « Votre site n’utilise pas HTTPS ». Le transport public est bien HTTPS, mais siteurl reste configuré en HTTP. Avant installation et paiements, prévoir la correction de l'adresse WordPress vers HTTPS après sauvegarde ; home est déjà HTTPS. Rien n'a été changé à distance durant l'inventaire.
+L’adresse WordPress a été corrigée en HTTPS après sauvegarde. L’application de revue est désormais la page d’accueil, avec dix fiches de démonstration. Voir [Revue produit](REVUE-PRODUIT.md) pour le parcours et les limites de cette livraison.
 
 ## Authentification résolue
 
@@ -25,12 +25,15 @@ Le mot de passe d'application initial avait été créé sur un autre compte. Ap
 
 Reproduire la lecture avec `python3 scripts/inventory-ovh.py`. Le script privilégie OI_WP_APPLICATION_PASSWORD ; l'en-tête complet n'est qu'un fallback historique. Redirections refusées, TLS vérifié, sorties limitées aux informations d'inventaire. Pas d'email, mot de passe ni en-tête d'authentification affiché.
 
-## À préparer avant intervention de production
+## Livraison de revue
 
-- Sauvegarde de la base et des fichiers, avec restauration vérifiable.
-- Correction HTTPS de siteurl et vérification du login, des médias et des redirections.
-- Compatibilité locale vérifiée sur WordPress 7.1.2 et Twenty Twenty-Five 1.5 : 68 assertions serveur et 12 tests navigateur réussis. Cela ne remplace pas les vérifications de configuration OVH.
-- Limites PHP, base, cron, emails/SMTP et cache : pas entièrement accessibles par l'inventaire REST natif.
-- Méthode d'installation de l'archive propriétaire : l'accès API ne fournit pas d'accès au système de fichiers ni une sauvegarde intégrale. Installation ZIP depuis l'administration ou accès serveur sécurisé à organiser.
+L’accès REST administrateur a permis de créer un compte technique temporaire, puis une session d’administration classique pour installer les ZIP. UpdraftPlus a sauvegardé la base et les cinq catégories de contenus avant l’installation de l’application ; copies téléchargées en stockage privé et archives vérifiées. Le compte technique et l’extension temporaire de préparation sont supprimés après validation.
 
-Le plugin Objectif Infirmière n'est pas installé sur OVH. Aucun plugin activé, aucune configuration, aucun contenu ni donnée distante modifiés.
+La connexion SSH directe a été refusée depuis l’environnement cloud. Le secret réseau SSH n’est pas une injection de mot de passe exploitable par SSH ; aucune connexion SSH authentifiée n’a été réalisée.
+
+## Restant avant commercialisation
+
+- Validation pédagogique des contenus ; les dix fiches sont des exemples de revue.
+- Configuration des secrets sur OVH, email réellement délivré, achat Stripe TEST complet, réponse OpenAI sourcée réelle.
+- Restauration isolée complète, configuration serveur, limites PHP, cron et cache à qualifier.
+- La sauvegarde UpdraftPlus utilisée couvre la base et wp-content, pas le cœur WordPress ni toute la configuration d’hébergement.

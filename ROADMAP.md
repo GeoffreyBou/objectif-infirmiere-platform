@@ -10,7 +10,7 @@ Lots réalisés progressivement, chacun avec validation avant commit.
 6. Audit : tests permissions/parcours, responsive, documentation, sauvegarde et déploiement OVH.
 
 ## Blocages externes initiaux
-Pas d'installation WordPress existante ni d'accès à la production OVH dans l'environnement. Aucun secret Stripe/OpenAI fourni. Ne pas déclarer le parcours final validé avant paiements TEST et réponses sourcées réels.
+L’application de revue est installée sur WordPress OVH. Les secrets Stripe/OpenAI cloud ont permis des validations locales partielles ; leur configuration serveur reste à effectuer. Ne pas déclarer le parcours final validé avant paiements TEST et réponses sourcées réels.
 
 ## État du prototype local
 
@@ -21,4 +21,4 @@ Pas d'installation WordPress existante ni d'accès à la production OVH dans l'e
 - Lot 5 : implémenté et validé localement (13 assertions + navigateur).
 - Lot 6 : contrôles syntaxe/permissions/nonces/cache/responsive, packaging et documentation faits. Audit de charge, conformité RGPD, média premium, Safari réel et compatibilité production restant à réaliser.
 
-Pas d'environnement de staging distant : production cible `https://app-dev.objectif-infirmiere.fr/`. Aucune action de déploiement effectuée. Le critère final n'est pas encore validé ; attendre les bindings API et préparer l'inventaire OVH et la sauvegarde.
+Pas d'environnement de staging distant : production cible `https://app-dev.objectif-infirmiere.fr/`. Première version déployée après inventaire et sauvegarde des contenus : dix fiches, favoris, progression et quiz à revoir sur le site. Le critère final achat TEST et réponse IA sourcée réelle reste à valider.

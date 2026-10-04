@@ -2,11 +2,11 @@
 
 ## Vérifié dans l'environnement local
 
-- WordPress 7.1.2 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.5. Les 68 assertions serveur et 12 tests navigateur ont été réexécutés avec succès après alignement sur la version OVH.
+- WordPress 7.1.2 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.5. Les 69 assertions serveur et 12 tests navigateur ont été réexécutés avec succès après alignement sur la version OVH.
 - Plugin activé, désactivation/réactivation sans destruction des données, setup relancé sans réinstallation ni duplication des dix fiches.
 - Images officielles épinglées par digest, TLS et checksums conservés. Proxy HTTPS cloud et CA système utilisés par la configuration locale uniquement.
 - Syntaxe PHP de tous les fichiers et JavaScript vérifiée.
-- 68 assertions serveur exécutées dans WordPress réel : socle 16, expérience 8, Stripe 15, IA 16, révision 13.
+- 69 assertions serveur exécutées dans WordPress réel : socle 16, expérience 9, Stripe 15, IA 16, révision 13.
 - 12 tests Playwright Chromium réussis : parcours étudiant, routes anonymes, nonces/cache/URL ; chacun sur 390×844, 412×915, 820×1180 et 1920×1080. Émulation de taille et tactile, pas une validation matérielle Safari iOS/Android.
 - Parcours connexion → recherche → fiche → favori → révisée → quiz → erreur IA maîtrisée → favoris.
 - Permissions : pas de contenu sans pack, brouillon interdit, autre étudiant refusé, native REST absent, nonce absent/falsifié refusé, URL directe sans fuite du corps de fiche, cache privé sans stockage.
@@ -20,9 +20,11 @@
 
 Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténation naïve d'un deuxième `?` pour les paramètres de recherche. La construction utilise désormais URL/URLSearchParams pour les deux configurations WordPress. Les tests HTTP du navigateur exercent cette forme réelle. Le test de panne IA intercepte sa réponse dans le navigateur pour rester déterministe sans appels facturés ; les tests serveur et l’essai réel distinct documentent l’intégration.
 
-## Inventaire OVH authentifié
+## Livraison OVH de revue
 
-La production répond en HTTPS et annonce PHP 8.3. Le compte dev-agent est maintenant authentifié administrateur via le mot de passe d'application corrigé. WordPress 7.1.2 confirmé par wp.getOptions, thème actif Twenty Twenty-Five 1.5, Akismet 5.7 et Hello Dolly 1.7.2 installés mais inactifs. REST users/me, plugins, themes et settings lus avec succès. Siteurl est HTTP tandis que home est HTTPS ; Santé du site signale cette incohérence. Voir docs/INVENTAIRE-OVH.md. Aucun fichier, réglage, plugin ou contenu distant modifié.
+WordPress 7.1.2, PHP 8.3, Twenty Twenty-Five 1.5. Application 0.1.0 installée et activée après sauvegarde de la base et des contenus, dix fiches et un pack de démonstration créés, page d’accueil de révision publiée. Siteurl et home sont HTTPS. Voir docs/INVENTAIRE-OVH.md et docs/REVUE-PRODUIT.md.
+
+Le navigateur Chromium a vérifié l’application réellement servie par OVH : dix fiches, recherche, lecture, favoris, progression, quiz et rendu mobile sans débordement. Les requêtes de cette vérification passent par urllib avec TLS vérifié et le proxy cloud, car Chromium ne reconnaît pas directement la chaîne du proxy. Aucun contournement de validation TLS ni simulation des réponses applicatives pour ces contrôles.
 
 ## Restant à valider avant commercialisation
 
@@ -34,4 +36,4 @@ La production répond en HTTPS et annonce PHP 8.3. Le compte dev-agent est maint
 - Paiements production, remboursements/annulations et abonnements : non pris en charge dans cette version.
 - Validation éditoriale et référentiel IFSI officiel, médias premium, procédures RGPD spécifiques, tests Safari natif et charge/performances production.
 
-Le plugin est un prototype local testé. Il ne remplit pas encore le critère final d'achat TEST réel puis réponse IA sourcée réelle. Une archive installable ne constitue pas une autorisation ni une preuve de déploiement en production.
+Le plugin est un prototype testé localement et une première version de revue est déployée sur OVH. Il ne remplit pas encore le critère final d'achat TEST réel puis réponse IA sourcée réelle. Cette livraison sert à la revue produit et ne constitue pas une ouverture commerciale.

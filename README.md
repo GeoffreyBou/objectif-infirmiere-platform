@@ -2,7 +2,7 @@
 
 Prototype WordPress propriétaire : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
 
-Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Aucun déploiement distant effectué. Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).
+Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Première version de revue déployée : dix fiches de démonstration, favoris, progression et quiz. Voir [le parcours de revue](docs/REVUE-PRODUIT.md). Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).
 
 ## Démarrage local
 
@@ -35,4 +35,4 @@ Variables d'environnement ou constantes dans `wp-config.php`, jamais dans le plu
 
 ## Limites actuelles
 
-Stripe TEST seulement, achats ponctuels. Remboursements, abonnements et mode paiement production restent à ajouter et tester. IA limitée à 100 fiches indexées autorisées par utilisateur. Emails locaux simulés ; livraison SMTP à valider. Aucun média premium à stocker dans des URLs publiques sans dispositif OVH complémentaire. Une sauvegarde et l'inventaire administratif OVH sont nécessaires avant toute installation autorisée.
+Stripe TEST seulement, achats ponctuels. Remboursements, abonnements et mode paiement production restent à ajouter et tester. IA limitée à 100 fiches indexées autorisées par utilisateur. Emails locaux simulés ; livraison SMTP à valider. Aucun média premium à stocker dans des URLs publiques sans dispositif OVH complémentaire. Inventaire administratif et sauvegarde base/contenus effectués avant la livraison de revue ; restauration complète isolée restant à qualifier.

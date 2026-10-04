@@ -9,6 +9,7 @@ try {
  update_user_meta($user,'oi_packs',[$pack]);
  $list=rest_do_request('/oi/v1/fiches');check($list->get_status()===200 && $list->get_data()['total']===10,'10 fiches visibles');
  $id=$list->get_data()['items'][0]['id'];$fiche=rest_do_request('/oi/v1/fiches/'.$id);check($fiche->get_status()===200 && str_contains($fiche->get_data()['content'],'Vigilance IDE'),'Contenu complet autorisé');
+ check(!in_array($id,array_column($fiche->get_data()['related'],'id'),true),'La fiche courante est exclue des suggestions');
  $search=new WP_REST_Request('GET','/oi/v1/fiches');$search->set_param('q','potassium');$found=rest_do_request($search)->get_data();check($found['total']>=3,'Recherche dans contenu');
  $request=new WP_REST_Request('GET','/oi/v1/fiches');$request->set_param('semestre',$list->get_data()['semesters'][0]['id']);check(rest_do_request($request)->get_data()['total']===5,'Filtre semestre');
  wp_set_current_user(0);check(rest_do_request('/oi/v1/fiches/'.$id)->get_status()===401,'REST anonyme interdit');

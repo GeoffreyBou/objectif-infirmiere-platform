@@ -45,7 +45,7 @@ final class OI_API {
         if (!OI_Model::can_read(get_current_user_id(), $id)) { return new WP_Error('oi_forbidden', 'Cette fiche ne fait pas partie de vos accès.', ['status' => 403]); }
         $post = get_post($id);
         OI_Revision::viewed(get_current_user_id(), $id);
-        $related = get_posts(['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => OI_Model::allowed(get_current_user_id()), 'post__not_in' => [$id], 'posts_per_page' => 4, 'orderby' => 'title', 'order' => 'ASC']);
+        $related = get_posts(['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => array_values(array_diff(OI_Model::allowed(get_current_user_id()), [$id])) ?: [0], 'posts_per_page' => 4, 'orderby' => 'title', 'order' => 'ASC']);
         // Native blocks are rendered; no arbitrary shortcodes from protected content are executed.
         return self::summary($post) + ['state' => OI_Revision::state(get_current_user_id(), $id), 'quiz' => OI_Revision::quiz($id), 'watermark' => OI_Revision::watermark(get_current_user_id()), 'content' => wp_kses_post(do_blocks($post->post_content)), 'related' => array_map([self::class, 'summary'], $related)];
     }
