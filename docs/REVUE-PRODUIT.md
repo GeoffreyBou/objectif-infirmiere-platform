@@ -1,30 +1,28 @@
-# Revue produit — première livraison en ligne
+# Revue produit — refonte 0.2.1 en ligne
 
-Adresse : https://app-dev.objectif-infirmiere.fr/
+- Accueil : https://app-dev.objectif-infirmiere.fr/
+- Inscription : https://app-dev.objectif-infirmiere.fr/inscription/
+- Connexion : https://app-dev.objectif-infirmiere.fr/connexion/
+- Espace membre : https://app-dev.objectif-infirmiere.fr/espace-revision/
 
-Se connecter avec son compte administrateur WordPress habituel. Les administrateurs disposent de la lecture des dix fiches de démonstration. L’administration des fiches et packs se trouve dans le menu Objectif Infirmière.
+## Parcours de revue
 
-## Parcours à revoir
+1. Ouvrir l’accueil déconnecté : présentation de l’offre, aperçu de l’espace et FAQ.
+2. Essayer un des trois sujets dans la démonstration publique. Tester une réponse, puis suivre le bouton d’inscription : le sujet est conservé.
+3. Créer un compte étudiant gratuit, ou utiliser son compte WordPress existant. L’inscription ouvre une session et donne accès au seul pack de découverte explicitement autorisé.
+4. Dans l’espace membre, rechercher une fiche, ouvrir le sommaire, ajouter un favori et marquer une notion comme révisée.
+5. Ouvrir l’onglet QCM & partiels, choisir un sujet et consulter la correction.
+6. Ouvrir l’Assistant pour revoir l’interface, les suggestions et la zone de question.
+7. Refaire ces parcours sur téléphone : navigation membre en bas d’écran.
 
-1. Ouvrir l’espace de révision et parcourir les dix fiches.
-2. Rechercher « Furosémide » et ouvrir la fiche.
-3. Consulter le sommaire, ajouter un favori et marquer la fiche comme révisée.
-4. Répondre au quiz et afficher la correction.
-5. Revenir aux fiches et ouvrir les favoris ; vérifier la progression.
-6. Refaire la navigation sur téléphone.
+Les retours attendus portent sur la clarté de l’offre, l’envie de s’inscrire, la navigation, la lisibilité et l’expérience de révision. Les dix fiches et les quiz sont des démonstrations non validées pour un usage clinique. Les images/vidéos de présentation pourront remplacer ou compléter les aperçus illustratifs actuels.
 
-Les retours attendus portent sur la navigation, la lisibilité, le classement et le déroulement des révisions. Les textes sont des exemples non validés pédagogiquement, explicitement signalés dans les fiches.
+## Périmètre réellement disponible
 
-## Périmètre de cette livraison
+Accueil, démo interactive, inscription, connexion, lecture, favoris, progression et QCM sont fonctionnels. Le compte gratuit ne donne aucun droit sur un pack payant. Le conseiller IA est clairement indiqué en préparation : ses réponses restent à activer sur OVH. Aucun encaissement réel n’est activé.
 
-Application propriétaire installée et activée, page d’accueil remplacée par l’espace de révision, dix exemples et un pack de démonstration. L’adresse WordPress a été corrigée en HTTPS. Les pages existantes sont conservées.
+## Sauvegarde et retour arrière
 
-Stripe et OpenAI ne sont pas configurés sur le serveur OVH : les secrets cloud ne sont pas des secrets serveur. Aucun encaissement réel n’est activé. Le Conseiller IA affiche son indisponibilité de configuration ; les fiches restent utilisables.
+Une sauvegarde UpdraftPlus de la base, extensions, thèmes, téléversements et autres contenus a été créée avant remplacement du plugin. Les cinq archives ont été téléchargées en stockage privé et vérifiées (ZIP et décompression SQL). Elles restent accessibles dans WordPress, Réglages → Sauvegardes UpdraftPlus. Ce contrôle d’intégrité n’est pas une restauration complète isolée ; le cœur WordPress et la configuration d’hébergement ne sont pas inclus.
 
-## Sauvegarde avant installation
-
-Sauvegarde UpdraftPlus de la base, extensions, thèmes, téléversements et autres contenus créée avant installation de l’application. Les cinq archives ont été téléchargées en stockage local privé et vérifiées (ZIP, décompression SQL). Elles sont également accessibles dans WordPress, Réglages → Sauvegardes UpdraftPlus. Ce contrôle d’intégrité n’est pas une restauration complète en environnement isolé ; le cœur WordPress et la configuration d’hébergement ne sont pas inclus dans cette sauvegarde de contenus.
-
-## Retour arrière
-
-Désactiver Objectif Infirmière et rétablir la page d’accueil précédente dans Réglages → Lecture. Les valeurs précédentes ont été conservées dans l’option oi_before_review_front. Aucune donnée existante n’a été supprimée ; les créations de revue sont distinctes. La restauration de la base complète nécessite d’abord de sauvegarder l’état courant pour préserver toute modification intervenue depuis.
+Pour revenir à la version 0.1.0, réinstaller l’archive précédente et rétablir l’ancienne page d’accueil (options précédentes conservées dans oi_before_redesign_front). Conserver la base actuelle pour préserver les inscriptions, favoris et contenus intervenus depuis. Ne pas réimporter aveuglément une ancienne base.

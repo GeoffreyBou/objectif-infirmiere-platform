@@ -1,8 +1,8 @@
 # Objectif Infirmière
 
-Prototype WordPress propriétaire : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
+Plateforme WordPress propriétaire 0.2.1 : accueil de présentation, démo interactive, inscription et espace membre. Fonctionnalités : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
 
-Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Première version de revue déployée : dix fiches de démonstration, favoris, progression et quiz. Voir [le parcours de revue](docs/REVUE-PRODUIT.md). Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).
+Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Refonte de revue déployée : accueil commercial, découverte interactive, inscription gratuite et espace membre Fiches / QCM / Assistant. Dix fiches de démonstration, favoris et progression. Voir [le parcours de revue](docs/REVUE-PRODUIT.md). Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).
 
 ## Démarrage local
 
@@ -21,7 +21,7 @@ WordPress écoute sur le port local 8080, limité à la boucle locale. Les ident
 
 Le dossier `plugin/objectif-infirmiere` est un plugin autonome, sans dépendance Composer/npm en production. PHP 8.3+, WordPress 6.8+, MySQL/MariaDB avec droits de création de tables. Téléverser l'archive issue de `scripts/package.sh` depuis Extensions → Ajouter une extension. Ne pas importer la base locale ni ses comptes sur OVH.
 
-Créer une page dont le contenu est uniquement `[objectif_infirmiere]` : le plugin fournit alors une interface autonome du thème. Si le shortcode est inséré dans une page comportant d'autres contenus, le thème est conservé. Les comptes étudiants n'ont pas de back-office.
+À l’activation, le plugin crée les pages Accueil, Inscription, Connexion et Espace membre sans écraser les pages existantes. Les shortcodes dédiés fournissent une interface autonome du thème. Le compte gratuit reçoit uniquement le pack explicitement marqué `oi_free_demo`, configuré dans `oi_registration_demo_pack` et sans prix Stripe. Les comptes étudiants n’ont pas de back-office.
 
 Voir [guide pas à pas](docs/DEMARRAGE.md), [configuration et exploitation](docs/EXPLOITATION.md), [architecture](ARCHITECTURE.md), [roadmap](ROADMAP.md) et [résultats de validation](docs/VALIDATION.md).
 

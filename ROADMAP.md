@@ -22,3 +22,7 @@ L’application de revue est installée sur WordPress OVH. Les secrets Stripe/Op
 - Lot 6 : contrôles syntaxe/permissions/nonces/cache/responsive, packaging et documentation faits. Audit de charge, conformité RGPD, média premium, Safari réel et compatibilité production restant à réaliser.
 
 Pas d'environnement de staging distant : production cible `https://app-dev.objectif-infirmiere.fr/`. Première version déployée après inventaire et sauvegarde des contenus : dix fiches, favoris, progression et quiz à revoir sur le site. Le critère final achat TEST et réponse IA sourcée réelle reste à valider.
+
+## Refonte 0.2.1 livrée
+
+Vitrine de présentation, découverte interactive de trois sujets, pages inscription/connexion, espace membre avec navigation Fiches / QCM & partiels / Assistant, adaptation mobile et inscription donnant accès à un pack gratuit explicitement défini. Direction graphique turquoise inspirée du logo fourni ; aperçu illustratif intégré, médias de démonstration à ajouter quand disponibles. L’IA est indiquée en préparation et les paiements réels ne sont pas activés.

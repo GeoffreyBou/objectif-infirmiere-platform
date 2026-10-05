@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1 — Refonte de la vitrine et de l’espace membre
+
+- Accueil éditorial turquoise : présentation des fiches, QCM, préparation des partiels, assistant en préparation et démo interactive sur trois sujets.
+- Inscription gratuite, choix du sujet conservé, connexion dédiée et accès étudiant aux seules démonstrations autorisées.
+- Espace membre avec navigation desktop/mobile, bibliothèque, favoris, progression, QCM dédiés et interface du conseiller IA.
+- Polices hébergées localement, icônes SVG, contraste et lisibilité mobile améliorés.
+- Protection de l’inscription : nonce, origine, limitation, rôle fixe, absence d’attribution de packs payants.
+- Tests : 104 assertions serveur ; 21 tests navigateur réussis et 3 répétitions d’inscription volontairement ignorées. Comptes distincts par appareil pour respecter les limites de requêtes.
+
+
 ## Livraison de revue OVH
 
 - Application installée et page d’accueil de révision publiée avec dix fiches de démonstration.

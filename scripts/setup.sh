@@ -39,3 +39,5 @@ if [[ "$(scripts/dc.sh wp core version)" != "7.1.2" ]]; then
   scripts/dc.sh wp core verify-checksums
 fi
 scripts/dc.sh run --rm cli wp plugin activate objectif-infirmiere
+
+scripts/dc.sh wp eval 'OI_App::install_pages();'

@@ -1,13 +1,13 @@
-# Validation du prototype 0.1.0
+# Validation du version 0.2.1
 
 ## Vérifié dans l'environnement local
 
-- WordPress 7.1.2 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.5. Les 69 assertions serveur et 12 tests navigateur ont été réexécutés avec succès après alignement sur la version OVH.
+- WordPress 7.1.2 ; PHP 8.3.28 ; MariaDB 11.4 ; thème Twenty Twenty-Five 1.5. Les 104 assertions serveur et 21 tests navigateur ont été réexécutés avec succès après alignement sur la version OVH.
 - Plugin activé, désactivation/réactivation sans destruction des données, setup relancé sans réinstallation ni duplication des dix fiches.
 - Images officielles épinglées par digest, TLS et checksums conservés. Proxy HTTPS cloud et CA système utilisés par la configuration locale uniquement.
 - Syntaxe PHP de tous les fichiers et JavaScript vérifiée.
-- 69 assertions serveur exécutées dans WordPress réel : socle 16, expérience 9, Stripe 15, IA 16, révision 13.
-- 12 tests Playwright Chromium réussis : parcours étudiant, routes anonymes, nonces/cache/URL ; chacun sur 390×844, 412×915, 820×1180 et 1920×1080. Émulation de taille et tactile, pas une validation matérielle Safari iOS/Android.
+- 104 assertions serveur exécutées dans WordPress réel : socle 16, expérience 9, Stripe 15, IA 16, révision 13, inscription/connexion 35.
+- 21 tests Playwright Chromium réussis sur 24 scénarios planifiés : 3 répétitions de création de compte sont explicitement ignorées (création complète vérifiée une fois sur desktop). Parcours vitrine, démo, inscription, navigation, QCM, routes anonymes et nonces/cache/URL sur 390×844, 412×915, 820×1180 et 1920×1080. Émulation de taille et tactile, pas une validation matérielle Safari iOS/Android.
 - Parcours connexion → recherche → fiche → favori → révisée → quiz → erreur IA maîtrisée → favoris.
 - Permissions : pas de contenu sans pack, brouillon interdit, autre étudiant refusé, native REST absent, nonce absent/falsifié refusé, URL directe sans fuite du corps de fiche, cache privé sans stockage.
 - Paiement : HMAC falsifié/expiré, non payé, mauvais prix, session live et pack invalide rejetés ; compte créé, second achat sans doublon, rejeu sans seconde transaction. Transport Stripe et email simulés, aucune carte débitée.
@@ -22,9 +22,9 @@ Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténa
 
 ## Livraison OVH de revue
 
-WordPress 7.1.2, PHP 8.3, Twenty Twenty-Five 1.5. Application 0.1.0 installée et activée après sauvegarde de la base et des contenus, dix fiches et un pack de démonstration créés, page d’accueil de révision publiée. Siteurl et home sont HTTPS. Voir docs/INVENTAIRE-OVH.md et docs/REVUE-PRODUIT.md.
+WordPress 7.1.2, PHP 8.3, Twenty Twenty-Five 1.5. Application 0.2.1 installée et activée après sauvegarde de la base et des contenus, dix fiches et un pack de démonstration créés, page d’accueil de présentation et pages inscription/connexion/membre publiées. Siteurl et home sont HTTPS. Voir docs/INVENTAIRE-OVH.md et docs/REVUE-PRODUIT.md.
 
-Le navigateur Chromium a vérifié l’application réellement servie par OVH : dix fiches, recherche, lecture, favoris, progression, quiz et rendu mobile sans débordement. Les requêtes de cette vérification passent par urllib avec TLS vérifié et le proxy cloud, car Chromium ne reconnaît pas directement la chaîne du proxy. Aucun contournement de validation TLS ni simulation des réponses applicatives pour ces contrôles.
+Le navigateur Chromium a vérifié l’application réellement servie par OVH : accueil, démonstration publique, création réelle d’un compte étudiant avec connexion automatique, dix fiches accessibles, QCM corrigé et rendu mobile sans débordement. Les requêtes de cette vérification passent par urllib avec TLS vérifié et le proxy cloud, car Chromium ne reconnaît pas directement la chaîne du proxy. Aucun contournement de validation TLS ni simulation des réponses applicatives pour ces contrôles. Pour le POST d’inscription distant, la réponse HTTP 303 et les cookies sont vérifiés ; la navigation suivante est ouverte explicitement par le harnais car Chromium contourne son interception lors des redirections et refuse le certificat du proxy. Le parcours automatique sans ce transport est également testé en local.
 
 ## Restant à valider avant commercialisation
 

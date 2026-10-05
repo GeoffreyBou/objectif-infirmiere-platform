@@ -11,13 +11,13 @@ Compte : `dev-agent`, rôle administrator et capacité manage_options confirmés
 | PHP | 8.3 annoncé par le serveur ; patch non exposé |
 | Thème actif | Twenty Twenty-Five 1.5, sans thème enfant |
 | Autres thèmes | Twenty Twenty-Four 1.5 et Twenty Twenty-Three 1.6, inactifs |
-| Extensions | Objectif Infirmière 0.1.0 et UpdraftPlus 1.26.8 actifs ; Akismet et Hello Dolly inactifs |
+| Extensions | Objectif Infirmière 0.2.1 et UpdraftPlus 1.26.8 actifs ; Akismet et Hello Dolly inactifs |
 | REST | /wp-json/ et /index.php/wp-json/ répondent ; lecture authentifiée de users/me, plugins, themes et settings réussie |
 | Adresse WordPress (siteurl) | https://app-dev.objectif-infirmiere.fr |
 | Adresse du site (home) | https://app-dev.objectif-infirmiere.fr |
 | Fuseau horaire | Chaîne vide, décalage UTC 0 |
 
-L’adresse WordPress a été corrigée en HTTPS après sauvegarde. L’application de revue est désormais la page d’accueil, avec dix fiches de démonstration. Voir [Revue produit](REVUE-PRODUIT.md) pour le parcours et les limites de cette livraison.
+L’adresse WordPress a été corrigée en HTTPS après sauvegarde. La page d’accueil présente désormais l’offre ; les pages inscription, connexion et espace membre sont publiées. Dix fiches de démonstration sont proposées aux nouveaux comptes dans le pack gratuit explicitement autorisé. Voir [Revue produit](REVUE-PRODUIT.md) pour le parcours et les limites de cette livraison.
 
 ## Authentification résolue
 

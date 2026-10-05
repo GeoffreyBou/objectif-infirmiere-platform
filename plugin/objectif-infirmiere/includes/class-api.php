@@ -20,7 +20,7 @@ final class OI_API {
         return $response;
     }
     public static function catalog(): array {
-        return array_map(fn($p) => ['id' => $p->ID, 'title' => $p->post_title, 'description' => wp_strip_all_tags($p->post_content), 'available' => (bool)get_post_meta($p->ID, 'oi_price', true)], get_posts(['post_type' => 'oi_pack', 'post_status' => 'publish', 'numberposts' => 100]));
+        return array_map(fn($p) => ['id' => $p->ID, 'title' => $p->post_title, 'description' => wp_strip_all_tags($p->post_content), 'available' => (bool)get_post_meta($p->ID, 'oi_price', true), 'free_demo' => get_post_meta($p->ID, 'oi_free_demo', true)==='1' && !get_post_meta($p->ID, 'oi_price', true)], get_posts(['post_type' => 'oi_pack', 'post_status' => 'publish', 'numberposts' => 100]));
     }
     public static function summary(WP_Post $p): array {
         $terms = [];
@@ -28,7 +28,7 @@ final class OI_API {
             $found = wp_get_post_terms($p->ID, 'oi_' . $tax);
             $terms[$tax] = is_wp_error($found) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $found);
         }
-        return ['id' => $p->ID, 'title' => $p->post_title, 'terms' => $terms, 'updated' => $p->post_modified_gmt];
+        return ['id' => $p->ID, 'title' => $p->post_title, 'terms' => $terms, 'updated' => $p->post_modified_gmt, 'quiz_count'=>count(OI_Revision::quiz($p->ID)), 'state'=>OI_Revision::state(get_current_user_id(),$p->ID)];
     }
     public static function listing(WP_REST_Request $r): array {
         $allowed = OI_Model::allowed(get_current_user_id());

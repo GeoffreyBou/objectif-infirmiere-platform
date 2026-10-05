@@ -1,7 +1,7 @@
 <?php
 // Explicit demo installer, never run automatically on OVH.
 if (!in_array(wp_parse_url(get_option('siteurl'), PHP_URL_HOST), ['127.0.0.1', 'localhost'], true)) { throw new RuntimeException('Démonstration autorisée uniquement sur WordPress local.'); }
-if (get_option('oi_demo_seeded')) { echo "Démonstration déjà installée.\n"; return; }
+if (get_option('oi_demo_seeded')) { OI_App::install_pages(); echo "Démonstration déjà installée.\n"; return; }
 $topics = [
  ['Furosémide','Médicament','Le furosémide est un diurétique de l’anse. La surveillance porte notamment sur la diurèse, la pression artérielle et les paramètres prescrits.','Pourquoi surveiller la kaliémie sous furosémide ?',['Pour repérer une perte de potassium','Pour mesurer la glycémie'],[0],'La diurèse peut favoriser les pertes de potassium. Interpréter avec la situation clinique et les prescriptions.'],
  ['Hypokaliémie','Biologie','Une diminution du potassium sanguin peut perturber l’activité musculaire et cardiaque. Les normes dépendent du laboratoire.','Le potassium intervient-il dans l’activité cardiaque ?',['Vrai','Faux'],[0],'Les variations de kaliémie peuvent modifier l’activité électrique cardiaque.'],
@@ -30,4 +30,5 @@ foreach ($topics as $i => [$title,$theme,$text,$question,$options,$correct,$expl
 $pack=wp_insert_post(['post_type'=>'oi_pack','post_status'=>'publish','post_title'=>'Pack Découverte — Démonstration','post_content'=>'10 fiches pour tester les parcours de révision. Contenus non validés pour un usage clinique.']);update_post_meta($pack,'oi_fiches',$ids);
 $page=wp_insert_post(['post_type'=>'page','post_status'=>'publish','post_title'=>'Mon espace de révision','post_content'=>'[objectif_infirmiere]']);
 update_option('show_on_front','page');update_option('page_on_front',$page);update_option('oi_demo_pack',$pack);update_option('oi_demo_seeded',true);
+OI_App::install_pages();
 echo "10 fiches et un pack de démonstration créés.\n";
