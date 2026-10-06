@@ -23,6 +23,6 @@ L’application de revue est installée sur WordPress OVH. Les secrets Stripe/Op
 
 Pas d'environnement de staging distant : production cible `https://app-dev.objectif-infirmiere.fr/`. Première version déployée après inventaire et sauvegarde des contenus : dix fiches, favoris, progression et quiz à revoir sur le site. Le critère final achat TEST et réponse IA sourcée réelle reste à valider.
 
-## Refonte 0.2.1 livrée
+## Refonte 0.2.2 livrée
 
-Vitrine de présentation, découverte interactive de trois sujets, pages inscription/connexion, espace membre avec navigation Fiches / QCM & partiels / Assistant, adaptation mobile et inscription donnant accès à un pack gratuit explicitement défini. Direction graphique turquoise inspirée du logo fourni ; aperçu illustratif intégré, médias de démonstration à ajouter quand disponibles. L’IA est indiquée en préparation et les paiements réels ne sont pas activés.
+Vitrine de présentation, découverte interactive de trois sujets, pages inscription/connexion, espace membre avec navigation Fiches / QCM & partiels / Assistant, adaptation mobile et inscription donnant accès à un pack gratuit explicitement défini. Direction graphique bleue, logo et mascottes originaux intégrés, repères visuels et textes consacrés aux UE et aux soins infirmiers ; aperçu illustratif et démonstration interactive intégrés. L’IA est indiquée en préparation et les paiements réels ne sont pas activés.

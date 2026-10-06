@@ -30,10 +30,11 @@ final class OI_App {
             'api' => esc_url_raw(rest_url('oi/v1/')), 'nonce' => wp_create_nonce('wp_rest'),
             'loggedIn' => true, 'name' => wp_get_current_user()->display_name,
             'homeUrl'=>self::url('home'), 'memberUrl'=>self::url('member'),
+            'brandUrl'=>esc_url_raw(OI_URL . 'assets/brand/'),
             'logoutUrl'=>wp_logout_url(self::url('home')),
             'aiConfigured'=>(bool)(get_option('oi_vector_store') && OI_Stripe::secret('OI_OPENAI_API_KEY')),
         ]);
-        return '<main id="oi-app" class="oi-app"><header class="oi-top"><a href="' . esc_url(self::url('home')) . '" class="oi-brand"><span class="oi-member-brandmark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16m-14-6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>Objectif <strong>Infirmière</strong></a><a href="' . esc_url(wp_logout_url(self::url('home'))) . '">Déconnexion</a></header><div id="oi-view"><p role="status">Votre espace de révision se prépare…</p></div></main>';
+        return '<main id="oi-app" class="oi-app"><header class="oi-top"><a href="' . esc_url(self::url('home')) . '" class="oi-brand" aria-label="Objectif Infirmière, accueil"><img class="oi-member-logo" src="' . esc_url(OI_URL . 'assets/brand/logo.png') . '" width="1300" height="436" alt="Objectif Infirmière — La référence de la révision en ligne"></a><a href="' . esc_url(wp_logout_url(self::url('home'))) . '">Déconnexion</a></header><div id="oi-view"><p role="status">Votre espace de révision se prépare…</p></div></main>';
     }
     /** Explicit activation creates product pages while preserving existing content. */
     public static function install_pages(): void {

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 — Identité bleue et univers infirmier
+
+- Palette bleu profond, bleu vif et bleu glacé sur la vitrine, l’inscription, la connexion et l’espace membre.
+- Logo et mascottes originaux de la marque, hébergés dans le plugin avec leur provenance.
+- Repères plus concrets autour des UE, de l’hygiène, de la pharmacologie, de la cardio et du quotidien en IFSI.
+- Parcours et contenus existants conservés, dont les démonstrations et la mention de l’assistant IA en préparation.
+- Validation : 104 assertions serveur et 21 tests navigateur réussis ; 3 répétitions d’inscription volontairement ignorées. Revue visuelle jusqu’à 320 px.
+
 ## 0.2.1 — Refonte de la vitrine et de l’espace membre
 
 - Accueil éditorial turquoise : présentation des fiches, QCM, préparation des partiels, assistant en préparation et démo interactive sur trois sujets.

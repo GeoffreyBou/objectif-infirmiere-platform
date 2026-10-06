@@ -11,7 +11,7 @@ Compte : `dev-agent`, rôle administrator et capacité manage_options confirmés
 | PHP | 8.3 annoncé par le serveur ; patch non exposé |
 | Thème actif | Twenty Twenty-Five 1.5, sans thème enfant |
 | Autres thèmes | Twenty Twenty-Four 1.5 et Twenty Twenty-Three 1.6, inactifs |
-| Extensions | Objectif Infirmière 0.2.1 et UpdraftPlus 1.26.8 actifs ; Akismet et Hello Dolly inactifs |
+| Extensions | Objectif Infirmière 0.2.2 et UpdraftPlus 1.26.8 actifs ; Akismet et Hello Dolly inactifs |
 | REST | /wp-json/ et /index.php/wp-json/ répondent ; lecture authentifiée de users/me, plugins, themes et settings réussie |
 | Adresse WordPress (siteurl) | https://app-dev.objectif-infirmiere.fr |
 | Adresse du site (home) | https://app-dev.objectif-infirmiere.fr |

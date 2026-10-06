@@ -1,6 +1,6 @@
 # Objectif Infirmière
 
-Plateforme WordPress propriétaire 0.2.1 : accueil de présentation, démo interactive, inscription et espace membre. Fonctionnalités : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
+Plateforme WordPress propriétaire 0.2.2 : accueil de présentation, démo interactive, inscription et espace membre. Fonctionnalités : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
 
 Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Refonte de revue déployée : accueil commercial, découverte interactive, inscription gratuite et espace membre Fiches / QCM / Assistant. Dix fiches de démonstration, favoris et progression. Voir [le parcours de revue](docs/REVUE-PRODUIT.md). Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).
 

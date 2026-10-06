@@ -1,4 +1,10 @@
-# Validation du version 0.2.1
+# Validation de la version 0.2.2
+
+## Revue de la direction artistique — 6 octobre 2026
+
+Palette bleue, logo et deux mascottes originaux, contenus de présentation consacrés aux soins infirmiers. Les 104 assertions serveur et 21 tests navigateur ont été réexécutés avec succès ; 3 répétitions d’inscription restent volontairement ignorées. Contrôles visuels complémentaires à 1440, 820, 390 et 320 px ; inscription également contrôlée à 320 px. Images chargées, aucun débordement horizontal observé. Aucun service payant externe appelé par ces tests.
+
+Version 0.2.2 active sur OVH ; les trois PNG publiés correspondent aux originaux intégrés (SHA-256 identiques). Parcours réel revérifié après mise en ligne : démo publique, inscription avec session élève, dix fiches, correction QCM et affichage de l’IA en préparation. Captures ordinateur et téléphone dans `.runtime/prod-blue-*`. Sauvegarde base et contenus du 6 octobre téléchargée et contrôlée avant remplacement du plugin.
 
 ## Vérifié dans l'environnement local
 
@@ -22,7 +28,7 @@ Le REST avec permaliens simples (`?rest_route=`) ne supportait pas la concaténa
 
 ## Livraison OVH de revue
 
-WordPress 7.1.2, PHP 8.3, Twenty Twenty-Five 1.5. Application 0.2.1 installée et activée après sauvegarde de la base et des contenus, dix fiches et un pack de démonstration créés, page d’accueil de présentation et pages inscription/connexion/membre publiées. Siteurl et home sont HTTPS. Voir docs/INVENTAIRE-OVH.md et docs/REVUE-PRODUIT.md.
+WordPress 7.1.2, PHP 8.3, Twenty Twenty-Five 1.5. Application 0.2.2 installée et activée après sauvegarde de la base et des contenus, dix fiches et un pack de démonstration créés, page d’accueil de présentation et pages inscription/connexion/membre publiées. Siteurl et home sont HTTPS. Voir docs/INVENTAIRE-OVH.md et docs/REVUE-PRODUIT.md.
 
 Le navigateur Chromium a vérifié l’application réellement servie par OVH : accueil, démonstration publique, création réelle d’un compte étudiant avec connexion automatique, dix fiches accessibles, QCM corrigé et rendu mobile sans débordement. Les requêtes de cette vérification passent par urllib avec TLS vérifié et le proxy cloud, car Chromium ne reconnaît pas directement la chaîne du proxy. Aucun contournement de validation TLS ni simulation des réponses applicatives pour ces contrôles. Pour le POST d’inscription distant, la réponse HTTP 303 et les cookies sont vérifiés ; la navigation suivante est ouverte explicitement par le harnais car Chromium contourne son interception lors des redirections et refuse le certificat du proxy. Le parcours automatique sans ce transport est également testé en local.
 

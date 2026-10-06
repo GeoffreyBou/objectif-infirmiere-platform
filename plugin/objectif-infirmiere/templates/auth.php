@@ -7,23 +7,23 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
     <a class="oi-auth-skip" href="#oi-auth-form">Aller au formulaire</a>
     <header class="oi-auth-header">
         <a class="oi-auth-brand" href="<?php echo esc_url(OI_App::url('home')); ?>" aria-label="Objectif Infirmière, accueil">
-            <span class="oi-auth-brandmark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
-            <span>Objectif<strong>Infirmière<span aria-hidden="true">.</span></strong></span>
+            <img class="oi-auth-logo" src="<?php echo esc_url(OI_URL . 'assets/brand/logo.png'); ?>" alt="Objectif Infirmière — La référence de la révision en ligne" width="1300" height="436">
         </a>
         <a class="oi-auth-back" href="<?php echo esc_url(OI_App::url('home')); ?>"><span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Retour à l’accueil</a>
     </header>
     <div class="oi-auth-layout">
         <section class="oi-auth-story" aria-labelledby="oi-auth-title">
-            <span class="oi-auth-eyebrow"><span aria-hidden="true"></span> TON FUTUR COMMENCE ICI</span>
-            <h1 id="oi-auth-title"><?php echo $mode === 'login' ? 'Ta prochaine<br>réussite commence<br><em>aujourd’hui.</em>' : 'De l’envie<br>de soigner à<br><em>la fierté de réussir.</em>'; ?></h1>
-            <p class="oi-auth-intro">Un espace pour comprendre tes cours, entraîner tes réflexes et avancer vers ton diplôme. À ton rythme, avec un cap.</p>
+            <span class="oi-auth-eyebrow"><span aria-hidden="true"></span> TON CAP : LE DIPLÔME INFIRMIER</span>
+            <h1 id="oi-auth-title"><?php echo $mode === 'login' ? 'Ta prochaine <br>réussite commence<br><em>aujourd’hui.</em>' : 'De l’envie <br>de soigner à<br><em>la fierté de réussir.</em>'; ?></h1>
+            <p class="oi-auth-intro">Anatomie, hygiène, pharmacologie… Fais le lien entre tes cours d’IFSI et les notions que tu retrouveras en stage. Une révision à la fois.</p>
             <div class="oi-auth-preview" aria-label="Les outils de ton espace">
-                <div class="oi-auth-preview-top"><span class="oi-auth-preview-icon" aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" fill="currentColor"/></svg></span><span>TOUT POUR AVANCER</span><span class="oi-auth-preview-dot" aria-hidden="true"></span></div>
+                <img class="oi-auth-mascot" src="<?php echo esc_url(OI_URL . 'assets/brand/mascot.png'); ?>" width="500" height="500" alt="La mascotte infirmière d’Objectif Infirmière" loading="lazy">
+                <div class="oi-auth-preview-top"><span>DU COURS AUX SOINS</span><span class="oi-auth-preview-dot" aria-hidden="true"></span></div>
                 <h2>Un peu plus prête.<br>À chaque révision.</h2>
                 <ul>
                     <li><span aria-hidden="true">01</span><span><strong>Des fiches qui vont à l’essentiel</strong><small>Organise tes connaissances, UE après UE.</small></span></li>
                     <li><span aria-hidden="true">02</span><span><strong>Des QCM pour te challenger</strong><small>Comprends tes erreurs et progresse.</small></span></li>
-                    <li><span aria-hidden="true">03</span><span><strong>Ton assistant de révision</strong><small>Un espace IA pensé pour tes questions.</small></span></li>
+                    <li><span aria-hidden="true">03</span><span><strong>Ton assistant de révision</strong><small>L’espace IA se prépare pour tes questions.</small></span></li>
                 </ul>
                 <div class="oi-auth-preview-bottom"><span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Objectif diplôme. Un pas après l’autre.</div>
             </div>
