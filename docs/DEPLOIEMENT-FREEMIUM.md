@@ -92,3 +92,9 @@ Déployé le 8 octobre 2026. Archive SHA-256 `e48c853a7a8aaba6f36ccf4d39fe023ccf
 La sélection globale des Word exclut les fichiers inchangés et conflictuels. Préparation séquentielle par lots de 10, publication des aperçus validés par lots de 20, compteur et conservation des résultats en cas d’interruption. La liste affiche 100 préparations et le total en attente.
 
 Validation : 50 assertions serveur Word/Drive et quatre parcours navigateur ordinateur/iPhone (sélection, exclusion, état intermédiaire, lots 10/10/1 sans publication automatique, rendu et retour de paiement). Vérification en production : version rc.11, trois assets identiques au paquet local, connexion Drive et liste de préparations accessibles, tarif inchangé. Aucun contenu pédagogique préparé ou publié par ces vérifications. Archive rc.10 conservée pour retour arrière.
+
+## Prévisualisation en masse — 0.3.0-rc.12
+
+8 octobre 2026 : prévisualisation robuste aux erreurs individuelles, compteur, reprise des seules fiches sans aperçu valide et comparaisons repliées avec cadres montés à la demande. Évite l’arrêt au premier classement incomplet et le chargement simultané de 200 iframes pour 100 fiches. Les contrôles de publication restent inchangés.
+
+Test navigateur local avec 100 vraies préparations et REST réel : 99 réussites malgré une UE invalide, puis 100 après correction avec une seule requête supplémentaire ; ouverture/fermeture de la comparaison, aucun iframe conservé lorsque replié. Parcours Word de publication, mise à jour, restauration et protections également réussi. Archive SHA-256 `b9e91561b699ed6fd7effae2a6366875922418e1f88763acefab154ee94f58fe` ; rc.11 conservée pour retour arrière.

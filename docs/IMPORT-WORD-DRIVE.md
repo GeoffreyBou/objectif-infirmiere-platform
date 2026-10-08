@@ -88,3 +88,6 @@ Le traitement s’applique aussi à l’affichage des préparations et fiches ex
 Après l’analyse, « Tout sélectionner » coche les Word nouveaux ou modifiés ; les fichiers inchangés et les doublons restent exclus. La préparation traite automatiquement la sélection par lots de 10, sans publication automatique. Garder l’onglet ouvert pendant le traitement. En cas d’interruption, les préparations déjà enregistrées sont conservées ; relancer une analyse permet de reprendre.
 
 La liste présente les 100 préparations les plus récentes et indique le total en attente. Les suivantes apparaissent après publication. La publication de la sélection prévisualisée est également répartie en lots de 20.
+
+### Prévisualisation de 100 fiches (rc.12)
+La sélection est traitée fiche par fiche avec compteur. Une fiche invalide affiche son erreur sans interrompre les suivantes. Après correction, relancer la prévisualisation ne recalcule que les aperçus manquants ou invalidés par une modification. Les comparaisons sont repliées et leurs cadres chargés uniquement à l’ouverture, puis libérés à la fermeture. La publication conserve ses contrôles de prévisualisation et de contenu à jour.
