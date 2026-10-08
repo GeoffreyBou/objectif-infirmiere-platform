@@ -1,3 +1,10 @@
+## 0.3.0-rc.10
+- Ma progression devient un suivi d’objectifs personnels : sélection UE/thème/fiche, sauvegarde, édition et cycles indépendants.
+- Progression déclarative par objectif, validation depuis le lecteur, accès et crédits conservés.
+- Planning facultatif par échéance ou durée, jours disponibles et budget de temps, signalement des charges impossibles.
+- Lien vers l’assistant avec demande contextualisée, sans envoi automatique.
+- 34 assertions serveur dédiées et parcours objectifs desktop/iPhone réussis.
+
 ## 0.3.0-rc.9
 - Atelier administrateur QCM : modèle XLSX, import local ou Drive, validation par ligne, corrections avant aperçu, publication sélective et restauration.
 - Questions identifiées par code permanent et rattachées aux fiches ; questions absentes conservées, archivage explicite.

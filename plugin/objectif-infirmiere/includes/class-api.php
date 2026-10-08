@@ -60,6 +60,6 @@ final class OI_API {
         OI_Revision::viewed(get_current_user_id(), $id);
         $related = get_posts(['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => array_values(array_diff(OI_Model::allowed(get_current_user_id()), [$id])) ?: [0], 'posts_per_page' => 4, 'orderby' => 'title', 'order' => 'ASC']);
         // Native blocks are rendered; no arbitrary shortcodes from protected content are executed.
-        return self::summary($post) + ['state' => OI_Revision::state(get_current_user_id(), $id), 'quiz' => OI_Offer::can_access(get_current_user_id(),'QCM',$id)?OI_Revision::quiz($id):[], 'watermark' => OI_Revision::watermark(get_current_user_id()), 'content' => OI_Docx::content(do_blocks($post->post_content), $id), 'related' => array_map([self::class, 'summary'], $related)];
+        return self::summary($post) + ['state' => OI_Revision::state(get_current_user_id(), $id), 'quiz' => OI_Offer::can_access(get_current_user_id(),'QCM',$id)?OI_Revision::quiz($id):[], 'goal'=>OI_Goals::for_fiche(get_current_user_id(),$id), 'watermark' => OI_Revision::watermark(get_current_user_id()), 'content' => OI_Docx::content(do_blocks($post->post_content), $id), 'related' => array_map([self::class, 'summary'], $related)];
     }
 }

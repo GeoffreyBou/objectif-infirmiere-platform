@@ -77,3 +77,10 @@ Déployé le 8 octobre 2026. SHA-256 `2d616a88fcc0b2b4a5681c301a16696707f81fc85c
 Déployé le 8 octobre 2026. Archive SHA-256 `1c285ff88a03116127f6ab5116d12a5eabd3dfa95c34c06a6238ea289191d876`. Modèle XLSX disponible dans Gérer les QCM. Imports, revue, mises à jour et restauration ; banque par fiche utilisée par les séances fiche/thème/UE. Nouveaux types privés et métadonnées ; aucune migration destructive. Sessions/corrigés figés côté serveur ; droits QCM existants conservés sans débit supplémentaire pour les séances.
 
 Validation locale : 39 assertions QCM, 50 imports, 13 révision, 18 administration ; deux parcours QCM ordinateur/iPhone et quatre parcours existants ordinateur. Vérification réelle : plugin/assets rc.9, APIs administrateur et périmètres, modèle XLSX téléchargé, connexion Google et analyse de tout le Drive (aucun `_qcm.xlsx` encore présent). Aucun contenu technique publié en production. Compte temporaire supprimé. Archive rc.8 disponible pour retour arrière ; les métadonnées QCM antérieures sont conservées dans l’historique d’import.
+
+
+## Objectifs et planning — 0.3.0-rc.10
+
+Déployé le 8 octobre 2026. Archive SHA-256 `8b3a2e3b405f3c05447a95617adb38b135768122e5ee882ef42c4a088ac07950`. Ma progression suit désormais des objectifs personnels enregistrés dans une métadonnée utilisateur privée : sélection par programme, cycles indépendants, planning indicatif, validation depuis la fiche et passage vers l’IA avec demande préremplie. Aucun envoi IA automatique ni modification des droits/crédits.
+
+34 assertions objectifs, 13 révision, deux parcours objectifs ordinateur/iPhone et quatre parcours membre ordinateur réussis. Vérification REST réelle : création, planning, sauvegarde, édition, progression, nouveau cycle et reprise ; compte technique et objectifs de contrôle supprimés. Aucune modification d’un compte étudiant ou contenu pédagogique. Archive rc.9 conservée ; revenir à cette archive masque la nouvelle interface sans supprimer les objectifs enregistrés.
