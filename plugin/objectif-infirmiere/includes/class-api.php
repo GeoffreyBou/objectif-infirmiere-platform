@@ -29,7 +29,7 @@ final class OI_API {
             $found = wp_get_post_terms($p->ID, 'oi_' . $tax);
             $terms[$tax] = is_wp_error($found) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $found);
         }
-        return ['id' => $p->ID, 'title' => $p->post_title, 'terms' => $terms, 'updated' => $p->post_modified_gmt, 'quiz_count'=>count(OI_Revision::quiz($p->ID)), 'access'=>['FICHE'=>OI_Offer::can_access(get_current_user_id(),'FICHE',$p->ID),'QCM'=>OI_Offer::can_access(get_current_user_id(),'QCM',$p->ID)], 'state'=>OI_Revision::state(get_current_user_id(),$p->ID)];
+        return ['id' => $p->ID, 'title' => $p->post_title, 'terms' => $terms, 'updated' => $p->post_modified_gmt, 'quiz_count'=>count(OI_Revision::quiz($p->ID,true,200)), 'access'=>['FICHE'=>OI_Offer::can_access(get_current_user_id(),'FICHE',$p->ID),'QCM'=>OI_Offer::can_access(get_current_user_id(),'QCM',$p->ID)], 'state'=>OI_Revision::state(get_current_user_id(),$p->ID)];
     }
     public static function listing(WP_REST_Request $r): array {
         $allowed = OI_Model::ids(array_merge(OI_Offer::catalogue(), OI_Model::allowed(get_current_user_id()), OI_Credits::unlocked(get_current_user_id(),'QCM')));

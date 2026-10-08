@@ -56,11 +56,13 @@ final class OI_Settings {
         wp_safe_redirect(admin_url('admin.php?page=oi-ai'));exit;
     }
     public static function quiz_box(WP_Post $post): void {
+        if(get_post_meta($post->ID,'oi_qcm_source',true)){echo '<p>Cette banque est gérée dans <a href="'.esc_url(OI_App::url('member').'?view=qcm-imports').'">Gérer les QCM</a>. Réimporte son Excel pour préparer une modification avec aperçu et historique.</p>';return;}
         wp_nonce_field('oi_quiz_edit','oi_quiz_nonce');
         echo '<p>JSON : tableau de questions avec <code>question</code>, <code>options</code>, <code>correct</code> (indices à partir de 0) et <code>explanation</code>. Plusieurs indices = QCM ; deux options Vrai/Faux = vrai/faux. Maximum 20 questions, 8 options.</p><textarea class="widefat" rows="10" name="oi_quiz">'.esc_textarea(wp_json_encode(get_post_meta($post->ID,'oi_quiz',true)?:[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE)).'</textarea>';
     }
     public static function save_quiz(int $id): void {
         if(wp_is_post_revision($id)||wp_is_post_autosave($id)||!current_user_can('edit_post',$id)||!isset($_POST['oi_quiz_nonce'])||!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['oi_quiz_nonce'])),'oi_quiz_edit'))return;
+        if(get_post_meta($id,'oi_qcm_source',true))return;
         $raw=wp_unslash($_POST['oi_quiz']??'[]');if(strlen($raw)>50000)return;
         $quiz=json_decode($raw,true);if(!is_array($quiz))return;
         update_post_meta($id,'oi_quiz',$quiz);update_post_meta($id,'oi_quiz',OI_Revision::quiz($id,false));

@@ -26,8 +26,9 @@ final class OI_App {
         if (!is_user_logged_in()) { return OI_Auth::render('login'); }
         nocache_headers();
         wp_enqueue_style('oi-app', OI_URL . 'assets/app.css', ['oi-base'], OI_VERSION);
-        if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',[],OI_VERSION,true);}
-        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', [], OI_VERSION, true);
+        if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',[],OI_VERSION,true);}
+        wp_enqueue_script('oi-training',OI_URL.'assets/training.js',[],OI_VERSION,true);
+        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training'], OI_VERSION, true);
         wp_localize_script('oi-app', 'OI', [
             'api' => esc_url_raw(rest_url('oi/v1/')), 'nonce' => wp_create_nonce('wp_rest'),
             'admin'=>current_user_can('manage_options'), 'loggedIn' => true, 'name' => wp_get_current_user()->display_name,

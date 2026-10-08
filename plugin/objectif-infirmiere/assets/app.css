@@ -567,3 +567,11 @@
 
 .oi-app .oi-content a{color:#245bd6;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
 .oi-app .oi-content a:hover{color:#17365e}
+
+.oi-training-panel{background:#fff;border:1px solid #d5e2f6;border-radius:20px;padding:24px;margin-bottom:28px}
+.oi-training-panel form[data-training-launch]{display:grid;grid-template-columns:1fr 2fr 1fr;gap:14px;align-items:end}
+.oi-training-panel label{display:grid;gap:8px}.oi-training-panel select{width:100%;min-width:0}
+.oi-training-panel [data-training-session]:not(:empty){margin-top:30px;border-top:1px solid #d5e2f6;padding-top:24px}
+.oi-qcm-edit{margin:12px 0}.oi-qcm-edit label{display:grid;gap:6px;margin:10px 0}.oi-qcm-edit textarea{width:100%}
+.oi-qcm-review-question{padding:16px;background:#f4f8ff;border-radius:12px;margin:12px 0;overflow-wrap:anywhere}
+@media(max-width:650px){.oi-training-panel form[data-training-launch]{grid-template-columns:1fr}.oi-training-panel{padding:18px}}

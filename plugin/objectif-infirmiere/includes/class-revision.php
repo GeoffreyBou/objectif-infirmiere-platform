@@ -32,16 +32,19 @@ final class OI_Revision {
         if(!self::write($user,$id,[$r['field']=>$r['value']])) return new WP_Error('oi_busy','Veuillez réessayer.',['status'=>503]);
         return self::state($user,$id);
     }
-    public static function quiz(int $id,bool $public=true): array {
+    public static function quiz(int $id,bool $public=true,int $limit=20): array {
         $quiz=get_post_meta($id,'oi_quiz',true);
         if(!is_array($quiz)) return [];
         $result=[];
-        foreach(array_slice($quiz,0,20) as $question) {
+        foreach(array_slice($quiz,0,200) as $question) {
+            if(count($result)>=min(200,$limit))break;
+            if(is_array($question)&&isset($question['active'])&&!$question['active'])continue;
             if(!is_array($question) || !is_string($question['question']??null) || !is_array($question['options']??null) || !is_array($question['correct']??null)) continue;
             $options=array_values(array_map('sanitize_text_field',array_slice($question['options'],0,8)));
             $correct=array_values(array_unique(array_map('intval',$question['correct'])));sort($correct);
             if(count($options)<2 || !$correct || min($correct)<0 || max($correct)>=count($options)) continue;
             $q=['question'=>sanitize_text_field($question['question']),'options'=>$options,'multiple'=>count($correct)>1];
+            if(isset($question['code']))$q['code']=sanitize_text_field($question['code']);
             if(!$public) {$q['correct']=$correct;$q['explanation']=sanitize_textarea_field($question['explanation']??'');}
             $result[]=$q;
         }
@@ -66,7 +69,7 @@ final class OI_Revision {
     public static function progress(int $user): array {
         $fiches=OI_Model::allowed($user);$allowed=OI_Model::ids(array_merge($fiches,OI_Credits::unlocked($user,'QCM')));$state=self::all($user);$revised=0;$viewed=0;$quizzes=0;
         foreach($allowed as $id) {$s=$state[$id]??[];if(in_array($id,$fiches,true)&&!empty($s['revised']))$revised++;if(in_array($id,$fiches,true)&&!empty($s['viewed_at']))$viewed++;if(!empty($s['quiz_at']))$quizzes++;}
-        return ['total'=>count($fiches),'revised'=>$revised,'viewed'=>$viewed,'quizzes'=>$quizzes];
+        return ['total'=>count($fiches),'revised'=>$revised,'viewed'=>$viewed,'quizzes'=>$quizzes+(int)get_user_meta($user,'oi_qcm_completed',true)];
     }
     public static function watermark(int $user): string {
         if(!get_option('oi_watermark',true)) return '';

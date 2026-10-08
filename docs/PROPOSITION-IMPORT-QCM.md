@@ -1,6 +1,6 @@
 # Proposition : créer et mettre à jour les QCM en masse
 
-Statut : proposition de fonctionnement, non développée.
+Statut : proposition initiale ; mise en œuvre rc.9 décrite dans IMPORT-QCM.md.
 
 ## Point de départ recommandé
 

@@ -1,3 +1,10 @@
+## 0.3.0-rc.9
+- Atelier administrateur QCM : modèle XLSX, import local ou Drive, validation par ligne, corrections avant aperçu, publication sélective et restauration.
+- Questions identifiées par code permanent et rattachées aux fiches ; questions absentes conservées, archivage explicite.
+- Entraînements par fiche, thème et UE, tirage sans répétition réparti entre fiches accessibles, aucun débit supplémentaire.
+- Sessions conservant leur corrigé côté serveur, résultats idempotents et retour vers le cours source.
+- Validation : 39 assertions QCM, 50 imports Word, 13 révision, 18 administration ; deux parcours QCM navigateur (desktop/iPhone), quatre parcours existants desktop.
+
 ## 0.3.0-rc.8
 - URL bibliographiques en texte brut rendues cliquables, y compris dans les préparations déjà enregistrées.
 - Liens des sources distingués visuellement et ouverts dans un nouvel onglet isolé depuis l’aperçu et le lecteur.

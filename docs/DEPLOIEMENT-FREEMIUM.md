@@ -70,3 +70,10 @@ Déployé le 8 octobre 2026. Archive SHA-256 `166aa3231150372af69c96c89612d4f297
 ## Sources cliquables — 0.3.0-rc.8
 
 Déployé le 8 octobre 2026. SHA-256 `2d616a88fcc0b2b4a5681c301a16696707f81fc85c7dfd52ca208b0d845e222d`. 50 assertions serveur et parcours navigateur desktop réussis, ouverture de source dans un onglet isolé vérifiée. URL des préparations existantes 50/51 vérifiées en production sans réimportation ni publication de contenu. Compte technique supprimé.
+
+
+## Atelier QCM et entraînements — 0.3.0-rc.9
+
+Déployé le 8 octobre 2026. Archive SHA-256 `1c285ff88a03116127f6ab5116d12a5eabd3dfa95c34c06a6238ea289191d876`. Modèle XLSX disponible dans Gérer les QCM. Imports, revue, mises à jour et restauration ; banque par fiche utilisée par les séances fiche/thème/UE. Nouveaux types privés et métadonnées ; aucune migration destructive. Sessions/corrigés figés côté serveur ; droits QCM existants conservés sans débit supplémentaire pour les séances.
+
+Validation locale : 39 assertions QCM, 50 imports, 13 révision, 18 administration ; deux parcours QCM ordinateur/iPhone et quatre parcours existants ordinateur. Vérification réelle : plugin/assets rc.9, APIs administrateur et périmètres, modèle XLSX téléchargé, connexion Google et analyse de tout le Drive (aucun `_qcm.xlsx` encore présent). Aucun contenu technique publié en production. Compte temporaire supprimé. Archive rc.8 disponible pour retour arrière ; les métadonnées QCM antérieures sont conservées dans l’historique d’import.

@@ -3,7 +3,7 @@ defined('ABSPATH') || exit;
 final class OI_Drive {
     private const ROOT='131LsjTxr9RswdWDWY_l9-wfx_hmnAs30';
     public static function routes(): void {
-        foreach(['/imports/drive/service-account'=>'service_account','/imports/drive/config'=>'config','/imports/drive/disconnect'=>'disconnect','/imports/drive/scan'=>'scan','/imports/drive/prepare'=>'prepare'] as $path=>$callback)register_rest_route('oi/v1',$path,['methods'=>'POST','permission_callback'=>[OI_Imports::class,'auth'],'callback'=>[self::class,$callback]]);
+        foreach(['/imports/drive/service-account'=>'service_account','/imports/drive/config'=>'config','/imports/drive/disconnect'=>'disconnect','/imports/drive/scan'=>'scan','/imports/drive/prepare'=>'prepare','/imports/drive/prepare-qcm'=>'prepare_qcm'] as $path=>$callback)register_rest_route('oi/v1',$path,['methods'=>'POST','permission_callback'=>[OI_Imports::class,'auth'],'callback'=>[self::class,$callback]]);
     }
     private static function seal(array $value): string {
         $iv=random_bytes(12);$tag='';$data=openssl_encrypt(wp_json_encode($value),'aes-256-gcm',hash('sha256',wp_salt('auth'),true),OPENSSL_RAW_DATA,$iv,$tag);if($data===false)throw new RuntimeException('Chiffrement impossible.');return base64_encode($iv.$tag.$data);
@@ -71,7 +71,7 @@ final class OI_Drive {
     }
     public static function scan(WP_REST_Request $r): array|WP_Error {
         try{
-            $key='oi_drive_scan_'.get_current_user_id();$job=get_transient($key);
+            $qcm=$r['kind']==='qcm';$key='oi_drive_scan_'.get_current_user_id().($qcm?'_qcm':'');$job=get_transient($key);
             if($r['restart']||!$job)$job=['queue'=>[['id'=>self::ROOT,'path'=>[],'token'=>'']],'files'=>[],'visited'=>[],'count'=>0,'done'=>false];
             for($step=0;$step<3&&$job['queue'];$step++){
                 $folder=array_shift($job['queue']);$data=json_decode(wp_remote_retrieve_body(self::request('files',['q'=>"'".$folder['id']."' in parents and trashed = false",'fields'=>'nextPageToken,files(id,name,mimeType,modifiedTime,size,md5Checksum)','pageSize'=>100,'pageToken'=>$folder['token'],'supportsAllDrives'=>'true','includeItemsFromAllDrives'=>'true'])),true);
@@ -81,7 +81,7 @@ final class OI_Drive {
                     if($f['mimeType']==='application/vnd.google-apps.folder'){
                         if(count($folder['path'])>=12)throw new RuntimeException('Arborescence trop profonde.');
                         if(!isset($job['visited'][$f['id']])){$job['visited'][$f['id']]=true;$job['queue'][]=['id'=>$f['id'],'path'=>array_merge($folder['path'],[$f['name']]),'token'=>''];}
-                    }elseif(preg_match('/\.docx$/i',$f['name'])&&$f['mimeType']==='application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
+                    }elseif((!$qcm&&preg_match('/\.docx$/i',$f['name'])&&$f['mimeType']==='application/vnd.openxmlformats-officedocument.wordprocessingml.document')||($qcm&&preg_match('/_qcm(?:[_ -]v\d+(?:\.\d+)*)?\.xlsx$/i',$f['name'])&&$f['mimeType']==='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')){
                         $f['path']=$folder['path'];$job['files'][]=$f;
                     }
                 }
@@ -89,7 +89,7 @@ final class OI_Drive {
             }
             $job['done']=!$job['queue'];set_transient($key,$job,3600);
             $candidates=$job['done']?self::candidates($job['files']):[];$missing=[];
-            if($job['done']){
+            if($job['done']&&!$qcm){
                 $known=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','numberposts'=>-1,'meta_key'=>'oi_drive_file_id']);
                 foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId||(!empty($candidate['code'])&&$candidate['code']===(get_post_meta($post->ID,'oi_source_code',true)?:OI_Imports::code($post->post_title)))){$found=true;if($candidate['id']===$fileId&&!empty($candidate['code'])&&!get_post_meta($post->ID,'oi_source_code',true))update_post_meta($post->ID,'oi_source_code',$candidate['code']);$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
             }
@@ -98,10 +98,19 @@ final class OI_Drive {
     }
     public static function candidates(array $files): array {
         $groups=[];foreach($files as $f){$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)$/i',trim($part),$m))$version=$m[1];else $path[]=$part;}
-            $stem=pathinfo($f['name'],PATHINFO_FILENAME);if($version==='0'&&preg_match('/[_ -]v(\d+(?:\.\d+)+)$/i',$stem,$m))$version=$m[1];$stem=preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$stem);$f['code']=OI_Imports::code($f['name']);$key=$f['code']?'code:'.$f['code']:hash('sha256',mb_strtolower(implode('/',$path).'/'.$stem));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
+            $stem=preg_replace('/_qcm$/i','',pathinfo($f['name'],PATHINFO_FILENAME));if($version==='0'&&preg_match('/[_ -]v(\d+(?:\.\d+)+)$/i',$stem,$m))$version=$m[1];$stem=preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$stem);$f['code']=OI_Imports::code($f['name']);$key=$f['code']?'code:'.$f['code']:hash('sha256',mb_strtolower(implode('/',$path).'/'.$stem));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
             if(!isset($groups[$key])||version_compare($version,$groups[$key][0]['version'],'>'))$groups[$key]=[$f];elseif(version_compare($version,$groups[$key][0]['version'],'='))$groups[$key][]=$f;
         }
         $result=[];foreach($groups as $group)foreach($group as $file){$file['conflict']=count($group)>1;$result[]=$file;}return $result;
+    }
+    public static function prepare_qcm(WP_REST_Request $r): array|WP_Error {
+        $job=get_transient('oi_drive_scan_'.get_current_user_id().'_qcm');$ids=$r['ids'];if(!$job||empty($job['done'])||!is_array($ids)||!$ids||count($ids)>10)return new WP_Error('oi_scan','Analyse le Drive puis sélectionne de 1 à 10 Excel.',['status'=>400]);
+        $result=[];foreach(self::candidates($job['files']) as $file){if(!in_array($file['id'],$ids,true))continue;$tmp='';
+            try{if($file['conflict'])throw new RuntimeException('Deux Excel portent le même code et la même version. Corrige le doublon.');if((int)($file['size']??0)>5*1024*1024)throw new RuntimeException('Excel de plus de 5 Mo.');
+                $body=wp_remote_retrieve_body(self::request('files/'.rawurlencode($file['id']),['alt'=>'media','supportsAllDrives'=>'true']));require_once ABSPATH.'wp-admin/includes/file.php';$tmp=wp_tempnam('oi-qcm');if(!$tmp||file_put_contents($tmp,$body)!==strlen($body))throw new RuntimeException('Fichier temporaire impossible.');
+                $id=OI_QCM_Imports::stage($tmp,$file['name'],['file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label']]);$result[]=['file'=>$file['name'],'id'=>$id,'ok'=>true,'unchanged'=>$id===0];
+            }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
+        }return $result;
     }
     public static function prepare(WP_REST_Request $r): array|WP_Error {
         $job=get_transient('oi_drive_scan_'.get_current_user_id());$ids=$r['ids'];if(!$job||empty($job['done'])||!is_array($ids)||count($ids)>10)return new WP_Error('oi_scan','Termine une analyse puis sélectionne jusqu’à 10 Word.',['status'=>400]);
