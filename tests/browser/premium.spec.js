@@ -1,0 +1,19 @@
+const {test,expect}=require('@playwright/test');
+const fs=require('node:fs');const {execFile}=require('node:child_process');const {promisify}=require('node:util');
+const run=promisify(execFile);const credentials=JSON.parse(fs.readFileSync('.runtime/browser-user.json','utf8'));
+test('retour de paiement : attendre le webhook, afficher le Premium et préserver la progression',async({page})=>{
+ test.skip(!['desktop','iPhone'].includes(test.info().project.name),'Activation sur ordinateur et téléphone.');test.setTimeout(90000);
+ const user=credentials.projects[test.info().project.name];
+ const fixture=action=>run('scripts/dc.sh',['wp','eval-file','/tests/browser-premium.php',String(user.id),action],{timeout:60000});
+ await page.goto('/connexion/');await page.locator('#user_login').fill(user.login);await page.locator('#user_pass').fill(user.password);await page.locator('#wp-submit').click();await expect(page.locator('.oi-wallet')).toBeVisible();
+ const nonce=await page.evaluate(()=>OI.nonce);const before=await(await page.request.get('/?rest_route=/oi/v1/account',{headers:{'X-WP-Nonce':nonce}})).json();expect(before.premium).toBe(false);
+ try{
+  await page.goto('/espace-revision/?oi_payment=received');await expect(page.locator('.oi-payment-notice')).toContainText('attendons');await expect(page.locator('[data-balance=FICHE]')).toHaveText('5');
+  await fixture('grant');
+  await expect(page.locator('.oi-payment-notice')).toContainText('Premium est actif',{timeout:20000});
+  await expect(page.locator('[data-balance=FICHE]')).toHaveText('Inclus');await expect(page.locator('[data-balance=QCM]')).toHaveText('Inclus');await expect(page.locator('[data-balance=IA]')).toHaveText('105');
+  await expect(page.locator('.oi-main-nav [data-tab=premium]')).toBeHidden();await expect(page.locator('.oi-wallet-actions [data-tab=premium]')).toHaveCount(0);await expect(page.locator('#oi-results [data-unlock]')).toHaveCount(0);
+  const after=await(await page.request.get('/?rest_route=/oi/v1/account',{headers:{'X-WP-Nonce':nonce}})).json();expect(after.progress).toEqual(before.progress);
+  await page.screenshot({path:`.runtime/freemium-active-${test.info().project.name}.png`,fullPage:true});
+ }finally{await fixture('cleanup');}
+});

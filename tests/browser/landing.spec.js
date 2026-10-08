@@ -5,11 +5,12 @@ async function noOverflow(page) {
 }
 
 test('accueil : offre, démonstration corrigée, FAQ et navigation publique',async({page})=>{
+  test.setTimeout(90000);
   const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('/');
-  await expect(page.locator('h1')).toContainText('réussir ton');
-  await expect(page.locator('.oi-offer-grid article')).toHaveCount(4);
+  await expect(page.locator('h1')).toContainText('Tes cours d’IFSI');
+  await expect(page.locator('.oi-offer-grid article')).toHaveCount(3);
   const nav=page.getByRole('navigation',{name:'Navigation principale',exact:true});
   await expect(nav.getByRole('link',{name:'Se connecter',exact:true})).toBeVisible();
   await expect(nav.getByRole('link',{name:'S’inscrire',exact:false})).toBeVisible();

@@ -1,5 +1,8 @@
 # Roadmap
 
+> **Freemium/Premium 0.3.0-rc.1 — livraison pour revue sur OVH, 8 octobre 2026.** Le propriétaire a ensuite explicitement demandé le déploiement, levant l’interdiction initiale du cahier. Voir [la revue Freemium](docs/REVUE-FREEMIUM.md) et [le plan de validation](docs/PLAN-FREEMIUM.md). Les informations 0.2.2 ci-dessous décrivent la version précédente.
+
+
 Lots réalisés progressivement, chacun avec validation avant commit.
 
 1. Socle : plugin, rôle, fiches, taxonomies, packs, administration et permissions.

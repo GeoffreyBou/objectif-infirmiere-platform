@@ -49,7 +49,7 @@ final class OI_Revision {
     }
     public static function quiz_endpoint(WP_REST_Request $r): array|WP_Error {
         $id=absint($r['id']);$user=get_current_user_id();
-        if(!OI_Model::can_read($user,$id)) return new WP_Error('oi_forbidden','Cette fiche ne fait pas partie de vos accès.',['status'=>403]);
+        if(!OI_Offer::can_access($user,'QCM',$id)) return new WP_Error('oi_forbidden','Cette fiche ne fait pas partie de vos accès.',['status'=>403]);
         $quiz=self::quiz($id,false);$answers=$r['answers'];
         if(!$quiz || !is_array($answers) || count($answers)!==count($quiz)) return new WP_Error('oi_quiz','Réponses invalides.',['status'=>400]);
         $score=0;$corrections=[];
@@ -64,9 +64,9 @@ final class OI_Revision {
         return ['score'=>$score,'total'=>count($quiz),'corrections'=>$corrections];
     }
     public static function progress(int $user): array {
-        $allowed=OI_Model::allowed($user);$state=self::all($user);$revised=0;$viewed=0;$quizzes=0;
-        foreach($allowed as $id) {$s=$state[$id]??[];if(!empty($s['revised']))$revised++;if(!empty($s['viewed_at']))$viewed++;if(!empty($s['quiz_at']))$quizzes++;}
-        return ['total'=>count($allowed),'revised'=>$revised,'viewed'=>$viewed,'quizzes'=>$quizzes];
+        $fiches=OI_Model::allowed($user);$allowed=OI_Model::ids(array_merge($fiches,OI_Credits::unlocked($user,'QCM')));$state=self::all($user);$revised=0;$viewed=0;$quizzes=0;
+        foreach($allowed as $id) {$s=$state[$id]??[];if(in_array($id,$fiches,true)&&!empty($s['revised']))$revised++;if(in_array($id,$fiches,true)&&!empty($s['viewed_at']))$viewed++;if(!empty($s['quiz_at']))$quizzes++;}
+        return ['total'=>count($fiches),'revised'=>$revised,'viewed'=>$viewed,'quizzes'=>$quizzes];
     }
     public static function watermark(int $user): string {
         if(!get_option('oi_watermark',true)) return '';

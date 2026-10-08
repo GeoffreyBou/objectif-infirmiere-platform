@@ -1,5 +1,8 @@
 # Architecture Objectif Infirmière
 
+> **Freemium/Premium 0.3.0-rc.1 — livraison pour revue sur OVH, 8 octobre 2026.** Le propriétaire a ensuite explicitement demandé le déploiement, levant l’interdiction initiale du cahier. Voir [la revue Freemium](docs/REVUE-FREEMIUM.md) et [le plan de validation](docs/PLAN-FREEMIUM.md). Les informations 0.2.2 ci-dessous décrivent la version précédente.
+
+
 ## Décision
 WordPress natif + plugin propriétaire unique + Stripe Checkout + OpenAI Responses/File Search. PHP 8.3+, WordPress 6.8+. Pas de LearnDash, framework JavaScript ni service applicatif séparé. Docker sert uniquement aux tests locaux, pas au déploiement OVH. Production cible : https://app-dev.objectif-infirmiere.fr/ (considérée comme production malgré son nom). Développement et validation en local, pas de staging distant. L'installation OVH, son thème et ses plugins restent à inventorier : aucun accès fourni. Sauvegarde vérifiée et autorisation du déploiement concret avant toute intervention distante.
 

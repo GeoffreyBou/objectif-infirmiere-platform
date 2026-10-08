@@ -1,5 +1,8 @@
 # Objectif Infirmière
 
+> **Freemium/Premium 0.3.0-rc.1 — livraison pour revue sur OVH, 8 octobre 2026.** Le propriétaire a ensuite explicitement demandé le déploiement, levant l’interdiction initiale du cahier. Voir [la revue Freemium](docs/REVUE-FREEMIUM.md) et [le plan de validation](docs/PLAN-FREEMIUM.md). Les informations 0.2.2 ci-dessous décrivent la version précédente.
+
+
 Plateforme WordPress propriétaire 0.2.2 : accueil de présentation, démo interactive, inscription et espace membre. Fonctionnalités : fiches privées par pack, navigation, recherche, lecteur mobile, favoris, progression, quiz, Stripe Checkout TEST et Conseiller IA avec Responses/File Search.
 
 Développement en local. Production cible : https://app-dev.objectif-infirmiere.fr/. Refonte de revue déployée : accueil commercial, découverte interactive, inscription gratuite et espace membre Fiches / QCM / Assistant. Dix fiches de démonstration, favoris et progression. Voir [le parcours de revue](docs/REVUE-PRODUIT.md). Clés réseau injectées : Stripe confirme TEST, OpenAI authentifie Models/Files/Vector Stores et les dix fiches démo sont indexées. Prix Stripe TEST configuré (39 EUR) et création Checkout réelle validée. Aucun paiement complet ni réponse Responses réelle validé : secret webhook absent, et Responses refuse la clé via le proxy (401 invalid_api_key).

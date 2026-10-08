@@ -10,6 +10,9 @@ final class OI_Storage {
             session_id varchar(191) NOT NULL,
             event_id varchar(191) NOT NULL,
             customer_id varchar(191) NOT NULL DEFAULT '',
+            payment_intent varchar(191) NOT NULL DEFAULT '',
+            refunded_amount bigint unsigned NOT NULL DEFAULT 0,
+            refund_status varchar(20) NOT NULL DEFAULT '',
             user_id bigint unsigned NOT NULL,
             pack_id bigint unsigned NOT NULL,
             amount bigint unsigned NOT NULL DEFAULT 0,
@@ -19,7 +22,8 @@ final class OI_Storage {
             created_at datetime NOT NULL,
             PRIMARY KEY  (id),
             UNIQUE KEY session_id (session_id),
-            KEY user_id (user_id)
+            KEY user_id (user_id),
+            KEY payment_intent (payment_intent)
         ) $charset;");
         dbDelta("CREATE TABLE {$wpdb->prefix}oi_ai_usage (
             id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -42,7 +46,15 @@ final class OI_Storage {
             $name = $wpdb->prefix . $suffix;
             if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($name))) !== $name) { throw new RuntimeException('Migration Objectif Infirmière impossible : vérifier les droits SQL.'); }
         }
-        update_option('oi_schema_version', 2);
+        OI_Credits::migrate();
+        OI_AI_Journal::migrate();
+        OI_Metrics::migrate();
+        OI_Credit_Admin::migrate();
+        foreach(['oi_payments','oi_credit_grants','oi_credit_operations','oi_unlocks','oi_wallets','oi_ai_requests','oi_metrics','oi_campaigns'] as $suffix){
+            $engine=$wpdb->get_var($wpdb->prepare('SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=%s',$wpdb->prefix.$suffix));
+            if(strtolower((string)$engine)!=='innodb')throw new RuntimeException('Migration incomplète ou moteur non transactionnel : '.$suffix);
+        }
+        update_option('oi_schema_version', 5);
     }
     public static function paid_packs(int $user): array {
         global $wpdb;

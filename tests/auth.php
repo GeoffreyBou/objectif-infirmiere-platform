@@ -84,8 +84,8 @@ try {
     update_post_meta($demo_pack, 'oi_free_demo', '1');
     update_option('oi_registration_demo_pack', $demo_pack);
     $demo_student = $auth_create(array_replace($auth_fields, ['email' => 'auth_demo_' . $auth_suffix . '@example.invalid']));
-    $auth_assert(is_int($demo_student) && OI_Model::packs($demo_student) === [$demo_pack], 'Seul le pack démo explicitement marqué est accordé');
-    $auth_assert(OI_Model::can_read($demo_student, $demo_fiche), 'La fiche de démonstration est effectivement accessible');
+    $auth_assert(is_int($demo_student) && OI_Model::packs($demo_student) === [], 'Le compte gratuit ne reçoit plus le pack démo entier');
+    $auth_assert(!OI_Model::can_read($demo_student, $demo_fiche), 'La fiche reste verrouillée avant vérification et déblocage');
     $auth_assert(!OI_Model::can_read($demo_student, $paid_fiche), 'Une fiche d’un autre pack reste interdite');
     update_post_meta($demo_pack, 'oi_price', 'price_authConvertedDemo');
     $converted_student = $auth_create(array_replace($auth_fields, ['email' => 'auth_converted_' . $auth_suffix . '@example.invalid']));

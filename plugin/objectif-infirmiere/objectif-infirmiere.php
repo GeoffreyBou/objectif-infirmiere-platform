@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.2.2
+ * Version: 0.3.0-rc.1
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.2.2');
+define('OI_VERSION', '0.3.0-rc.1');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -31,6 +31,15 @@ add_shortcode('objectif_infirmiere_home', ['OI_App', 'landing']);
 register_activation_hook(__FILE__, ['OI_App', 'install_pages']);
 
 require_once OI_DIR . 'includes/class-storage.php';
+require_once OI_DIR . 'includes/class-credits.php';
+require_once OI_DIR . 'includes/class-metrics.php';
+require_once OI_DIR . 'includes/class-credit-admin.php';
+OI_Credit_Admin::register();
+add_action('rest_api_init',[OI_Metrics::class,'register']);
+require_once OI_DIR . 'includes/class-offer.php';
+require_once OI_DIR . 'includes/class-verification.php';
+OI_Verification::register();
+add_action('rest_api_init', [OI_Offer::class, 'register']);
 require_once OI_DIR . 'includes/class-limit.php';
 require_once OI_DIR . 'includes/class-auth.php';
 OI_Auth::register();
@@ -38,7 +47,9 @@ add_shortcode('objectif_infirmiere_register', fn()=>OI_Auth::render('register'))
 add_shortcode('objectif_infirmiere_login', fn()=>OI_Auth::render('login'));
 require_once OI_DIR . 'includes/class-stripe.php';
 add_action('rest_api_init', ['OI_Stripe', 'register']);
-add_action('init', function () { if ((int)get_option('oi_schema_version') !== 2) { OI_Storage::migrate(); } });
+add_action('init', function () { if ((int)get_option('oi_schema_version') !== 5) { OI_Storage::migrate(); } });
+require_once OI_DIR . 'includes/class-ai-journal.php';
+OI_AI_Journal::register();
 require_once OI_DIR . 'includes/class-ai.php';
 add_action('rest_api_init', ['OI_AI', 'register']);
 add_action('save_post_oi_fiche', ['OI_AI', 'queue']);

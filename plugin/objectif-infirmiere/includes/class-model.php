@@ -34,7 +34,7 @@ final class OI_Model {
     public static function packs(int $user): array {
         return self::ids(array_merge(self::ids(get_user_meta($user, 'oi_packs', true)), class_exists('OI_Storage') ? OI_Storage::paid_packs($user) : []));
     }
-    public static function allowed(int $user): array {
+    public static function legacy_allowed(int $user): array {
         if (!$user) { return []; }
         if (user_can($user, 'manage_options')) {
             return get_posts(['post_type' => 'oi_fiche', 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids']);
@@ -47,9 +47,11 @@ final class OI_Model {
         }
         return self::ids($ids);
     }
-    public static function can_read(int $user, int $fiche): bool {
-        return $user > 0 && get_post_type($fiche) === 'oi_fiche'
-            && get_post_status($fiche) === 'publish'
-            && in_array($fiche, self::allowed($user), true);
+    public static function allowed(int $user): array {
+        if (!$user || get_user_meta($user,'oi_email_pending',true)) return [];
+        return self::ids(array_merge(self::legacy_allowed($user),array_filter(OI_Credits::unlocked($user,'FICHE'),fn($id)=>get_post_type($id)==='oi_fiche'&&get_post_status($id)==='publish')));
+    }
+    public static function can_read(int $user,int $fiche): bool {
+        return OI_Offer::can_access($user,'FICHE',$fiche);
     }
 }

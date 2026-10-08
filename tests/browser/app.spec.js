@@ -1,5 +1,6 @@
 const {test, expect}=require('@playwright/test');
 const fs=require('node:fs');
+const {confirmEmail}=require('./mail-helper');
 const credentials=JSON.parse(fs.readFileSync('.runtime/browser-user.json','utf8'));
 
 async function login(page) {
@@ -57,10 +58,8 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   await page.getByRole('button',{name:'Poser une question sur cette fiche'}).click();
   await expect(memberTab(page,'ai')).toHaveAttribute('aria-current','page');
   await expect(page.locator('.oi-chat-context')).toContainText('Furosémide');
-  await page.locator('#oi-question').fill('Pourquoi surveiller la kaliémie ?');
-  await page.getByRole('button',{name:'Poser ma question',exact:true}).click();
-  await expect(page.locator('#oi-status')).toContainText('pas encore configuré');
-  await expect(page.getByRole('button',{name:'Poser ma question',exact:true})).toBeEnabled();
+  await expect(page.locator('.oi-chat-availability')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Poser ma question',exact:true})).toBeDisabled();
   await noOverflow(page);
   await page.screenshot({path:`.runtime/assistant-${test.info().project.name}.png`,fullPage:true});
 
@@ -137,6 +136,8 @@ test('inscription réelle : session élève et accès démo sans élévation de 
   });
   await page.getByRole('button',{name:'Créer mon compte gratuit'}).click();
   await expect(page).toHaveURL(/\/espace-revision\/$/);
+  await expect(page.getByRole('heading',{name:'Vérifie ton adresse e-mail.'})).toBeVisible();
+  await confirmEmail(page,email);
   await expect(page.getByRole('heading',{name:'Bonjour Camille Test.',exact:true})).toBeVisible();
   await expect(page.locator('#oi-results .oi-card').first()).toBeVisible();
   const nonce=await page.evaluate(()=>OI.nonce);

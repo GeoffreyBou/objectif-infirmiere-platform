@@ -27,6 +27,8 @@ final class OI_Auth {
             'password' => 'Choisis un mot de passe contenant au moins 12 caractères.',
             'consent' => 'Confirme la création de ton compte pour continuer.',
             'account' => 'La création du compte n’a pas abouti. Réessaie, ou connecte-toi si tu as déjà un compte.',
+            'verification' => 'Le lien de vérification est invalide ou expiré. Connecte-toi pour en demander un nouveau.',
+            'verified' => 'Adresse confirmée ! Connecte-toi pour retrouver tes crédits de bienvenue.',
             'login' => 'Connexion impossible avec ces informations. Vérifie-les ou réinitialise ton mot de passe.',
         ];
         $error = $messages[$notice] ?? '';
@@ -74,12 +76,7 @@ final class OI_Auth {
             update_user_meta($user, 'oi_interest', $interest);
         }
         update_user_meta($user, 'oi_signup_source', 'public_form');
-        $pack = absint(get_option('oi_registration_demo_pack', 0));
-        if ($pack && get_post_type($pack) === 'oi_pack' && get_post_status($pack) === 'publish'
-            && get_post_meta($pack, 'oi_free_demo', true) === '1'
-            && !get_post_meta($pack, 'oi_price', true)) {
-            update_user_meta($user, 'oi_packs', [$pack]);
-        }
+        update_user_meta($user, 'oi_email_pending', 1);
         return (int) $user;
     }
 
@@ -93,6 +90,7 @@ final class OI_Auth {
         if (is_wp_error($user)) {
             self::redirect('register', $user->get_error_code());
         }
+        OI_Verification::issue($user);
         wp_set_current_user($user);
         wp_set_auth_cookie($user, false, is_ssl());
         do_action('wp_login', get_userdata($user)->user_login, get_userdata($user));

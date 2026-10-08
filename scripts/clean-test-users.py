@@ -8,20 +8,20 @@ def wp(*args):
     return subprocess.run(['scripts/dc.sh','wp',*args],capture_output=True,text=True)
 
 mode=sys.argv[1]
-path=Path('.runtime/browser-user.json' if mode=='browser' else '.runtime/registration-test-user.json')
+path=Path('.runtime/browser-user.json' if mode=='browser' else '.runtime/freemium-test-users.json' if mode=='freemium' else '.runtime/registration-test-user.json')
 if not path.exists():
     raise SystemExit(0)
 home=wp('option','get','home')
 if home.returncode or urlsplit(home.stdout.strip()).hostname not in ['localhost','127.0.0.1']:
     raise SystemExit('Nettoyage réservé à WordPress local.')
 fixture=json.loads(path.read_text())
-entries=[fixture]+list(fixture.get('projects',{}).values()) if mode=='browser' else [fixture]
+entries=[fixture]+list(fixture.get('projects',{}).values()) if mode=='browser' else [{'email':email} for email in fixture] if mode=='freemium' else [fixture]
 seen=set()
 for entry in entries:
     identity=str(entry['id']) if mode=='browser' else entry.get('email','')
     if identity in seen: continue
     seen.add(identity)
-    if mode!='browser' and not re.fullmatch(r'oi_e2e_signup_\d+@example\.invalid',identity):
+    if mode!='browser' and not re.fullmatch(r'oi_e2e_(?:signup|freemium)_\d+@example\.invalid',identity):
         raise SystemExit('Identité de test non reconnue.')
     result=wp('user','get',identity,'--fields=ID,user_login,user_email,roles','--format=json')
     if result.returncode:

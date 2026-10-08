@@ -7,6 +7,9 @@ final class OI_Settings {
         add_submenu_page('objectif-infirmiere','Conseiller IA','IA et synchronisation','manage_options','oi-ai',[self::class,'ai']);
     }
     public static function register(): void {
+        register_setting('oi_settings','oi_premium_pack',['type'=>'integer','sanitize_callback'=>function($v){$id=absint($v);return get_post_type($id)==='oi_pack'&&get_post_status($id)==='publish'?$id:0;}]);
+        register_setting('oi_settings','oi_ai_enabled',['type'=>'boolean','sanitize_callback'=>'rest_sanitize_boolean']);
+        register_setting('oi_settings','oi_ai_retention_days',['type'=>'integer','sanitize_callback'=>fn($v)=>max(0,min(30,absint($v)))]);
         foreach(['oi_ai_model','oi_vector_store','oi_ai_prompt'] as $key) register_setting('oi_settings',$key,['type'=>'string','sanitize_callback'=>$key==='oi_ai_prompt'?'sanitize_textarea_field':'sanitize_text_field']);
         register_setting('oi_settings','oi_ai_quota',['type'=>'integer','sanitize_callback'=>fn($v)=>max(1,min(1000,absint($v)))]);
         register_setting('oi_settings','oi_watermark',['type'=>'boolean','sanitize_callback'=>'rest_sanitize_boolean']);
@@ -17,7 +20,9 @@ final class OI_Settings {
         echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Secrets à définir côté serveur, jamais ici ni dans Git : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
         foreach(['OI_STRIPE_SECRET_KEY','OI_STRIPE_WEBHOOK_SECRET','OI_OPENAI_API_KEY'] as $name) echo '<li>'.esc_html($name).' : '.(OI_Stripe::secret($name)?'présent':'absent').'</li>';
         echo '</ul><form method="post" action="options.php">';settings_fields('oi_settings');
-        foreach(['oi_ai_model'=>['Modèle OpenAI','gpt-4.1-mini'],'oi_vector_store'=>['Vector Store ID',''],'oi_ai_quota'=>['Quota quotidien (UTC), y compris les demandes échouées',20],'oi_ai_input_cost'=>['Prix entrée USD par million de tokens (renseigner tarif actuel)',0],'oi_ai_output_cost'=>['Prix sortie USD par million de tokens (renseigner tarif actuel)',0]] as $name=>[$label,$default]) {
+        echo '<p><label>Pack Premium à 59 € <select name="oi_premium_pack"><option value="0">À configurer</option>';
+        foreach(get_posts(['post_type'=>'oi_pack','post_status'=>'publish','numberposts'=>-1]) as $pack)echo '<option value="'.(int)$pack->ID.'" '.selected(OI_Offer::pack(),$pack->ID,false).'>'.esc_html($pack->post_title).'</option>';echo '</select></label></p><input type="hidden" name="oi_ai_enabled" value="0"><p><label><input type="checkbox" name="oi_ai_enabled" value="1" '.checked((bool)get_option('oi_ai_enabled',false),true,false).'> Activer le conseiller IA après validation réelle de Responses et des sources</label></p><p>Quand cette case n’est pas cochée, le conseiller reste présenté en préparation et aucun crédit IA n’est consommé.</p>';
+        foreach(['oi_ai_retention_days'=>['Conservation des textes IA en jours (0 = aucune, maximum 30)',0],'oi_ai_model'=>['Modèle OpenAI','gpt-4.1-mini'],'oi_vector_store'=>['Vector Store ID',''],'oi_ai_quota'=>['Limite de sécurité quotidienne IA (UTC), distincte des crédits',20],'oi_ai_input_cost'=>['Prix entrée USD par million de tokens (renseigner tarif actuel)',0],'oi_ai_output_cost'=>['Prix sortie USD par million de tokens (renseigner tarif actuel)',0]] as $name=>[$label,$default]) {
             echo '<p><label>'.esc_html($label).'<br><input class="regular-text" name="'.esc_attr($name).'" value="'.esc_attr(get_option($name,$default)).'"></label></p>';
         }
         echo '<p><label>Prompt pédagogique complémentaire<br><textarea class="large-text" rows="6" name="oi_ai_prompt">'.esc_textarea(get_option('oi_ai_prompt','Explique les notions avec clarté et propose des pistes de révision.')).'</textarea></label></p><input type="hidden" name="oi_watermark" value="0"><p><label><input type="checkbox" name="oi_watermark" value="1" '.checked(get_option('oi_watermark',true),true,false).'> Watermark discret (initiale et ID compte)</label></p>';
@@ -27,8 +32,8 @@ final class OI_Settings {
         if(!current_user_can('manage_options'))return;
         global $wpdb;$page=max(1,absint($_GET['paged']??1));$offset=($page-1)*50;
         $rows=$wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments ORDER BY id DESC LIMIT 50 OFFSET %d",$offset));
-        echo '<div class="wrap"><h1>Paiements Stripe TEST</h1><table class="widefat"><thead><tr><th>Date UTC</th><th>Compte</th><th>Pack</th><th>Montant</th><th>Session</th><th>État</th><th>Email accepté</th></tr></thead><tbody>';
-        foreach($rows as $row) echo '<tr><td>'.esc_html($row->created_at).'</td><td>'.(int)$row->user_id.'</td><td>'.esc_html(get_the_title($row->pack_id)).'</td><td>'.esc_html(number_format($row->amount/100,2).' '.strtoupper($row->currency)).'</td><td>'.esc_html($row->session_id).'</td><td>'.esc_html($row->status).'</td><td>'.($row->notified?'Oui':'Non — vérifier SMTP et rejouer le webhook').'</td></tr>';
+        echo '<div class="wrap"><h1>Paiements Stripe TEST</h1><table class="widefat"><thead><tr><th>Date UTC</th><th>Compte</th><th>Pack</th><th>Montant</th><th>Session</th><th>État / remboursement</th><th>Email accepté</th></tr></thead><tbody>';
+        foreach($rows as $row) echo '<tr><td>'.esc_html($row->created_at).'</td><td>'.(int)$row->user_id.'</td><td>'.esc_html(get_the_title($row->pack_id)).'</td><td>'.esc_html(number_format($row->amount/100,2).' '.strtoupper($row->currency)).'</td><td>'.esc_html($row->session_id).'</td><td>'.esc_html($row->status.' / '.$row->refund_status).'</td><td>'.($row->notified?'Oui':'Non — vérifier SMTP et rejouer le webhook').'</td></tr>';
         echo '</tbody></table><p>Les emails acceptés par WordPress ne prouvent pas leur livraison. Configurez et testez votre SMTP sur OVH.</p><p><a href="'.esc_url(add_query_arg(['page'=>'oi-payments','paged'=>$page+1],admin_url('admin.php'))).'">Page suivante</a></p></div>';
     }
     public static function ai(): void {

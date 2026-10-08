@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0-rc.1 — 2026-10-08 — revue déployée sur OVH après autorisation explicite
+
+- Vérification e-mail et attribution unique de 5 crédits Fiche, 5 QCM, 5 IA.
+- Portefeuilles transactionnels, déblocages permanents distincts, promotions avec expiration et historique.
+- Premium unique à 59 € en TEST : confirmation serveur, bonus IA +100 unique, remboursements sans perte pédagogique.
+- Accueil, espace membre, progression et comparaison Freemium/Premium dans l'identité bleue existante.
+- Administration des crédits et campagnes reprenables, statistiques agrégées et export CSV.
+- IA : réservation, restitution sur erreur/interruption, journal de coûts et purge des conversations facultatives.
+- Les tests simulés ne valident pas les services externes : Responses, prix Stripe 59 €, webhook réel et livraison SMTP restent à qualifier. Voir docs/REVUE-FREEMIUM.md.
+
+
 ## 0.2.2 — Identité bleue et univers infirmier
 
 - Palette bleu profond, bleu vif et bleu glacé sur la vitrine, l’inscription, la connexion et l’espace membre.

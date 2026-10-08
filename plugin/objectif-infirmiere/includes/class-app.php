@@ -15,6 +15,7 @@ final class OI_App {
         return ['[objectif_infirmiere]'=>'member', '[objectif_infirmiere_home]'=>'home', '[objectif_infirmiere_register]'=>'register', '[objectif_infirmiere_login]'=>'login'][$content] ?? '';
     }
     public static function landing(): string {
+        OI_Metrics::count('home_view');
         self::assets();
         wp_enqueue_style('oi-landing', OI_URL . 'assets/landing.css', ['oi-base'], OI_VERSION);
         wp_enqueue_script('oi-public', OI_URL . 'assets/public.js', [], OI_VERSION, true);

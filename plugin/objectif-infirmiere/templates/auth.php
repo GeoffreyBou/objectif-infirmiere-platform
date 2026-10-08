@@ -21,9 +21,9 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                 <div class="oi-auth-preview-top"><span>DU COURS AUX SOINS</span><span class="oi-auth-preview-dot" aria-hidden="true"></span></div>
                 <h2>Un peu plus prête.<br>À chaque révision.</h2>
                 <ul>
-                    <li><span aria-hidden="true">01</span><span><strong>Des fiches qui vont à l’essentiel</strong><small>Organise tes connaissances, UE après UE.</small></span></li>
-                    <li><span aria-hidden="true">02</span><span><strong>Des QCM pour te challenger</strong><small>Comprends tes erreurs et progresse.</small></span></li>
-                    <li><span aria-hidden="true">03</span><span><strong>Ton assistant de révision</strong><small>L’espace IA se prépare pour tes questions.</small></span></li>
+                    <li><span aria-hidden="true">01</span><span><strong>5 fiches à choisir</strong><small>Organise tes connaissances, UE après UE.</small></span></li>
+                    <li><span aria-hidden="true">02</span><span><strong>5 séries de QCM à débloquer</strong><small>Comprends tes erreurs et progresse.</small></span></li>
+                    <li><span aria-hidden="true">03</span><span><strong>5 crédits pour ton conseiller IA</strong><small>L’espace IA se prépare pour tes questions.</small></span></li>
                 </ul>
                 <div class="oi-auth-preview-bottom"><span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Objectif diplôme. Un pas après l’autre.</div>
             </div>
@@ -42,7 +42,7 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                 <div class="oi-auth-form-wrap">
                     <span class="oi-auth-step"><?php echo $mode === 'login' ? 'ON REPREND ?' : 'LE PREMIER PAS EST GRATUIT'; ?></span>
                     <h2 id="oi-auth-panel-title"><?php echo $mode === 'login' ? 'Ton objectif,<br>à portée de main.' : 'Ton futur toi<br>te dira merci.'; ?></h2>
-                    <p class="oi-auth-description"><?php echo $mode === 'login' ? 'Connecte-toi pour retrouver ton espace de révision.' : 'Crée ton compte et découvre les fiches et QCM de démonstration. Sans carte bancaire.'; ?></p>
+                    <p class="oi-auth-description"><?php echo $mode === 'login' ? 'Connecte-toi pour retrouver ton espace de révision.' : 'Après confirmation de ton e-mail : 5 fiches à choisir, 5 séries de QCM à débloquer et 5 crédits IA. Sans carte bancaire.'; ?></p>
                     <?php if ($error !== '') : ?><div class="oi-auth-error" role="alert"><?php echo esc_html($error); ?></div><?php endif; ?>
                     <form id="oi-auth-form" class="oi-auth-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                         <input type="hidden" name="action" value="<?php echo $mode === 'login' ? 'oi_login' : 'oi_register'; ?>">
@@ -59,7 +59,7 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                             <div class="oi-auth-trap" aria-hidden="true"><label for="oi-register-website">Votre site web</label><input id="oi-register-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
                             <label class="oi-auth-check"><input type="checkbox" name="consent" value="1" required><span>Je souhaite créer mon compte Objectif Infirmière pour accéder à mon espace de révision.<?php if (get_privacy_policy_url()) : ?> <a href="<?php echo esc_url(get_privacy_policy_url()); ?>">Confidentialité</a><?php endif; ?></span></label>
                             <button class="oi-auth-submit" type="submit">Créer mon compte gratuit <span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
-                            <p class="oi-auth-footnote">La démo est gratuite. Elle ne débloque pas les packs payants.</p>
+                            <p class="oi-auth-footnote">Les crédits sont offerts une seule fois après vérification de ton e-mail. Le conseiller IA reste en préparation.</p>
                         <?php else : ?>
                             <div class="oi-auth-field"><label for="user_login">Adresse e-mail ou identifiant</label><input id="user_login" name="log" type="text" autocomplete="username" placeholder="camille@exemple.fr" maxlength="254" required></div>
                             <div class="oi-auth-field"><label for="user_pass">Mot de passe</label><div class="oi-auth-password"><input id="user_pass" name="pwd" type="password" autocomplete="current-password" maxlength="4096" required><button type="button" class="oi-auth-password-toggle" data-oi-password-toggle="user_pass" aria-controls="user_pass" aria-label="Afficher le mot de passe" aria-pressed="false" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path class="oi-auth-eye-slash" d="m4 4 16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div></div>

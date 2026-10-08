@@ -23,7 +23,10 @@ Path('.runtime/proxy.env').write_text('\n'.join(lines)+'\n')
 Path('.runtime/cloud-trust.php').write_text("<?php\ndefined('ABSPATH') || exit;\nadd_filter('http_request_args', function ($args) { $args['sslcertificates']='/etc/ssl/certs/ca-certificates.crt'; return $args; });\n")
 Path('.runtime/cloud-trust.php').chmod(0o644)
 PY_PROXY
+mkdir -p .runtime/mail
 scripts/dc.sh up -d --wait db wordpress
+# Private shared group: WordPress writes; local browser tests can inspect their own mail.
+scripts/dc.sh exec -T -u 0 wordpress sh -c 'chown 33:"$1" /var/oi-mail && chmod 2770 /var/oi-mail' sh "$(id -g)"
 if ! scripts/dc.sh run --rm cli wp core is-installed; then
   # Password remains in a local private file, never in tracked files or logs.
   scripts/dc.sh run --rm cli wp core install --url=http://127.0.0.1:8080 --title='Objectif Infirmière — Développement' --admin_user=oi_local_admin --admin_email=admin@example.invalid --admin_password="$(sed -n 's/^OI_LOCAL_ADMIN_PASSWORD=//p' .runtime/local.env)" --skip-email > .runtime/install.log

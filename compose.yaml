@@ -44,6 +44,8 @@ services:
       - wp:/var/www/html
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
       - ./.runtime/cloud-trust.php:/var/www/html/wp-content/mu-plugins/oi-cloud-trust.php:ro
+      - ./scripts/local-mail.php:/var/www/html/wp-content/mu-plugins/oi-local-mail.php:ro
+      - ./.runtime/mail:/var/oi-mail
       - ./plugin/objectif-infirmiere:/var/www/html/wp-content/plugins/objectif-infirmiere:ro
   cli:
     image: wordpress:cli-php8.3@sha256:36243da432a0f0a3b56dc3240ecee9b159108d71305e7c064d987a20a465bfde
@@ -54,6 +56,8 @@ services:
       - wp:/var/www/html
       - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
       - ./.runtime/cloud-trust.php:/var/www/html/wp-content/mu-plugins/oi-cloud-trust.php:ro
+      - ./scripts/local-mail.php:/var/www/html/wp-content/mu-plugins/oi-local-mail.php:ro
+      - ./.runtime/mail:/var/oi-mail
       - ./plugin/objectif-infirmiere:/var/www/html/wp-content/plugins/objectif-infirmiere:ro
       - ./tests:/tests:ro
       - ./scripts:/oi-scripts:ro
