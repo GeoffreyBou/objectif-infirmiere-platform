@@ -5,6 +5,7 @@
   const view = document.querySelector('#oi-view');
   const publicCatalog = document.querySelector('#oi-catalog');
   const paths = {
+    folder: '<path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
     book: '<path d="M4 5.5c3-1 5-.7 8 1 3-1.7 5-2 8-1v14c-3-1-5-.7-8 1-3-1.7-5-2-8-1z"/><path d="M12 6.5v14"/>',
     quiz: '<rect x="5" y="3" width="14" height="18" rx="3"/><path d="m8 8 1 1 2-2m2 1h3M8 13h8m-8 4h5"/>',
     spark: '<path d="m12 3 2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z"/><path d="M20 2v4m-2-2h4"/>',
@@ -30,6 +31,9 @@
   let activeFiche = null;
   let query = '';
   let semester = '';
+  let unit = null;
+  let theme = null;
+  const folderNames = {unit:'',theme:''};
   let routeSequence = 0;
   let searchSequence = 0;
   const api = async (path, data) => {
@@ -57,7 +61,7 @@
   function shell() {
     if (document.querySelector('#oi-screen')) return;
     view.removeAttribute('aria-live');
-    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><div class="oi-sidebar-heading">TON CAMPUS, PARTOUT.</div><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('credits','Mes crédits','shield')}${navButton('progress','Ma progression','pulse')}${navButton('premium','Découvrir le Premium','shield')}</nav><div class="oi-sidebar-note">${icon('leaf')}<strong>Un peu chaque jour.<br>Plus solide demain.</strong><p>Ton diplôme se construit une notion à la fois.</p></div><div class="oi-student"><span class="oi-avatar">${esc((OI.name || 'É').slice(0,1).toUpperCase())}</span><span><strong>${esc(OI.name)}</strong><small>Espace personnel</small></span><span class="oi-online-dot" title="Connecté"></span></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
+    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${navButton('premium','Découvrir le Premium','shield')}</nav><div class="oi-sidebar-note">${icon('leaf')}<strong>Un peu chaque jour.<br>Plus solide demain.</strong><p>Ton diplôme se construit une notion à la fois.</p></div><div class="oi-student"><span class="oi-avatar">${esc((OI.name || 'É').slice(0,1).toUpperCase())}</span><span><strong>${esc(OI.name)}</strong><small>Espace personnel</small></span><span class="oi-online-dot" title="Connecté"></span></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
   }
   function setTab(tab) {
     currentTab = tab;
@@ -68,7 +72,7 @@
   }
   const screen = () => document.querySelector('#oi-screen');
   function subject(item) {
-    const name = item.terms?.theme?.map(t=>t.name).join(' · ') || item.terms?.ue?.map(t=>t.name).join(' · ') || 'Essentiels IFSI';
+    const name = item.terms?.theme?.filter(t=>/^[A-E][1-9] - \d+ /.test(t.name)).map(t=>t.name).join(' · ') || item.terms?.enseignement?.map(t=>t.name).join(' · ') || 'Unité d’enseignement à préciser';
     const pharmacology = /pharmaco|médicament|furosémide|paracétamol|héparine|insuline|morphine/i.test(name+' '+item.title);
     return {name, icon:pharmacology?'pill':/cardio|vital|constante/i.test(name+' '+item.title)?'pulse':/soin|hygiène|sécurité/i.test(name+' '+item.title)?'shield':'book', color:pharmacology?'peach':/soin|hygiène/i.test(name+' '+item.title)?'blue':'mint'};
   }
@@ -79,10 +83,6 @@
     const label=accessible?(quizMode?'Commencer le QCM':item.state?.revised?'Révisée':'Ouvrir la fiche'):(available?`Débloquer ${quizMode?'cette série':'cette fiche'} — 1 crédit`:'Plus de crédits — voir le Premium');
     return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" ${action}><span class="oi-card-top"><span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span><span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}${!accessible?`<br>${available} crédit(s) ${quizMode?'QCM':'Fiche'} restant(s)`:''}</span><span class="oi-card-bottom"><span>${label}</span>${icon(accessible?'arrow':'lock')}</span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
   }
-  function walletPanel() {
-    if(!account)return '';
-    return `<section class="oi-wallet" aria-label="Mes crédits"><div class="oi-wallet-heading"><h2>${account.premium?'Mon accès Premium':'Mes crédits de révision'}</h2><span>${account.premium?'Paiement unique · Sans abonnement':'Déblocages conservés, sans nouveau débit'}</span></div>${account.administrator?'<p class="oi-admin-access-note">'+icon('shield')+'<span><strong>Accès administrateur</strong> Tu peux consulter toutes les fiches et tous les QCM sans dépenser de crédit. Le parcours gratuit avec déblocage se teste avec un compte étudiant distinct.</span></p>':''}<div class="oi-wallet-grid">${[['FICHE','fiches à choisir','book'],['QCM','séries de QCM à choisir','quiz'],['IA','questions IA','spark']].map(([kind,label,glyph])=>`<div>${icon(glyph)}<strong data-balance="${kind}">${account.premium&&kind!=='IA'?'Inclus':Number(account.balances[kind])}</strong><span>${account.premium&&kind!=='IA'?(kind==='FICHE'?'Fiches du pack':'QCM du pack'):label}</span></div>`).join('')}</div>${!account.ai_available?'<p class="oi-wallet-note">Le conseiller IA est en préparation. Tes crédits IA sont conservés jusqu’à son activation.</p>':''}<div class="oi-wallet-actions"><button type="button" data-tab="progress">Ma progression ${icon('pulse')}</button>${!account.premium&&currentTab!=='premium'?'<button type="button" data-tab="premium">Découvrir le Premium — 59 € '+icon('arrow')+'</button>':''}</div>${!account.verified?'<p>Confirme ton adresse pour recevoir tes crédits de bienvenue.</p><button type="button" data-resend>Recevoir mon lien de vérification</button>':''}</section>`;
-  }
   function verification() {
     screen().innerHTML=`<section class="oi-verification"><span class="oi-eyebrow">UNE DERNIÈRE ÉTAPE</span><h1>Vérifie ton adresse e-mail.</h1><p>${account.verification_email_sent?'Ouvre le message Objectif Infirmière reçu dans ta boîte mail, puis confirme ton adresse. Pense aussi aux indésirables.':'L’e-mail de confirmation n’a pas pu être envoyé. Tu peux demander un nouvel envoi ci-dessous.'}</p><p>Tu recevras ensuite 5 crédits Fiche, 5 crédits QCM et 5 crédits IA, une seule fois.</p><button type="button" data-resend>Renvoyer le lien de vérification</button><button type="button" data-refresh-account>J’ai confirmé mon adresse</button><p id="oi-status" role="status"></p></section>`;
   }
@@ -92,18 +92,14 @@
     if(account.verification_required){verification();return false;}return true;
   }
   async function premium() {
-    shell();setTab('premium');if(!await loadAccount())return;
+    const sequence=++routeSequence;shell();setTab('premium');if(!await loadAccount()||sequence!==routeSequence)return;
     const offer=account.offer;
     if(!account.premium)api('events',{event:'premium_view'}).catch(()=>{});
     screen().innerHTML=`<section class="oi-premium-page"><span class="oi-eyebrow">${account.premium?'MON ACCÈS':'PACK PREMIUM OBJECTIF INFIRMIÈRE'}</span><h1>${account.premium?'Ton Premium est actif.':'Toutes tes révisions.<br>Un seul paiement.'}</h1>${account.premium?'<p>Tes fiches et QCM du pack sont accessibles sans dépenser de crédits, sans expiration automatique en V1.</p>':`<div class="oi-premium-price"><strong>59 €</strong><span>Paiement unique · Aucun abonnement</span></div><ul><li>${Number(offer.fiches)} fiches publiées dans le pack</li><li>${Number(offer.qcm)} séries de QCM à recommencer</li><li>Favoris et progression conservés</li><li>100 crédits IA supplémentaires, non renouvelés automatiquement</li></ul><p>Les crédits IA gratuits restants sont conservés. Les contenus de démonstration ne remplacent pas tes cours ni les protocoles de soins.</p>${!account.ai_available?'<p>Le conseiller IA est encore en préparation : les crédits restent disponibles pour son activation.</p>':''}<button type="button" data-buy="${Number(offer.pack_id)}" ${!offer.available||!account.verified?'disabled':''}>Débloquer mon accès Premium — 59 €</button><p class="oi-muted">Paiement Stripe TEST uniquement. Prix et fiscalité à confirmer avant commercialisation.</p>${!offer.available?'<p>Le paiement de démonstration n’est pas encore configuré.</p>':''}`}<button type="button" data-tab="fiches">Explorer les fiches</button><p id="oi-status" role="status"></p></section>`;
   }
-  async function credits() {
-    ++routeSequence;shell();setTab('credits');if(!await loadAccount())return;
-    screen().innerHTML=`<section class="oi-page-intro"><span class="oi-eyebrow">MON COMPTE</span><h1>Mes crédits.</h1><p>Retrouve tes soldes et les accès inclus dans ton compte.</p></section>${walletPanel()}<p id="oi-status" role="status"></p>`;
-  }
   async function progression() {
-    shell();setTab('progress');if(!await loadAccount())return;
-    screen().innerHTML=`<section class="oi-page-intro"><span class="oi-eyebrow">CHAQUE SÉANCE COMPTE</span><h1>Ma progression.</h1><p>Retrouve les fiches consultées, tes révisions et les séries travaillées.</p></section>${progress(account.progress)}<button type="button" data-tab="favorites">Retrouver mes favoris</button><p id="oi-status" role="status"></p>`;
+    const sequence=++routeSequence;shell();setTab('progress');if(!await loadAccount()||sequence!==routeSequence)return;
+    screen().innerHTML=`<section class="oi-page-intro"><span class="oi-eyebrow">CHAQUE SÉANCE COMPTE</span><h1>Ma progression.</h1><p>Retrouve les fiches consultées, tes révisions et les séries travaillées.</p></section>${progress(account.progress)}<button type="button" data-tab="favorites">Retrouver mes favoris</button>${!account.premium?'<button type="button" data-tab="premium">Découvrir le Premium</button>':''}<p id="oi-status" role="status"></p>`;
   }
   function progress(p) {
     const total = Number(p?.total || 0);
@@ -111,16 +107,35 @@
     const percentage = total ? Math.round(revised/total*100) : 0;
     return `<section class="oi-progress-panel" aria-label="Ma progression"><div class="oi-progress-title"><span>${icon('pulse')} Ma progression</span><strong>${percentage}%</strong></div><progress value="${revised}" max="${Math.max(1,total)}" aria-label="Fiches révisées"></progress><p><strong>${revised} / ${total}</strong> fiches révisées<span>${Number(p?.quizzes || 0)} QCM réalisé${Number(p?.quizzes || 0)>1?'s':''}</span></p></section>`;
   }
+  function aiBanner() {
+    return `<section class="oi-ai-banner"><span class="oi-ai-banner-icon">${icon('spark')}</span><div><span class="oi-eyebrow">UN COUP DE POUCE QUAND ÇA BLOQUE</span><h2>Et si on te l’expliquait autrement ?</h2><p>Ton assistant personnel t’aide à faire le lien entre les notions.</p></div><button type="button" data-ai>Ouvrir mon assistant ${icon('arrow')}</button></section>`;
+  }
+  function recentSection(items) {
+    return `<section class="oi-recent" aria-labelledby="oi-recent-title"><div class="oi-section-title"><div><span class="oi-eyebrow">REPRENDS LE FIL</span><h2 id="oi-recent-title">Dernières fiches consultées</h2><p>Les plus récentes en premier, pour reprendre là où tu en étais.</p></div></div>${items.length?`<div class="oi-grid">${items.map(item=>card(item)).join('')}</div>`:'<p class="oi-recent-empty">Tes dernières lectures apparaîtront ici dès que tu ouvriras une fiche.</p>'}</section>`;
+  }
+  function folderFilters() {
+    return currentTab==='fiches'&&!query?(unit!==null?'&enseignement='+unit:'')+(theme!==null?'&theme='+theme:''):'';
+  }
+  function folderTrail() {
+    if(currentTab!=='fiches')return '';
+    return `<nav class="oi-folder-trail" aria-label="Parcours des fiches"><button type="button" data-library-level="root" ${unit===null&&!query?'aria-current="page"':''}>${icon('folder')} Toutes les unités</button>${query?'<span>Résultats de recherche</span>':unit!==null?`${icon('arrow')}<button type="button" data-library-level="unit" ${theme===null?'aria-current="page"':''}>${esc(folderNames.unit)}</button>${theme!==null?icon('arrow')+'<span aria-current="page">'+esc(folderNames.theme)+'</span>':''}`:''}</nav>`;
+  }
+  async function libraryResults(data,quizMode) {
+    if(currentTab!=='fiches'||query||theme!==null)return resultCards(data,quizMode);
+    const folders=await api(`library?semestre=${encodeURIComponent(semester)}${unit!==null?'&enseignement='+unit:''}`);
+    return folders.folders.map(folder=>`<button type="button" class="oi-folder-card" data-folder="${Number(folder.id)}" data-folder-name="${esc(folder.name)}"><span class="oi-folder-symbol">${icon('folder')}</span><span class="oi-folder-copy"><span class="oi-eyebrow">${unit===null?'UNITÉ D’ENSEIGNEMENT':'THÈME'}</span><h3>${esc(folder.name)}</h3><span>${folder.count?Number(folder.count)+' fiche'+(folder.count>1?'s':''):'À venir'}</span></span>${icon('arrow')}</button>`).join('') || '<div class="oi-empty"><h3>Aucune fiche dans ce dossier pour le moment.</h3><p>Choisis une autre unité ou modifie le filtre de semestre.</p></div>';
+  }
   function searchForm(data, quizMode) {
     return `<form id="oi-search" class="oi-search"><div class="oi-search-field">${icon('search')}<label class="oi-sr-only" for="oi-query">Rechercher dans mes fiches</label><input id="oi-query" type="search" value="${esc(query)}" placeholder="${quizMode?'Quel sujet veux-tu travailler ?':'Une notion, un médicament, une UE…'}" maxlength="150"><button type="submit" class="oi-search-submit">Rechercher</button></div><div class="oi-semester-field"><label class="oi-sr-only" for="oi-semester">Semestre</label><select id="oi-semester"><option value="">Tous les semestres</option>${(data.semesters||[]).map(s=>`<option value="${Number(s.id)}" ${String(s.id)===semester?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div></form>`;
   }
   function resultCards(data, quizMode) {
     const items = quizMode ? data.items.filter(item=>Number(item.quiz_count)>0) : data.items;
-    return items.map(item=>card(item,quizMode)).join('') || `<div class="oi-empty">${icon(quizMode?'quiz':favoritesOnly?'heart':'book')}<h3>${favoritesOnly?'Tes essentiels, au même endroit.':quizMode?'Aucun QCM pour cette sélection.':'Aucune fiche pour cette sélection.'}</h3><p>${favoritesOnly?'Ajoute une fiche aux favoris depuis sa page pour la retrouver ici.':data.total?'Essaie un autre mot-clé ou un autre semestre.':'Tes contenus apparaîtront ici dès qu’un pack sera activé sur ton compte.'}</p>${query||semester?'<button type="button" data-clear-search>Effacer les filtres</button>':''}</div>`;
+    return items.map(item=>card(item,quizMode)).join('') || `<div class="oi-empty">${icon(quizMode?'quiz':favoritesOnly?'heart':'book')}<h3>${favoritesOnly?'Tes essentiels, au même endroit.':quizMode?'Aucun QCM pour cette sélection.':'Aucune fiche pour cette sélection.'}</h3><p>${favoritesOnly?'Ajoute une fiche aux favoris depuis sa page pour la retrouver ici.':data.total?'Essaie un autre mot-clé ou un autre semestre.':query?'Essaie un autre mot-clé.':'Les fiches de ce thème arrivent prochainement.'}</p>${query||semester?'<button type="button" data-clear-search>Effacer les filtres</button>':''}</div>`;
   }
   function pagination(data) {
     const target = document.querySelector('#oi-pagination');
     if (!target) return;
+    if(currentTab==='fiches'&&!query&&theme===null){target.innerHTML='';return;}
     target.innerHTML = `<span>${Number(data.total)} fiche${Number(data.total)>1?'s':''}${currentTab==='qcm'?' à explorer':''}${Number(data.pages)>1?` · Page ${page} sur ${Number(data.pages)}`:''}</span><div>${page>1?'<button type="button" data-page="-1">'+icon('back')+' Précédent</button>':''}${page<Number(data.pages)?'<button type="button" data-page="1">Suivant '+icon('arrow')+'</button>':''}</div>`;
   }
   async function dashboard(tab='fiches', reset=true) {
@@ -131,16 +146,18 @@
     if(!await loadAccount())return;
     if(sequence!==routeSequence)return;
     favoritesOnly = tab==='favorites';
-    if (reset) { page=1; query=''; semester=''; }
+    if (reset) { page=1; query=''; semester=''; unit=null; theme=null; }
     screen().setAttribute('aria-busy','true');
     let data;
-    try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}`); }
+    try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`); }
     finally { screen().removeAttribute('aria-busy'); }
     if (sequence!==routeSequence) return;
     account=data.account;
     const quizMode = tab==='qcm';
-    const intro = favoritesOnly ? `<div class="oi-page-intro"><span class="oi-eyebrow">TA SÉLECTION PERSONNELLE</span><h1>À garder sous la main.</h1><p>Les notions que tu veux retrouver en un instant.</p></div>` : quizMode ? `<div class="oi-page-intro"><span class="oi-eyebrow">PLACE À LA PRATIQUE</span><h1>Tu sais. Maintenant,<br><em>prouve-le-toi.</em></h1><p>Teste tes connaissances, comprends tes erreurs et avance vers tes partiels.</p></div>` : `<div class="oi-dashboard-intro"><div><span class="oi-eyebrow">C’EST UN BON JOUR POUR APPRENDRE</span><h1>Bonjour ${esc(OI.name)}.</h1><p>Tes notions de soins infirmiers, un peu plus claires chaque jour.</p></div><span class="oi-space-tag">${icon('shield')} Mon espace de révision</span></div><div class="oi-dashboard-hero"><div><span class="oi-pill-label">DE TES COURS IFSI AUX SOINS</span><h2>Comprendre tes cours.<br><em>Construire tes réflexes.</em></h2><p>Hygiène, anatomie, pharmacologie…<br>Une fiche, un QCM, un repère de plus pour tes études.</p><button type="button" data-tab="qcm">M’entraîner avec un QCM ${icon('arrow')}</button></div><div class="oi-hero-illustration" aria-hidden="true"><span class="oi-orbit oi-orbit-one"></span><div class="oi-nursing-note"><span>${icon('pulse')} MON CAP</span><strong>Diplôme<br>d’État<br><em>infirmier.</em></strong><span class="oi-nursing-note-rule"></span><small>Une UE après l’autre.</small></div><img class="oi-member-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="500" height="500"><span class="oi-nursing-badge">${icon('heart')} Prendre soin demain</span></div></div>${progress(data.progress)}`;
-    screen().innerHTML = `${intro}${quizMode?'<div class="oi-qcm-notice">'+icon('quiz')+'<div><strong>Le bon réflexe avant les partiels.</strong><span>Des QCM par sujet, à ton rythme, avec une correction expliquée après chaque série.</span></div></div>':''}<section class="oi-library" aria-labelledby="oi-library-title"><div class="oi-section-title"><div><span class="oi-eyebrow">${quizMode?'APPRENDRE EN S’ENTRAÎNANT':favoritesOnly?'LE MEILLEUR DE TES RÉVISIONS':'TA BIBLIOTHÈQUE'}</span><h2 id="oi-library-title">${quizMode?'Choisis ton prochain défi.':favoritesOnly?'Mes favoris':'Qu’est-ce qu’on révise ?'}</h2></div>${!favoritesOnly&&!quizMode?'<button type="button" class="oi-text-button" data-tab="favorites">'+icon('heart')+' Mes favoris</button>':''}</div>${searchForm(data,quizMode)}<p id="oi-status" role="status"></p><div id="oi-results" class="oi-grid">${resultCards(data,quizMode)}</div><div id="oi-pagination" class="oi-pagination"></div></section>${!quizMode&&!favoritesOnly&&!account.premium?`<section class="oi-ai-banner"><span class="oi-ai-banner-icon">${icon('spark')}</span><div><span class="oi-eyebrow">UN COUP DE POUCE QUAND ÇA BLOQUE</span><h2>Et si on te l’expliquait autrement ?</h2><p>Ton assistant personnel t’aide à faire le lien entre les notions.</p></div><button type="button" data-ai>Ouvrir mon assistant ${icon('arrow')}</button></section><details class="oi-access-details"><summary>Mes accès et les packs disponibles</summary><p class="oi-muted">${data.packs.map(p=>esc(p.title)).join(' · ') || 'Aucun pack actif pour le moment.'}</p><div id="oi-catalog"></div></details>`:''}<footer class="oi-member-footer"><span>Objectif Infirmière</span><span>Un pas de plus vers la blouse.</span></footer>`;
+    const intro = favoritesOnly ? `<div class="oi-page-intro"><span class="oi-eyebrow">TA SÉLECTION PERSONNELLE</span><h1>À garder sous la main.</h1><p>Les notions que tu veux retrouver en un instant.</p></div>` : quizMode ? `<div class="oi-page-intro"><span class="oi-eyebrow">PLACE À LA PRATIQUE</span><h1>Tu sais. Maintenant,<br><em>prouve-le-toi.</em></h1><p>Teste tes connaissances, comprends tes erreurs et avance vers tes partiels.</p></div>` : `<div class="oi-dashboard-intro"><div><p class="oi-library-welcome">Tes notions de soins infirmiers, un peu plus claires chaque jour.</p><h1>Bonjour ${esc(OI.name)}.</h1></div></div>`;
+    const [contents,recent] = await Promise.all([libraryResults(data,quizMode), tab==='fiches'?api('recent'):Promise.resolve([])]);
+    if(sequence!==routeSequence)return;
+    screen().innerHTML = `${intro}${quizMode?'<div class="oi-qcm-notice">'+icon('quiz')+'<div><strong>Le bon réflexe avant les partiels.</strong><span>Des QCM par sujet, à ton rythme, avec une correction expliquée après chaque série.</span></div></div>':''}<section class="oi-library" aria-labelledby="oi-library-title"><div class="oi-section-title"><div><span class="oi-eyebrow">${quizMode?'APPRENDRE EN S’ENTRAÎNANT':favoritesOnly?'LE MEILLEUR DE TES RÉVISIONS':'TA BIBLIOTHÈQUE'}</span><h2 id="oi-library-title">${quizMode?'Choisis ton prochain défi.':favoritesOnly?'Mes favoris':'Qu’est-ce qu’on révise ?'}</h2></div>${!favoritesOnly&&!quizMode?'<button type="button" class="oi-text-button" data-tab="favorites">'+icon('heart')+' Mes favoris</button>':''}</div>${searchForm(data,quizMode)}<p id="oi-status" role="status"></p><div id="oi-folder-trail">${folderTrail()}</div><div id="oi-results" class="oi-grid">${contents}</div><div id="oi-pagination" class="oi-pagination"></div></section>${!quizMode&&!favoritesOnly?recentSection(recent)+aiBanner():''}<footer class="oi-member-footer"><span>Objectif Infirmière</span><span>Un pas de plus vers la blouse.</span></footer>`;
     pagination(data);
     document.querySelector('#oi-search').addEventListener('submit', e=>{e.preventDefault();page=1;search().catch(error);});
     document.querySelector('#oi-semester').addEventListener('change', ()=>{page=1;search().catch(error);});
@@ -153,14 +170,18 @@
     const route = routeSequence;
     const results = document.querySelector('#oi-results');
     results?.setAttribute('aria-busy','true');
+    results?.querySelectorAll('button').forEach(button=>button.disabled=true);
     status('Recherche en cours…');
     try {
-      const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}`);
+      const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`);
       if (sequence!==searchSequence || route!==routeSequence) return;
-      results.innerHTML = resultCards(data,currentTab==='qcm');
+      const contents=await libraryResults(data,currentTab==='qcm');
+      if(sequence!==searchSequence || route!==routeSequence)return;
+      results.innerHTML = contents;
+      document.querySelector('#oi-folder-trail').innerHTML=folderTrail();
       pagination(data);
-      status(data.total ? '' : 'Aucun résultat pour cette recherche.');
-    } finally { results?.removeAttribute('aria-busy'); }
+      status(data.total || !query ? '' : 'Aucun résultat pour cette recherche.');
+    } finally { if(sequence===searchSequence){results?.removeAttribute('aria-busy');results?.querySelectorAll('button').forEach(button=>button.disabled=false);} }
   }
   async function fiche(id, quizOnly=false) {
     const sequence = ++routeSequence;
@@ -170,7 +191,7 @@
     activeFiche = data;
     setTab(quizOnly?'qcm':'fiches');
     const topic = subject(data);
-    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><header class="oi-reader-heading"><span class="oi-reader-symbol oi-tone-${topic.color}">${icon(quizOnly?'quiz':topic.icon)}</span><span class="oi-eyebrow">${quizOnly?'QCM · ':''}${esc(topic.name)}</span><h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button><button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button><button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button></div>`:''}<p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content">'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>`:''}</article>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><header class="oi-reader-heading"><span class="oi-reader-symbol oi-tone-${topic.color}">${icon(quizOnly?'quiz':topic.icon)}</span><span class="oi-eyebrow">${quizOnly?'QCM · ':''}${esc(topic.name)}</span><h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button><button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button><button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button></div>`:''}<p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content">'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
     if (!quizOnly) {
       const headings = [...screen().querySelectorAll('.oi-content h2, .oi-content h3')];
       headings.forEach((h,i)=>{h.id=`oi-section-${i}`;});
@@ -207,12 +228,13 @@
     });
   }
   async function chat(withContext=true) {
-    ++routeSequence;
+    const openingSequence=++routeSequence;
     shell();
     const context = withContext?activeFiche:null;
     activeFiche = null;
     setTab('ai');
     if(!await loadAccount())return;
+    if(openingSequence!==routeSequence)return;
     aiRequestId=null;
     screen().innerHTML = `<nav class="oi-breadcrumb"><button type="button" data-home>${icon('back')} Mes révisions</button><span>Ton espace pour comprendre</span></nav><section class="oi-chat-page"><div class="oi-chat-orb">${icon('spark')}</div><span class="oi-eyebrow">TON ASSISTANT PERSONNEL SOIGNANT</span><h1>Une question.<br><em>Un nouveau déclic.</em></h1>${!account.ai_available?'<p class="oi-chat-availability">L’assistant est en préparation. Découvre son espace ; les réponses seront disponibles prochainement.</p>':''}${Number(account.balances.IA)===0?`<p class="oi-credit-empty">${account.premium?'Tes crédits IA sont épuisés. Tes fiches et QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 questions supplémentaires.'}</p>`:''}<p class="oi-chat-intro">Reformuler une notion, relier deux idées, préparer une révision.<br>Tu n’as plus à rester bloqué devant ton cours.</p>${context?`<div class="oi-chat-context">${icon('book')} On parle de : <strong>${esc(context.title)}</strong></div>`:''}<div class="oi-chat-suggestions"><button type="button" data-prompt="Explique-moi simplement le rôle de la surveillance infirmière.">${icon('book')} Comprendre une notion ${icon('arrow')}</button><button type="button" data-prompt="Aide-moi à réviser les points clés de la surveillance des traitements.">${icon('quiz')} Préparer ma révision ${icon('arrow')}</button><button type="button" data-prompt="Comment relier les effets d’un médicament à sa surveillance infirmière ?">${icon('pulse')} Faire le lien avec les soins ${icon('arrow')}</button></div><div id="oi-answer" class="oi-conversation" aria-live="polite"></div><p class="oi-question-balance"><strong data-balance="IA">${Number(account.balances.IA)}</strong> question(s) IA disponible(s) · 1 crédit par réponse réussie</p><form id="oi-chat" class="oi-chat-composer"><label for="oi-question">Qu’est-ce que tu veux éclaircir ?</label><textarea id="oi-question" required maxlength="2000" rows="3" placeholder="Explique-moi cette notion simplement…"></textarea><div><span>Un assistant pour apprendre, à ton rythme.</span><button type="submit" ${!account.ai_available||Number(account.balances.IA)===0?'disabled':''}>Poser ma question ${icon('send')}</button></div></form><p id="oi-status" role="status"></p><p class="oi-ai-privacy">${icon('shield')} Assistant automatisé dédié aux révisions. Aucune donnée de patient. Les réponses sont à vérifier avec tes cours et les protocoles ; elles ne remplacent pas un avis professionnel.</p></section>`;
     document.querySelector('#oi-chat').addEventListener('submit', async e=>{
@@ -241,7 +263,7 @@
     const b=e.target.closest('button');
     if (!b || !b.closest('.oi-app')) return;
     try {
-      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='progress')await progression();else if(b.dataset.tab==='credits')await credits();else await dashboard(b.dataset.tab);}
+      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='progress')await progression();else await dashboard(b.dataset.tab);}
       if(b.hasAttribute('data-refresh-account'))await dashboard();
       if(b.hasAttribute('data-resend')){b.disabled=true;try{await api('verify/resend',{});status('Un nouveau lien a été envoyé. Vérifie ta boîte mail et les indésirables.');}finally{b.disabled=false;}}
       if(b.dataset.unlock){
@@ -251,6 +273,16 @@
       }
       if (b.hasAttribute('data-home')) await dashboard();
       if (b.dataset.return) await dashboard(b.dataset.return,false);
+      if(b.hasAttribute('data-folder')) {
+        const selected=Number(b.dataset.folder);
+        if(unit===null){unit=selected;folderNames.unit=b.dataset.folderName;theme=null;}
+        else{theme=selected;folderNames.theme=b.dataset.folderName;}
+        page=1;await search();document.querySelector('#oi-folder-trail button:last-child')?.focus();
+      }
+      if(b.hasAttribute('data-library-level')) {
+        if(b.dataset.libraryLevel==='root'){unit=null;theme=null;}else theme=null;
+        document.querySelector('#oi-query').value='';page=1;await search();
+      }
       if (b.dataset.fiche) await fiche(Number(b.dataset.fiche));
       if (b.dataset.quizFiche) await fiche(Number(b.dataset.quizFiche),true);
       if (b.dataset.page) {page+=Number(b.dataset.page);await search();document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
@@ -295,6 +327,6 @@
     }
     banner.textContent='La confirmation du paiement prend un peu de temps. Actualise ton espace dans quelques instants avant de tenter un nouvel achat.';
   }
-  if (view && OI.loggedIn) (new URLSearchParams(location.search).get('view')==='premium'?premium():new URLSearchParams(location.search).get('view')==='credits'?credits():dashboard()).then(paymentReturn).catch(error);
+  if (view && OI.loggedIn) (new URLSearchParams(location.search).get('view')==='premium'?premium():dashboard()).then(paymentReturn).catch(error);
   else if(publicCatalog) showCatalog(publicCatalog).catch(error);
 })();

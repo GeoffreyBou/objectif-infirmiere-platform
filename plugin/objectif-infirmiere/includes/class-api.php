@@ -36,8 +36,19 @@ final class OI_API {
         if($r['kind']==='QCM')$allowed=array_values(array_filter($allowed,fn($id)=>(bool)OI_Revision::quiz($id)));
         $args = ['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => $allowed ?: [0], 'posts_per_page' => 20, 'paged' => max(1, absint($r['page'])), 'orderby' => 'title', 'order' => 'ASC', 'search_columns'=>['post_title']];
         if ($r['favorites']) { $args['post__in'] = array_values(array_filter($allowed, fn($id) => !empty(OI_Revision::state(get_current_user_id(), $id)['favorite']))) ?: [0]; }
-        if ($r['q']) { $args['s'] = substr(sanitize_text_field($r['q']), 0, 150); }
+        if ($r['q']) {
+            $text=substr(sanitize_text_field($r['q']),0,150);
+            $matches=get_posts(array_merge($args,['s'=>$text,'posts_per_page'=>-1,'paged'=>1,'fields'=>'ids']));
+            foreach(['oi_enseignement','oi_theme'] as $taxonomy){
+                $terms=get_terms(['taxonomy'=>$taxonomy,'hide_empty'=>true,'search'=>$text,'fields'=>'ids']);
+                if(!is_wp_error($terms)&&$terms){$objects=get_objects_in_term($terms,$taxonomy);if(!is_wp_error($objects))$matches=array_merge($matches,$objects);}
+            }
+            $args['post__in']=array_values(array_intersect($args['post__in'],OI_Model::ids($matches)))?:[0];
+        }
         if ($r['semestre']) { $args['tax_query'] = [['taxonomy' => 'oi_semestre', 'field' => 'term_id', 'terms' => absint($r['semestre'])]]; }
+        foreach (['enseignement','theme'] as $tax) {
+            if ($r->has_param($tax)) $args['tax_query'][] = OI_Library::tax_filter('oi_'.$tax, absint($r[$tax]));
+        }
         $query = new WP_Query($args);
         $semesters = get_terms(['taxonomy' => 'oi_semestre', 'object_ids' => $allowed ?: [0], 'hide_empty' => true]);
         return ['items' => array_map([self::class, 'summary'], $query->posts), 'total' => $query->found_posts, 'pages' => $query->max_num_pages, 'account' => OI_Offer::account(), 'progress' => OI_Revision::progress(get_current_user_id()), 'packs' => array_values(array_map(fn($id) => ['id' => $id, 'title' => get_the_title($id)], array_filter(OI_Model::packs(get_current_user_id()), fn($id) => get_post_status($id) === 'publish'))), 'semesters' => is_wp_error($semesters) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $semesters)];

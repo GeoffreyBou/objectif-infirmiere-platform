@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0-rc.3 — Bibliothèque par UE et dernières consultations
+
+- Retrait de l’onglet Crédits, du titre du menu, du cartouche et de la progression de « Mes fiches », ainsi que du bloc des packs.
+- Navigation UE → thèmes → fiches selon le programme fourni : 15 UE et 65 rubriques, classement des dix fiches existantes et recherche par intitulés.
+- Dernières fiches consultées persistantes, ordonnées et sans doublons ; accès vérifiés côté serveur.
+- Encart de l’assistant conservé dans la bibliothèque et ajouté à chaque lecteur avec son contexte.
+- Validation de la pagination, des accès, des déblocages et des parcours ordinateur/mobile.
+
 ## 0.3.0-rc.2 — Lisibilité des droits et navigation
 
 - Cadenas et mention « Verrouillée » sur les fiches et QCM à débloquer ; coût d'un crédit explicite.

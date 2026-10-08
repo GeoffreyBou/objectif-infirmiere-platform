@@ -31,4 +31,7 @@ $pack=wp_insert_post(['post_type'=>'oi_pack','post_status'=>'publish','post_titl
 $page=wp_insert_post(['post_type'=>'page','post_status'=>'publish','post_title'=>'Mon espace de révision','post_content'=>'[objectif_infirmiere]']);
 update_option('show_on_front','page');update_option('page_on_front',$page);update_option('oi_demo_pack',$pack);update_option('oi_demo_seeded',true);
 OI_App::install_pages();
+// The taxonomy skeleton can exist before this explicit local demo import.
+delete_option('oi_curriculum_version');
+OI_Curriculum::install();
 echo "10 fiches et un pack de démonstration créés.\n";

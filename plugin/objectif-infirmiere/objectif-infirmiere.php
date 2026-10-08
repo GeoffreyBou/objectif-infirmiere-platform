@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.3.0-rc.2
+ * Version: 0.3.0-rc.3
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.3.0-rc.2');
+define('OI_VERSION', '0.3.0-rc.3');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -83,3 +83,9 @@ add_action('after_password_reset', function ($user) { delete_user_meta($user->ID
 add_action('updated_post_meta', function ($meta_id, $post_id, $key, $value) {
     if ($key === 'oi_ai_status' && str_ends_with((string)$value, '_failed')) { OI_Log::event('ai_sync_error', ['fiche_id'=>$post_id]); }
 }, 10, 4);
+
+require_once OI_DIR . 'includes/class-library.php';
+add_action('rest_api_init', [OI_Library::class, 'register']);
+
+require_once OI_DIR . 'includes/class-curriculum.php';
+add_action('init', [OI_Curriculum::class, 'install'], 20);

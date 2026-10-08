@@ -24,7 +24,7 @@ final class OI_Revision {
             return true;
         } finally { $wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)',$lock)); }
     }
-    public static function viewed(int $user,int $id): void { self::write($user,$id,['viewed_at'=>current_time('mysql',true)]); }
+    public static function viewed(int $user,int $id): void { self::write($user,$id,['viewed_at'=>current_time('mysql',true),'viewed_order'=>microtime(true)]); }
     public static function state_endpoint(WP_REST_Request $r): array|WP_Error {
         $id=absint($r['id']);$user=get_current_user_id();
         if(!OI_Model::can_read($user,$id)) return new WP_Error('oi_forbidden','Cette fiche ne fait pas partie de vos accès.',['status'=>403]);

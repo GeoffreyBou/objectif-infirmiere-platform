@@ -38,3 +38,15 @@ Les contenus à débloquer portent un cadenas et un coût explicite de 1 crédit
 Validation : quatre parcours navigateur Freemium/Premium passent sur ordinateur et iPhone ; le parcours iPhone est repassé après correction du badge mobile. Premier déblocage 5 → 4, relecture sans nouveau débit. Sur le site réel, absence du bandeau dans les six onglets, page Crédits et navigation sans débordement à 390 et 320 px vérifiées avec un administrateur temporaire. Les fichiers JS/CSS distants correspondent exactement aux fichiers locaux. Les comptes étudiants locaux de test sont nettoyés séparément.
 
 Archive SHA-256 : `2701b27d04f5646480bc7f2bbe73529c6a8f10e24f6108873bc9cad1c0d3341a`. Retour arrière disponible avec l’archive 0.3.0-rc.1 ; aucune restauration de base requise pour cet ajustement.
+
+## Bibliothèque 0.3.0-rc.3 — 8 octobre 2026
+
+Déployée pour la revue du propriétaire : retrait de l’onglet Crédits et des cartouches de « Mes fiches », navigation UE → thème → fiche, historique personnel des six dernières lectures et encart assistant dans chaque lecteur. [Détails, source du programme et classement](BIBLIOTHEQUE-2026.md).
+
+Programme créé : 15 UE et 65 thèmes, sans duplication lors d’une nouvelle initialisation. Les dix fiches existantes sont classées ; aucune nouvelle fiche, aucun paiement et aucun contenu clinique ne sont ajoutés. Les anciennes associations de taxonomies sont conservées dans `oi_before_curriculum` pour les fiches migrées.
+
+Vérification réelle après téléversement : quinze dossiers racines, B1 puis thème 01 puis Hypokaliémie, libellé de vignette, encart assistant contextualisé, ordre de l’historique après une deuxième lecture et rechargement, absence des éléments supprimés, affichage à 390/320 px. Les contrôles distants utilisent un compte administrateur temporaire. Les scénarios locaux couvrent les droits étudiants, les crédits et la confirmation Premium. JS/CSS publiés strictement identiques aux fichiers validés.
+
+Validation locale : 15 assertions serveur bibliothèque ; 13 scénarios navigateur distincts passés sur ordinateur/iPhone, 1 scénario d’inscription mobile volontairement ignoré. Deux échecs initiaux provenaient d’un sélecteur de test devenu ambigu entre bibliothèque et historique ; il cible maintenant le H1 du lecteur, et les parcours concernés ont repassé. Retour de dossier et captures revérifiés après l’ajustement des clics pendant le chargement.
+
+Archive SHA-256 : `690b3bd8e4097f8f1cc62ef809116a34e90934f03233e13d07ffea0086b7d6de`. Archive rc.2 conservée pour retour arrière du plugin. Aucune restauration complète de base nécessaire pour revenir à l’interface précédente.

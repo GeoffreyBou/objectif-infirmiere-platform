@@ -11,7 +11,7 @@ async function login(page) {
   await page.locator('#wp-submit').click();
   await expect(page).toHaveURL(/\/espace-revision\/$/);
   await expect(page.getByRole('heading',{name:'Bonjour Étudiante Démo.',exact:true})).toBeVisible();
-  await expect(page.locator('#oi-results .oi-card')).toHaveCount(10);
+  await expect(page.locator('#oi-results .oi-folder-card').first()).toBeVisible();
 }
 
 async function noOverflow(page) {
@@ -33,7 +33,7 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   await page.getByRole('button',{name:'Rechercher',exact:true}).click();
   await expect(page.locator('#oi-results .oi-card')).toHaveCount(1);
   await page.locator('#oi-results .oi-card').click();
-  await expect(page.getByRole('heading',{name:'Furosémide',exact:true})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'Furosémide',exact:true,level:1})).toBeVisible();
   await expect(page.locator('#oi-toc')).toContainText('Vigilance IDE');
   await expect(page.locator('.oi-actions')).toBeVisible();
 
@@ -64,7 +64,7 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   await page.screenshot({path:`.runtime/assistant-${test.info().project.name}.png`,fullPage:true});
 
   await page.getByRole('button',{name:'Mes révisions',exact:false}).click();
-  await expect(page.locator('#oi-results .oi-card')).toHaveCount(10);
+  await expect(page.locator('#oi-results .oi-folder-card').first()).toBeVisible();
   await memberTab(page,'favorites').click();
   await expect(page.locator('#oi-results .oi-card')).toHaveCount(1);
   await expect(page.locator('#oi-results .oi-card')).toContainText('Furosémide');
@@ -139,7 +139,7 @@ test('inscription réelle : session élève et accès démo sans élévation de 
   await expect(page.getByRole('heading',{name:'Vérifie ton adresse e-mail.'})).toBeVisible();
   await confirmEmail(page,email);
   await expect(page.getByRole('heading',{name:'Bonjour Camille Test.',exact:true})).toBeVisible();
-  await expect(page.locator('#oi-results .oi-card').first()).toBeVisible();
+  await expect(page.locator('#oi-results .oi-folder-card').first()).toBeVisible();
   const nonce=await page.evaluate(()=>OI.nonce);
   const me=await page.request.get('/?rest_route=/wp/v2/users/me&context=edit',{headers:{'X-WP-Nonce':nonce}});
   expect(me.status()).toBe(200);
