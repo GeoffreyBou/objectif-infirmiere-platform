@@ -50,3 +50,13 @@ Vérification réelle après téléversement : quinze dossiers racines, B1 puis 
 Validation locale : 15 assertions serveur bibliothèque ; 13 scénarios navigateur distincts passés sur ordinateur/iPhone, 1 scénario d’inscription mobile volontairement ignoré. Deux échecs initiaux provenaient d’un sélecteur de test devenu ambigu entre bibliothèque et historique ; il cible maintenant le H1 du lecteur, et les parcours concernés ont repassé. Retour de dossier et captures revérifiés après l’ajustement des clics pendant le chargement.
 
 Archive SHA-256 : `690b3bd8e4097f8f1cc62ef809116a34e90934f03233e13d07ffea0086b7d6de`. Archive rc.2 conservée pour retour arrière du plugin. Aucune restauration complète de base nécessaire pour revenir à l’interface précédente.
+
+## Atelier Word/Drive et correctif REST — 0.3.0-rc.6
+
+L’atelier administrateur, la copie des Word dans WordPress, la publication sélective et les versions précédentes sont déployés. Les protections de lecture sont dissuasives (sélection/copie/clic droit, impression et filigrane). Les trois lignes demandées dans Favoris sont retirées. [Fonctionnement et connexion](IMPORT-WORD-DRIVE.md).
+
+Le propriétaire a configuré son compte de service depuis le formulaire sécurisé et partagé le dossier racine. Une vraie analyse serveur a retrouvé **441 Word**. Le correctif rc.6 charge le helper WordPress de fichiers avant `wp_tempnam()` et vérifie l’écriture temporaire. Les deux préparations réelles #44 et #45 (Santé sexuelle et Puberté) ont réussi, sans publication. L’ancienne préparation synthétique du contrôle d’interface a été retirée.
+
+Les contrôles locaux comprennent 31 assertions Word/Drive (dont signature RSA et renouvellement du compte de service) et les parcours navigateur de publication/mise à jour/restauration, images privées et protections. Les essais Google simulés sont distingués de la lecture Drive réelle ci-dessus. Le premier contrôle distant de l’atelier avait échoué sur une attente de titre avec espaces alors que le nom de fichier était transformé en tirets ; les titres importés conservent désormais les espaces.
+
+Archive rc.6 SHA-256 : `d88a0c80f41943f3e3213c90ea2aab09efa6e06e683dbff1350afcb7fa717509`. Les archives précédentes restent disponibles pour réinstallation ; ne pas restaurer aveuglément la base ni effacer la connexion Google configurée par le propriétaire.

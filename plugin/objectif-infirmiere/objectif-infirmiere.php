@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.3.0-rc.3
+ * Version: 0.3.0-rc.6
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.3.0-rc.3');
+define('OI_VERSION', '0.3.0-rc.6');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -89,3 +89,14 @@ add_action('rest_api_init', [OI_Library::class, 'register']);
 
 require_once OI_DIR . 'includes/class-curriculum.php';
 add_action('init', [OI_Curriculum::class, 'install'], 20);
+
+require_once OI_DIR . 'includes/class-docx.php';
+require_once OI_DIR . 'includes/class-drive.php';
+require_once OI_DIR . 'includes/class-imports.php';
+add_action('init', [OI_Imports::class, 'types']);
+add_action('rest_api_init', [OI_Imports::class, 'routes']);
+add_action('rest_api_init', [OI_Drive::class, 'routes']);
+add_action('admin_post_oi_fiche_image', [OI_Docx::class, 'image']);
+add_action('admin_post_nopriv_oi_fiche_image', [OI_Docx::class, 'image']);
+add_action('admin_post_oi_drive_connect', [OI_Drive::class, 'connect']);
+add_action('admin_post_oi_drive_callback', [OI_Drive::class, 'callback']);

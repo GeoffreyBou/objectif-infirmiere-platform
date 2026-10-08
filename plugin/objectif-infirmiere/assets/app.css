@@ -559,3 +559,8 @@
 .oi-recent{margin:40px 0}.oi-recent .oi-section-title p{font-size:13px;color:#61748d;margin:10px 0 0}.oi-recent-empty{padding:24px;border:1px dashed #c5d7ee;border-radius:16px;color:#61748d;background:#f3f7fc}
 .oi-fiche-card .oi-eyebrow{letter-spacing:.02em;text-transform:none;line-height:1.6}
 @media(max-width:760px){.oi-app .oi-folder-card{grid-column:1/-1;min-height:128px;padding:20px;gap:14px}.oi-folder-copy h3{font-size:16px}.oi-folder-trail{gap:6px}.oi-folder-trail button{max-width:100%}.oi-library-welcome{font-size:12px}.oi-recent{margin:30px 0}}
+
+.oi-protected{-webkit-user-select:none;user-select:none}.oi-protected img{-webkit-user-drag:none}.oi-reading-layout{position:relative}.oi-reading-layout:after{content:attr(data-watermark);display:none}#oi-watermark{padding:12px 0;color:#7789a1;font-size:11px;letter-spacing:.06em}
+@media print{body:has(.oi-reader) .oi-app{display:none!important}body:has(.oi-reader):after{content:"Objectif Infirmière — Impression des fiches non disponible.";display:block;font:18px sans-serif}}
+
+.oi-protected:before{content:attr(data-watermark);display:block;font:10px/1.5 system-ui;letter-spacing:.08em;color:#7184a0;margin:0 0 20px;pointer-events:none}

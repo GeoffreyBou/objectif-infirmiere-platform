@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0-rc.6 — Préparation Word depuis Drive
+
+- Chargement explicite des fonctions de fichiers WordPress dans le parcours REST : correction de `Call to undefined function wp_tempnam()`.
+- Vérification de la création et de l’écriture du fichier temporaire avant conversion.
+
+## 0.3.0-rc.5 — Compte de service Drive
+
+- Import sécurisé de la clé JSON dans WordPress, validation de la signature et de l’accès au dossier avant sauvegarde chiffrée.
+- Renouvellement serveur en lecture seule, sans consentement OAuth personnel ; aucun accès réel revendiqué avant dépôt de la clé et partage du dossier.
+- Conservation des espaces dans les titres des Word importés.
+
+## 0.3.0-rc.4 — Atelier Word et préparation de la connexion Drive
+
+- Onglet administrateur Mise à jour Fiches : import DOCX, classement, aperçu avant/après, sélection et publication avec historique/restauration.
+- Connecteur Google Drive en lecture seule, OAuth chiffré avec renouvellement, scan paginé, versions et doublons ; connexion Google réelle à configurer par le propriétaire.
+- Images Word privées, contrôles de concurrence et maintien des identifiants/déblocages/progression.
+- Protections dissuasives de copie et d’impression ; filigrane personnalisé.
+- Favoris : retrait du sous-texte et du double titre, recherche et liste conservées.
+
 ## 0.3.0-rc.3 — Bibliothèque par UE et dernières consultations
 
 - Retrait de l’onglet Crédits, du titre du menu, du cartouche et de la progression de « Mes fiches », ainsi que du bloc des packs.
