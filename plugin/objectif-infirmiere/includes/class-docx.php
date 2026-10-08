@@ -25,7 +25,7 @@ final class OI_Docx {
             if($xp->query('//w:object|//w:pict')->length)$self->warnings[]='Certains objets ou anciens dessins Word ne sont pas pris en charge.';
             if($xml->getElementsByTagNameNS('*','oMath')->length||$xml->getElementsByTagNameNS('*','chart')->length)$self->warnings[]='Équations ou graphiques Word non convertis : les remplacer par des images ou du texte avant publication.';
             if($xp->query('//w:vMerge')->length)$self->warnings[]='Vérifier les cellules fusionnées verticalement des tableaux.';
-            return ['title'=>$self->title($body),'html'=>wp_kses_post($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
+            return ['title'=>$self->title($body),'html'=>self::source_links($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
         }finally{$self->zip->close();}
     }
     private function title(DOMNode $body): string {
@@ -84,8 +84,20 @@ final class OI_Docx {
             }elseif(!in_array($c->localName,['pPr','rPr','del','instrText'],true))$out.=$this->inline($c);
         }return $out;
     }
+    public static function source_links(string $html): string {
+        // Word often stores bibliographic URLs as plain text rather than hyperlinks.
+        // make_clickable preserves existing anchors and handles trailing punctuation.
+        $html=wp_kses_post(make_clickable(wp_kses_post($html)));
+        $tags=new WP_HTML_Tag_Processor($html);
+        while($tags->next_tag('A')){
+            $url=$tags->get_attribute('href');
+            if(!is_string($url)||!in_array(strtolower((string)wp_parse_url($url,PHP_URL_SCHEME)),['http','https'],true))continue;
+            $tags->set_attribute('target','_blank');$tags->set_attribute('rel','noopener noreferrer');$tags->set_attribute('title',$url);
+        }
+        return $tags->get_updated_html();
+    }
     public static function content(string $html,int $id): string {
-        return preg_replace_callback('/#oi-image-([a-f0-9]{64})/',fn($m)=>esc_url(admin_url('admin-post.php?action=oi_fiche_image&fiche='.$id.'&image='.$m[1])),wp_kses_post($html));
+        return preg_replace_callback('/#oi-image-([a-f0-9]{64})/',fn($m)=>esc_url(admin_url('admin-post.php?action=oi_fiche_image&fiche='.$id.'&image='.$m[1])),self::source_links($html));
     }
     public static function image(): void {
         $id=absint($_GET['fiche']??0);$hash=sanitize_text_field($_GET['image']??'');

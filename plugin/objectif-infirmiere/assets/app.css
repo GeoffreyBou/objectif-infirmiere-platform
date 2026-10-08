@@ -564,3 +564,6 @@
 @media print{body:has(.oi-reader) .oi-app{display:none!important}body:has(.oi-reader):after{content:"Objectif Infirmière — Impression des fiches non disponible.";display:block;font:18px sans-serif}}
 
 .oi-protected:before{content:attr(data-watermark);display:block;font:10px/1.5 system-ui;letter-spacing:.08em;color:#7184a0;margin:0 0 20px;pointer-events:none}
+
+.oi-app .oi-content a{color:#245bd6;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.oi-app .oi-content a:hover{color:#17365e}

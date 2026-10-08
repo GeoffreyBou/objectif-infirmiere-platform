@@ -1,3 +1,8 @@
+## 0.3.0-rc.8
+- URL bibliographiques en texte brut rendues cliquables, y compris dans les préparations déjà enregistrées.
+- Liens des sources distingués visuellement et ouverts dans un nouvel onglet isolé depuis l’aperçu et le lecteur.
+- Vérification serveur des URL, de leur assainissement et du rendu répété ; test navigateur d’ouverture de source.
+
 ## 0.3.0-rc.7
 - Import : identité stable par code de fiche, indépendante du titre et du dossier de version ; conflits explicites.
 - Titre extrait du Word, corrections manuelles conservées, métadonnées de titre restaurables.

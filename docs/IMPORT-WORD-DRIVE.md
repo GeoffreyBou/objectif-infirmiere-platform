@@ -1,4 +1,4 @@
-# Import Word et connexion Drive — 0.3.0-rc.7
+# Import Word et connexion Drive — 0.3.0-rc.8
 
 ## Parcours administrateur
 
@@ -76,3 +76,10 @@ Les correspondances par code, ID Drive et clé source doivent converger vers une
 Validation rc.7 : 44 assertions serveur ; parcours navigateur desktop complet (import, titre personnalisé, mise à jour, restauration, protections). Les cas couvrent changements de nom/version/ID Drive, doublons, titres non stylés avant UE et anciennes préparations.
 
 Validation réelle rc.7 : connexion Google conservée ; 419 candidats après regroupement des versions par code (441 fichiers auparavant). Les versions v0.3 de Santé sexuelle et Puberté sont retenues, titres extraits sans avertissement, préparations 50 et 51 laissées pour revue, sans publication. Les anciennes préparations ne sont pas supprimées.
+
+
+## Sources — rc.8
+
+Les URL HTTP(S) présentes comme texte brut dans les références deviennent des liens, sans dupliquer les hyperliens Word existants. Le libellé d’un lien existant est conservé, sa destination figure dans son attribut de titre. Les sources s’ouvrent dans un nouvel onglet avec `noopener noreferrer`. Les iframes d’aperçu autorisent ces ouvertures sans autoriser les scripts dans le contenu importé.
+
+Le traitement s’applique aussi à l’affichage des préparations et fiches existantes : aucune réimportation requise pour les URL déjà présentes dans le texte. Aucun lien n’est inventé lorsque la référence Word ne contient pas d’URL. Validation serveur : 50 assertions réussies.

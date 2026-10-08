@@ -65,3 +65,8 @@ Archive rc.6 SHA-256 : `d88a0c80f41943f3e3213c90ea2aab09efa6e06e683dbff1350afcb7
 ## Correctif identité et titres — 0.3.0-rc.7
 
 Déployé le 8 octobre 2026. Archive SHA-256 `166aa3231150372af69c96c89612d4f297b96047a1d2c5e35b9775cb2f1dd91e`. Code stable et titre Word, personnalisation conservée, 44 assertions serveur et parcours navigateur desktop réussis. Vérification REST réelle : connexion Google conservée, 419 candidats regroupés, Santé sexuelle et Puberté v0.3 préparées (50/51), titres corrects et aucune publication de contenu. Compte de déploiement temporaire supprimé. Archive rc.6 conservée pour retour arrière.
+
+
+## Sources cliquables — 0.3.0-rc.8
+
+Déployé le 8 octobre 2026. SHA-256 `2d616a88fcc0b2b4a5681c301a16696707f81fc85c7dfd52ca208b0d845e222d`. 50 assertions serveur et parcours navigateur desktop réussis, ouverture de source dans un onglet isolé vérifiée. URL des préparations existantes 50/51 vérifiées en production sans réimportation ni publication de contenu. Compte technique supprimé.

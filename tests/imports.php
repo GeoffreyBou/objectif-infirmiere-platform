@@ -54,6 +54,15 @@ try{
  wp_update_post(['ID'=>$legacy,'post_title'=>'B1-UGR-099_Ancien']);$legacySource=get_post_meta($legacy,'oi_source',true);unset($legacySource['word_title']);update_post_meta($legacy,'oi_source',$legacySource);
  $migrated=OI_Imports::stage($heading,'B1-UGR-099_Ancien.docx',['file_id'=>'legacy-drive','key'=>'code:B1-UGR-099']);
  import_check($migrated===$legacy&&get_post_field('post_title',$legacy)==='Puberté : maturation sexuelle et repères','Ancienne préparation actualisée sans doublon');
+ // References remain usable in existing preparations and published content.
+ $linked=OI_Docx::content('<p>OMS : https://www.who.int/health-topics/sexual-health</p><p>Source : <a href="https://www.sf2h.net/">SF2H</a></p>',0);
+ import_check(substr_count($linked,'<a ')===2,'URL brute rendue cliquable sans doubler les liens Word');
+ import_check(substr_count($linked,'target="_blank"')===2&&substr_count($linked,'rel="noopener noreferrer"')===2,'Sources ouvertes dans un nouvel onglet isolé');
+ import_check(str_contains($linked,'>SF2H</a>')&&str_contains($linked,'https://www.who.int/health-topics/sexual-health'),'Libellé et URL conservés');
+ $safe=OI_Docx::source_links('<p><a href="javascript:alert(1)">ref</a><script>alert(1)</script> https://example.org/source.</p>');
+ import_check(!str_contains($safe,'href="javascript:')&&!str_contains($safe,'<script>'),'Liens dangereux et scripts refusés');
+ import_check(str_contains($safe,'href="https://example.org/source"'),'Ponctuation finale exclue de l’URL');
+ import_check(OI_Docx::source_links($linked)===$linked,'Rendu répété sans liens imbriqués');
  // Google transport fixture: no external OAuth or Drive service is claimed as verified.
  $seal=new ReflectionMethod(OI_Drive::class,'seal');update_option('oi_drive_credentials',$seal->invoke(null,['client_id'=>'fixture.apps.googleusercontent.com','client_secret'=>'fixture-secret','refresh_token'=>'fixture-refresh']));delete_transient('oi_drive_access');
  $transport=function($pre,$args,$url)use($tmp){if(str_starts_with($url,'https://oauth2.googleapis.com/token'))$data=['access_token'=>'fixture-access','expires_in'=>3600];elseif(str_starts_with($url,'https://www.googleapis.com/drive/v3/files?'))$data=['files'=>[['id'=>'word-fixture','name'=>'Drive technique.docx','mimeType'=>'application/vnd.openxmlformats-officedocument.wordprocessingml.document','modifiedTime'=>'2026-10-08T10:00:00Z','size'=>filesize($tmp)]]];elseif(str_starts_with($url,'https://www.googleapis.com/drive/v3/files/word-fixture?'))return ['headers'=>[],'body'=>file_get_contents($tmp),'response'=>['code'=>200]];else return $pre;return ['headers'=>[],'body'=>wp_json_encode($data),'response'=>['code'=>200]];};add_filter('pre_http_request',$transport,10,3);

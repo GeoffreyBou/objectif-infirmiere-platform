@@ -24,3 +24,13 @@ La première version alimente les QCM rattachés aux fiches existantes. Le moteu
 D’abord le dépôt du fichier Excel dans l’interface : aucun nouveau service à configurer. Ensuite, lecture d’un classeur Excel placé dans le Drive déjà connecté. Un Google Sheet natif demanderait de prévoir son export et ses limites, plutôt que promettre implicitement sa prise en charge.
 
 Une génération depuis les fiches peut préparer des brouillons à relire (réponse exacte, distracteurs, explication et référence à la fiche). Elle ne doit pas publier automatiquement du contenu pédagogique médical. L’import Excel n’exige aucun abonnement supplémentaire ; la génération IA aurait son propre coût d’usage.
+
+## Précision validée avec le propriétaire
+
+Le 8 octobre 2026 : un Excel par fiche, déposé à côté du Word dans Drive, nommé comme la fiche avec le suffixe `_qcm.xlsx`. Le code permanent, par exemple `B1-UGR-002`, assure le rattachement même si le reste du nom change. Chaque question est rédigée une fois et garde son propre code permanent.
+
+La cible produit comprend les trois niveaux dès la conception : fiche, thème et UE. Prévoir une banque de questions associées aux fiches et des sessions stockant les identifiants/versions tirés, plutôt que copier les questions dans trois collections. Le thème et l’UE sont déduits du classement des fiches.
+
+Pour les entraînements par thème ou UE, sélectionner des questions sans remise, en répartissant le tirage entre les fiches éligibles pour éviter qu’une fiche très fournie monopolise la session. Si le stock est insuffisant, annoncer le nombre réellement disponible sans dupliquer les questions. Chaque correction comporte un lien vers la fiche source. Le score mesure les questions tirées ; ne pas présenter une courte session comme une certification exhaustive de toute l’UE.
+
+Respecter les droits d’accès existants lors du choix du stock éligible, conserver le corrigé côté serveur jusqu’à la réponse et ne pas recalculer les tentatives passées après un import. Définir avant implémentation le décompte des crédits pour une session transversale (une seule session, sans débits cachés par fiche) et son articulation avec les séries déjà débloquées.
