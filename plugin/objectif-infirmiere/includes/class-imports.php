@@ -74,7 +74,7 @@ final class OI_Imports {
     }
     public static function listing(): array {
         $terms=fn($tax)=>array_map(fn($t)=>['id'=>$t->term_id,'name'=>$t->name,'unit'=>(int)get_term_meta($t->term_id,'oi_programme_unit',true)],get_terms(['taxonomy'=>$tax,'hide_empty'=>false]));
-        return ['stages'=>array_map([self::class,'row'],get_posts(['post_type'=>'oi_import','post_status'=>'draft','numberposts'=>100,'orderby'=>'date','order'=>'DESC'])),'targets'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>$p->post_title],get_posts(['post_type'=>'oi_fiche','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC'])),'units'=>$terms('oi_enseignement'),'themes'=>$terms('oi_theme'),'drive'=>OI_Drive::status()];
+        return ['total_stages'=>(int)(wp_count_posts('oi_import')->draft ?? 0),'stages'=>array_map([self::class,'row'],get_posts(['post_type'=>'oi_import','post_status'=>'draft','numberposts'=>100,'orderby'=>'date','order'=>'DESC'])),'targets'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>$p->post_title],get_posts(['post_type'=>'oi_fiche','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC'])),'units'=>$terms('oi_enseignement'),'themes'=>$terms('oi_theme'),'drive'=>OI_Drive::status()];
     }
     public static function upload(WP_REST_Request $r): array|WP_Error {
         $f=$r->get_file_params()['file']??null;

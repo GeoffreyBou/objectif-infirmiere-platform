@@ -84,3 +84,11 @@ Validation locale : 39 assertions QCM, 50 imports, 13 révision, 18 administrati
 Déployé le 8 octobre 2026. Archive SHA-256 `8b3a2e3b405f3c05447a95617adb38b135768122e5ee882ef42c4a088ac07950`. Ma progression suit désormais des objectifs personnels enregistrés dans une métadonnée utilisateur privée : sélection par programme, cycles indépendants, planning indicatif, validation depuis la fiche et passage vers l’IA avec demande préremplie. Aucun envoi IA automatique ni modification des droits/crédits.
 
 34 assertions objectifs, 13 révision, deux parcours objectifs ordinateur/iPhone et quatre parcours membre ordinateur réussis. Vérification REST réelle : création, planning, sauvegarde, édition, progression, nouveau cycle et reprise ; compte technique et objectifs de contrôle supprimés. Aucune modification d’un compte étudiant ou contenu pédagogique. Archive rc.9 conservée ; revenir à cette archive masque la nouvelle interface sans supprimer les objectifs enregistrés.
+
+## Déblocage et sélection Drive — 0.3.0-rc.11
+
+Déployé le 8 octobre 2026. Archive SHA-256 `e48c853a7a8aaba6f36ccf4d39fe023ccf26cd1471058fde630689754ec19fb6`. Le bloc de bas de menu devient un accès bleu avec cadenas « Débloquer tout le contenu ». La page Premium présente le déblocage dans une nouvelle composition bleue avec mascotte ; tarif, conditions d’éligibilité, mode Stripe TEST et quota IA restent inchangés.
+
+La sélection globale des Word exclut les fichiers inchangés et conflictuels. Préparation séquentielle par lots de 10, publication des aperçus validés par lots de 20, compteur et conservation des résultats en cas d’interruption. La liste affiche 100 préparations et le total en attente.
+
+Validation : 50 assertions serveur Word/Drive et quatre parcours navigateur ordinateur/iPhone (sélection, exclusion, état intermédiaire, lots 10/10/1 sans publication automatique, rendu et retour de paiement). Vérification en production : version rc.11, trois assets identiques au paquet local, connexion Drive et liste de préparations accessibles, tarif inchangé. Aucun contenu pédagogique préparé ou publié par ces vérifications. Archive rc.10 conservée pour retour arrière.

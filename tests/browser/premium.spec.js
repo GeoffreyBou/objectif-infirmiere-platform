@@ -12,7 +12,8 @@ test('retour de paiement : attendre le webhook, afficher le Premium et préserve
   await fixture('grant');
   await expect(page.locator('.oi-payment-notice')).toContainText('Premium est actif',{timeout:20000});
   await expect(page.locator('.oi-main-nav [data-tab=credits]')).toHaveCount(0);
-  await expect(page.locator('.oi-main-nav [data-tab=premium]')).toBeHidden();
+  await expect(page.locator('.oi-main-nav [data-tab=premium]')).toHaveCount(0);
+  await expect(page.locator('.oi-sidebar-unlock')).toBeHidden();
   const after=await(await page.request.get('/?rest_route=/oi/v1/account',{headers:{'X-WP-Nonce':nonce}})).json();expect(after.progress).toEqual(before.progress);expect(after.premium).toBe(true);expect(after.balances.IA).toBe(105);
   await page.screenshot({path:`.runtime/freemium-active-${test.info().project.name}.png`,fullPage:true});
  }finally{await fixture('cleanup');}

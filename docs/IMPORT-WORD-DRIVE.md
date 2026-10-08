@@ -83,3 +83,8 @@ Validation réelle rc.7 : connexion Google conservée ; 419 candidats après reg
 Les URL HTTP(S) présentes comme texte brut dans les références deviennent des liens, sans dupliquer les hyperliens Word existants. Le libellé d’un lien existant est conservé, sa destination figure dans son attribut de titre. Les sources s’ouvrent dans un nouvel onglet avec `noopener noreferrer`. Les iframes d’aperçu autorisent ces ouvertures sans autoriser les scripts dans le contenu importé.
 
 Le traitement s’applique aussi à l’affichage des préparations et fiches existantes : aucune réimportation requise pour les URL déjà présentes dans le texte. Aucun lien n’est inventé lorsque la référence Word ne contient pas d’URL. Validation serveur : 50 assertions réussies.
+
+### Sélection Drive en masse (rc.11)
+Après l’analyse, « Tout sélectionner » coche les Word nouveaux ou modifiés ; les fichiers inchangés et les doublons restent exclus. La préparation traite automatiquement la sélection par lots de 10, sans publication automatique. Garder l’onglet ouvert pendant le traitement. En cas d’interruption, les préparations déjà enregistrées sont conservées ; relancer une analyse permet de reprendre.
+
+La liste présente les 100 préparations les plus récentes et indique le total en attente. Les suivantes apparaissent après publication. La publication de la sélection prévisualisée est également répartie en lots de 20.
