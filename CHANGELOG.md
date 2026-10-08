@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0-rc.2 — Lisibilité des droits et navigation
+
+- Cadenas et mention « Verrouillée » sur les fiches et QCM à débloquer ; coût d'un crédit explicite.
+- Badge « Accès administrateur » pour éviter de confondre les droits de contrôle avec un déblocage gratuit.
+- Retrait du panneau de crédits en tête des onglets. Soldes regroupés dans « Mes crédits », accessible aussi dans la navigation mobile ; solde IA près du formulaire.
+- Droits existants conservés ; aucune modification des règles de débit.
+
+
 ## 0.3.0-rc.1 — 2026-10-08 — revue déployée sur OVH après autorisation explicite
 
 - Vérification e-mail et attribution unique de 5 crédits Fiche, 5 QCM, 5 IA.

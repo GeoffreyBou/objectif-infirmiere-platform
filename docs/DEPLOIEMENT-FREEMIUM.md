@@ -28,3 +28,13 @@ Le site est consultable pour revue du nouveau modèle, pas ouvert à l'encaissem
 Les comptes existants conservent leurs droits ; un administrateur dispose des accès de contrôle. Pour examiner le comportement d'un nouvel étudiant, utiliser une inscription distincte et confirmer l'adresse.
 
 Un éventuel retour arrière doit privilégier la réinstallation du plugin 0.2.2 et les réglages enregistrés, sans restauration aveugle de la base qui pourrait effacer de nouvelles inscriptions. Les nouvelles tables peuvent rester en place, inactives sous l'ancienne version. Toute restauration de données doit tenir compte des écritures intervenues après la sauvegarde.
+
+## Ajustement 0.3.0-rc.2 — 8 octobre 2026
+
+Déployé sur le même domaine pour la revue demandée. Le portefeuille est déplacé dans l’onglet « Mes crédits », accessible aussi dans la navigation mobile. Il n’est plus répété dans les fiches, QCM, favoris, progression, assistant et Premium. Le solde IA reste affiché près du formulaire.
+
+Les contenus à débloquer portent un cadenas et un coût explicite de 1 crédit. Les administrateurs voient « Accès administrateur » : leurs droits de consultation ne consomment pas de crédits. Les règles de débit et les droits existants restent inchangés.
+
+Validation : quatre parcours navigateur Freemium/Premium passent sur ordinateur et iPhone ; le parcours iPhone est repassé après correction du badge mobile. Premier déblocage 5 → 4, relecture sans nouveau débit. Sur le site réel, absence du bandeau dans les six onglets, page Crédits et navigation sans débordement à 390 et 320 px vérifiées avec un administrateur temporaire. Les fichiers JS/CSS distants correspondent exactement aux fichiers locaux. Les comptes étudiants locaux de test sont nettoyés séparément.
+
+Archive SHA-256 : `2701b27d04f5646480bc7f2bbe73529c6a8f10e24f6108873bc9cad1c0d3341a`. Retour arrière disponible avec l’archive 0.3.0-rc.1 ; aucune restauration de base requise pour cet ajustement.

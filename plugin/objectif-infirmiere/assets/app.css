@@ -314,7 +314,7 @@
 .oi-workspace{display:block}
 .oi-sidebar{position:static;padding:0;height:0;border:0;background:none;overflow:visible}
 .oi-sidebar-heading,.oi-sidebar-note,.oi-student{display:none}
-.oi-main-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:#fffffff5;backdrop-filter:blur(16px);border-top:1px solid #d8dee6;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 30px #16294505}
+.oi-main-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:#fffffff5;backdrop-filter:blur(16px);border-top:1px solid #d8dee6;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:8px 8px calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 30px #16294505}
 .oi-app .oi-main-nav button{flex-direction:column;justify-content:center;text-align:center;gap:4px;font-size:9px;padding:9px 3px;min-height:56px;border-radius:9px;line-height:1.5}
 .oi-main-nav .oi-icon{width:21px;height:21px}
 .oi-main-nav .oi-nav-tag,.oi-main-nav button[aria-current=page]:after{display:none}
@@ -541,3 +541,8 @@
 @media(max-width:760px){.oi-main-nav [data-tab=progress],.oi-main-nav [data-tab=premium]{display:none!important}.oi-wallet{padding:19px}.oi-wallet-grid{gap:8px}.oi-wallet-grid>div{padding:13px 10px}.oi-wallet-grid strong{font-size:27px}.oi-wallet-grid span{font-size:11px;line-height:1.6}.oi-wallet-heading h2{font-size:19px}.oi-verification{padding:24px}.oi-premium-price strong{font-size:54px}.oi-wallet-actions{flex-direction:column}.oi-wallet-actions button{width:100%}}
 
 .oi-payment-notice{padding:18px 24px;border:1px solid #b8d1f5;border-radius:16px;background:#edf5ff;color:#18395d;line-height:1.6;margin:0 0 24px;}
+
+.oi-fiche-card.is-locked .oi-card-badge{display:inline-flex;align-items:center;gap:5px}.oi-fiche-card.is-locked .oi-card-badge .oi-icon{width:14px;height:14px;flex-shrink:0}.oi-fiche-card.is-locked .oi-card-bottom{color:#1854b4;font-weight:700}.oi-admin-access-note{display:flex;gap:10px;padding:14px;border-radius:12px;background:#edf5ff;color:#29466b;font-size:13px;line-height:1.65}.oi-admin-access-note>.oi-icon{flex-shrink:0;margin-top:3px}.oi-admin-access-note strong{display:block}
+
+.oi-question-balance{font-size:13px;color:#516581;line-height:1.6;margin:20px 0 10px}.oi-question-balance strong{color:#1854b4}
+.oi-fiche-card.is-locked .oi-card-badge{white-space:nowrap;max-width:none;overflow-wrap:normal}

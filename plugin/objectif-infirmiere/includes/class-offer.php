@@ -24,7 +24,7 @@ final class OI_Offer {
     public static function account(): array {
         $user=get_current_user_id();$verified=OI_Verification::verified($user);
         if($verified) OI_Credits::welcome($user);
-        return ['verified'=>$verified,'verification_email_sent'=>(bool)get_user_meta($user,'oi_email_sent',true),'verification_required'=>(bool)get_user_meta($user,'oi_email_pending',true),'premium'=>self::premium($user),'balances'=>OI_Credits::balances($user),'offer'=>self::public_offer(),'ai_available'=>(bool)(get_option('oi_ai_enabled',false)&&get_option('oi_vector_store')&&OI_Stripe::secret('OI_OPENAI_API_KEY')),'progress'=>OI_Revision::progress($user)];
+        return ['administrator'=>user_can($user,'manage_options'),'verified'=>$verified,'verification_email_sent'=>(bool)get_user_meta($user,'oi_email_sent',true),'verification_required'=>(bool)get_user_meta($user,'oi_email_pending',true),'premium'=>self::premium($user),'balances'=>OI_Credits::balances($user),'offer'=>self::public_offer(),'ai_available'=>(bool)(get_option('oi_ai_enabled',false)&&get_option('oi_vector_store')&&OI_Stripe::secret('OI_OPENAI_API_KEY')),'progress'=>OI_Revision::progress($user)];
     }
     public static function public_offer(): array {
         $ids=self::catalogue();$pack=self::pack();

@@ -1,4 +1,4 @@
-# Revue Freemium / Premium — 0.3.0-rc.1
+# Revue Freemium / Premium — 0.3.0-rc.2
 
 Travail sur `feature/freemium-premium`. **Déployée pour revue sur https://app-dev.objectif-infirmiere.fr/ le 8 octobre 2026, après la nouvelle autorisation explicite du propriétaire.** Le cahier interdisait initialement la production ; cette dernière consigne prévaut. La version 0.2.2 reste la référence sur `reference/pre-freemium-2026-10-08`. Cette version de travail réutilise la palette bleue, le logo, les mascottes et les composants existants.
 
@@ -7,7 +7,7 @@ Travail sur `feature/freemium-premium`. **Déployée pour revue sur https://app-
 Captures du WordPress local avec comptes et contenus de démonstration :
 
 - [Accueil ordinateur](review-freemium/accueil-1440.png) et [accueil mobile](review-freemium/accueil-390.png).
-- [Espace gratuit ordinateur](review-freemium/espace-gratuit-desktop.png) et [compteurs sur mobile](review-freemium/espace-gratuit-mobile.png).
+- [Espace gratuit ordinateur](review-freemium/espace-gratuit-desktop.png) et [espace gratuit mobile](review-freemium/espace-gratuit-mobile.png).
 - [Offre Premium](review-freemium/offre-premium-mobile.png) et [espace après confirmation du webhook simulé](review-freemium/premium-actif-mobile.png).
 - [Administration des crédits et campagnes](review-freemium/administration.png).
 
@@ -17,8 +17,8 @@ La barre de navigation fixe peut apparaître au milieu d'une capture mobile de p
 
 1. L'accueil présente le compte gratuit, une démonstration, un comparatif et le Premium à 59 €, sans abonnement.
 2. L'inscription ouvre un écran de vérification. Un lien envoyé par e-mail demande une confirmation explicite ; le simple passage d'un scanner d'e-mail ne valide rien.
-3. Après confirmation, le tableau de bord affiche 5 crédits Fiche, 5 crédits QCM et 5 crédits IA. Reconnexion et confirmation répétée n'ajoutent aucun crédit.
-4. Le catalogue est visible ; ouvrir une fiche ou une série verrouillée débite son portefeuille respectif une seule fois. Relire et recommencer restent gratuits.
+3. Après confirmation, l’onglet « Mes crédits » affiche 5 crédits Fiche, 5 crédits QCM et 5 crédits IA. Les autres onglets ne répètent plus le bandeau. Reconnexion et confirmation répétée n'ajoutent aucun crédit.
+4. Le catalogue est visible ; les cartes verrouillées portent un cadenas et « Débloquer — 1 crédit ». Le premier déblocage débite son portefeuille respectif une seule fois. Relire et recommencer restent gratuits.
 5. Favoris et progression suivent les contenus débloqués. Le Premium couvre les fiches et QCM explicitement sélectionnés dans le pack.
 6. Seul un paiement de 59 € confirmé côté serveur active le Premium et ajoute 100 crédits IA une seule fois par compte. La page de retour attend cette confirmation ; son URL ne donne aucun droit.
 7. Le membre Premium ne voit plus les incitations à acheter l'offre qu'il possède.
@@ -49,7 +49,7 @@ python3 scripts/test-credit-races.py
 scripts/package.sh
 ```
 
-Les e-mails locaux sont capturés dans `.runtime/mail`, sans envoi externe. Ils contiennent des liens confidentiels : ne pas les publier. Les tests navigateur lisent uniquement leurs propres messages. Les comptes créés par les scénarios d’inscription sont supprimés ; quatre comptes locaux de navigateur sont conservés pour la revue et remplacés à la prochaine batterie. Le plugin installable exclut tous les scripts, tests, données locales et secrets. L'archive générée est `.runtime/objectif-infirmiere-0.3.0-rc.1.zip` ; elle n'est pas une autorisation de déploiement.
+Les e-mails locaux sont capturés dans `.runtime/mail`, sans envoi externe. Ils contiennent des liens confidentiels : ne pas les publier. Les tests navigateur lisent uniquement leurs propres messages. Les comptes créés par les scénarios d’inscription sont supprimés ; quatre comptes locaux de navigateur sont conservés pour la revue et remplacés à la prochaine batterie. Le plugin installable exclut tous les scripts, tests, données locales et secrets. L'archive générée est `.runtime/objectif-infirmiere-0.3.0-rc.2.zip` ; elle n'est pas une autorisation de déploiement.
 
 ## Services restant à valider
 
