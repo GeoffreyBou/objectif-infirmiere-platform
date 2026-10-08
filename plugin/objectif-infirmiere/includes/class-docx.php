@@ -25,8 +25,24 @@ final class OI_Docx {
             if($xp->query('//w:object|//w:pict')->length)$self->warnings[]='Certains objets ou anciens dessins Word ne sont pas pris en charge.';
             if($xml->getElementsByTagNameNS('*','oMath')->length||$xml->getElementsByTagNameNS('*','chart')->length)$self->warnings[]='Équations ou graphiques Word non convertis : les remplacer par des images ou du texte avant publication.';
             if($xp->query('//w:vMerge')->length)$self->warnings[]='Vérifier les cellules fusionnées verticalement des tableaux.';
-            return ['html'=>wp_kses_post($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
+            return ['title'=>$self->title($body),'html'=>wp_kses_post($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
         }finally{$self->zip->close();}
+    }
+    private function title(DOMNode $body): string {
+        // Only an explicit document title, or a leading Heading 1, is authoritative.
+        $first=true;$leading='';
+        foreach($body->childNodes as $p){
+            if($p->localName!=='p')continue;
+            $text='';foreach($p->getElementsByTagNameNS(self::W,'t') as $t)$text.=$t->textContent;
+            $text=sanitize_text_field($text);if(!$text)continue;
+            $id=$p->getElementsByTagNameNS(self::W,'pStyle')->item(0)?->getAttributeNS(self::W,'val')??'';
+            $style=$this->styles[$id]??$id;
+            if(!$first&&$leading&&preg_match('/^UE\s+[A-E]\.?[1-9]\b/u',$text))return $leading;
+            if($first&&mb_strlen($text)<=200)$leading=$text;
+            if(preg_match('/^(title|titre)$/i',$style)||($first&&preg_match('/^(heading|titre)\s*1$/i',$style)))return $text;
+            $first=false;
+        }
+        return '';
     }
     private function xml(string $name): DOMDocument {
         $raw=$this->zip->getFromName($name);if($raw===false||stripos($raw,'<!DOCTYPE')!==false||stripos($raw,'<!ENTITY')!==false)throw new RuntimeException('XML Word refusé.');

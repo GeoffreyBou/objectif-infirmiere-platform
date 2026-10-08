@@ -91,14 +91,14 @@ final class OI_Drive {
             $candidates=$job['done']?self::candidates($job['files']):[];$missing=[];
             if($job['done']){
                 $known=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','numberposts'=>-1,'meta_key'=>'oi_drive_file_id']);
-                foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId){$found=true;$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
+                foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId||(!empty($candidate['code'])&&$candidate['code']===(get_post_meta($post->ID,'oi_source_code',true)?:OI_Imports::code($post->post_title)))){$found=true;if($candidate['id']===$fileId&&!empty($candidate['code'])&&!get_post_meta($post->ID,'oi_source_code',true))update_post_meta($post->ID,'oi_source_code',$candidate['code']);$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
             }
             return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing];
         }catch(Throwable $e){return new WP_Error('oi_drive',$e->getMessage(),['status'=>400]);}
     }
     public static function candidates(array $files): array {
         $groups=[];foreach($files as $f){$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)$/i',trim($part),$m))$version=$m[1];else $path[]=$part;}
-            $key=hash('sha256',mb_strtolower(implode('/',$path).'/'.pathinfo($f['name'],PATHINFO_FILENAME)));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
+            $stem=pathinfo($f['name'],PATHINFO_FILENAME);if($version==='0'&&preg_match('/[_ -]v(\d+(?:\.\d+)+)$/i',$stem,$m))$version=$m[1];$stem=preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$stem);$f['code']=OI_Imports::code($f['name']);$key=$f['code']?'code:'.$f['code']:hash('sha256',mb_strtolower(implode('/',$path).'/'.$stem));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
             if(!isset($groups[$key])||version_compare($version,$groups[$key][0]['version'],'>'))$groups[$key]=[$f];elseif(version_compare($version,$groups[$key][0]['version'],'='))$groups[$key][]=$f;
         }
         $result=[];foreach($groups as $group)foreach($group as $file){$file['conflict']=count($group)>1;$result[]=$file;}return $result;

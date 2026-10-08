@@ -1,3 +1,9 @@
+## 0.3.0-rc.7
+- Import : identité stable par code de fiche, indépendante du titre et du dossier de version ; conflits explicites.
+- Titre extrait du Word, corrections manuelles conservées, métadonnées de titre restaurables.
+- Reprise des anciennes préparations sans doublon et affichage du code permanent.
+- Validation : 44 assertions serveur et parcours navigateur desktop.
+
 # Changelog
 
 ## 0.3.0-rc.6 — Préparation Word depuis Drive

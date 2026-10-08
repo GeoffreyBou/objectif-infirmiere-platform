@@ -1,4 +1,4 @@
-# Import Word et connexion Drive — 0.3.0-rc.6
+# Import Word et connexion Drive — 0.3.0-rc.7
 
 ## Parcours administrateur
 
@@ -50,7 +50,7 @@ Configuration alternative par le propriétaire du compte Google :
 
 Le scope demandé est `drive.readonly`. L’application ne crée, ne modifie et ne supprime aucun fichier dans Drive. Les secrets et jetons sont chiffrés en base avec les sels WordPress ; le jeton d’accès est renouvelé côté serveur. Une révocation Google, la suppression du client ou un changement des sels WordPress impose une reconnexion. « Déconnecter » retire la connexion de WordPress ; les autorisations Google peuvent aussi être révoquées depuis le compte Google.
 
-L’analyse est paginée et reprend par petites étapes (3 000 éléments, profondeur 12 maximum). Les dossiers de version `v0.3`, `v0.10` ou `version 0.3` sont comparés numériquement. Seule la version la plus récente par chemin logique est proposée. Les doublons d’une même version sont bloqués. Les Word inchangés sont signalés, les contenus publiés non retrouvés sont listés sans suppression automatique. L’identifiant Drive conserve la correspondance lors d’un déplacement ; les nouvelles copies dans les dossiers de version utilisent le chemin logique hors version. Les correspondances incertaines restent à vérifier dans l’aperçu et le choix de fiche cible.
+L’analyse est paginée et reprend par petites étapes (3 000 éléments, profondeur 12 maximum). Les dossiers de version `v0.3`, `v0.10` ou `version 0.3` sont comparés numériquement. Seule la version la plus récente par code permanent est proposée (chemin logique en repli pour les fichiers sans code). Les doublons d’une même version sont bloqués. Les Word inchangés sont signalés, les contenus publiés non retrouvés sont listés sans suppression automatique. L’identifiant Drive conserve la correspondance lors d’un déplacement ; les nouvelles copies utilisent le code permanent, indépendamment du titre et du chemin. Les correspondances incertaines restent à vérifier dans l’aperçu et le choix de fiche cible.
 
 ## Protections de lecture
 
@@ -63,3 +63,16 @@ Tests serveur : conversion/assainissement, images, refus XML, accès administrat
 Tests navigateur ordinateur/iPhone : import réel de fichier multipart, aperçu avant/après et image privée, publication, mise à jour, restauration, accès étudiants/anonymes refusés, protection de copie et impression. Les parcours existants de bibliothèque et d’authentification sont également contrôlés.
 
 **Validation réelle du 8 octobre 2026 :** connexion par compte de service configurée par le propriétaire, analyse de 441 Word et préparation réussie de `B1-UGR-002_Sante-sexuelle_v0.1.docx` et `B1-UGR-001_Puberte_v0.1.docx` dans WordPress. Les deux préparations restent disponibles pour revue, sans publication. La correction rc.6 charge explicitement `wp-admin/includes/file.php` dans le parcours REST : WP-CLI chargeait déjà cette dépendance et masquait l’absence de `wp_tempnam()` en production. Les premiers vrais Word doivent être relus pour qualifier leurs mises en page spécifiques.
+
+
+## Titres et identité — rc.7
+
+Conserver le préfixe stable du fichier, par exemple `B1-UGR-002`. Le reste du nom, le titre dans Word et le dossier peuvent changer. Le titre affiché est extrait du style Word Titre/Title, d’un premier Titre 1, ou du premier texte suivi de la ligne UE (présentation des documents réels). Sans titre identifiable, le nom du fichier est proposé avec un avertissement ; aucun texte du document n’est supprimé.
+
+Une correction du titre dans WordPress est conservée lors des préparations suivantes. Si le titre n’a pas été personnalisé, le nouveau titre Word est proposé. La publication reste soumise à aperçu. Le titre source et le caractère personnalisé sont sauvegardés avec chaque version et restaurés avec elle. Les préparations antérieures peuvent être préparées à nouveau : le même fichier est réutilisé, son titre technique remplacé, les corrections manuelles conservées.
+
+Les correspondances par code, ID Drive et clé source doivent converger vers une seule fiche. Les doublons bloquent la préparation/publication. Les versions dans les noms `_v0.3` sont reconnues en l’absence de dossier de version. Pour les anciens imports, l’ID Drive ou un code encore présent dans le titre assure la transition ; l’analyse mémorise le code lorsqu’elle retrouve le même fichier Drive. Si le code et l’ID Drive ont tous deux changé avant cette transition et que l’ancien titre avait été personnalisé, choisir explicitement la fiche cible dans l’aperçu.
+
+Validation rc.7 : 44 assertions serveur ; parcours navigateur desktop complet (import, titre personnalisé, mise à jour, restauration, protections). Les cas couvrent changements de nom/version/ID Drive, doublons, titres non stylés avant UE et anciennes préparations.
+
+Validation réelle rc.7 : connexion Google conservée ; 419 candidats après regroupement des versions par code (441 fichiers auparavant). Les versions v0.3 de Santé sexuelle et Puberté sont retenues, titres extraits sans avertissement, préparations 50 et 51 laissées pour revue, sans publication. Les anciennes préparations ne sont pas supprimées.

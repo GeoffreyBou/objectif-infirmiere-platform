@@ -60,3 +60,8 @@ Le propriétaire a configuré son compte de service depuis le formulaire sécuri
 Les contrôles locaux comprennent 31 assertions Word/Drive (dont signature RSA et renouvellement du compte de service) et les parcours navigateur de publication/mise à jour/restauration, images privées et protections. Les essais Google simulés sont distingués de la lecture Drive réelle ci-dessus. Le premier contrôle distant de l’atelier avait échoué sur une attente de titre avec espaces alors que le nom de fichier était transformé en tirets ; les titres importés conservent désormais les espaces.
 
 Archive rc.6 SHA-256 : `d88a0c80f41943f3e3213c90ea2aab09efa6e06e683dbff1350afcb7fa717509`. Les archives précédentes restent disponibles pour réinstallation ; ne pas restaurer aveuglément la base ni effacer la connexion Google configurée par le propriétaire.
+
+
+## Correctif identité et titres — 0.3.0-rc.7
+
+Déployé le 8 octobre 2026. Archive SHA-256 `166aa3231150372af69c96c89612d4f297b96047a1d2c5e35b9775cb2f1dd91e`. Code stable et titre Word, personnalisation conservée, 44 assertions serveur et parcours navigateur desktop réussis. Vérification REST réelle : connexion Google conservée, 419 candidats regroupés, Santé sexuelle et Puberté v0.3 préparées (50/51), titres corrects et aucune publication de contenu. Compte de déploiement temporaire supprimé. Archive rc.6 conservée pour retour arrière.
