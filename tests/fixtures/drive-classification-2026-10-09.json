@@ -1,0 +1,447 @@
+[
+  {
+    "path": [],
+    "count": 3,
+    "archived": false,
+    "code": null,
+    "theme": null
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "01 - Fondements biologiques et developpement humain",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 23,
+    "archived": false,
+    "code": "B1",
+    "theme": "01"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "02 - Cardiovasculaire respiratoire et sang",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 17,
+    "archived": false,
+    "code": "B1",
+    "theme": "02"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "03 - Systeme nerveux",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 8,
+    "archived": false,
+    "code": "B1",
+    "theme": "03"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "04 - Systeme locomoteur",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B1",
+    "theme": "04"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "05 - Systeme urinaire",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B1",
+    "theme": "05"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "06 - Systeme digestif",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 12,
+    "archived": false,
+    "code": "B1",
+    "theme": "06"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "07 - Systeme endocrinien",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B1",
+    "theme": "07"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "08 - Systemes urogenital et reproducteur",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 16,
+    "archived": false,
+    "code": "B1",
+    "theme": "08"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "09 - Systeme tegumentaire",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B1",
+    "theme": "09"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "10 - Immunite infections et inflammation",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 21,
+    "archived": false,
+    "code": "B1",
+    "theme": "10"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "11 - ORL et ophtalmologie",
+      "v0.3 - STANDARD VALIDE"
+    ],
+    "count": 14,
+    "archived": false,
+    "code": "B1",
+    "theme": "11"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "12 - Cancerologie et hemopathies",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 16,
+    "archived": false,
+    "code": "B1",
+    "theme": "12"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "13 - Enfant adolescent et pathologies infantiles",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 24,
+    "archived": false,
+    "code": "B1",
+    "theme": "13"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "14 - Psychiatrie adulte enfant adolescent",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 20,
+    "archived": false,
+    "code": "B1",
+    "theme": "14"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "15 - Situations critiques et urgences",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 15,
+    "archived": false,
+    "code": "B1",
+    "theme": "15"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "16 - Vieillissement et geriatrie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 16,
+    "archived": false,
+    "code": "B1",
+    "theme": "16"
+  },
+  {
+    "path": [
+      "B1 - Sciences biomedicales",
+      "17 - Soins palliatifs et medecine sociale",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 16,
+    "archived": false,
+    "code": "B1",
+    "theme": "17"
+  },
+  {
+    "path": [
+      "B2 - Sciences humaines et sociales",
+      "01 - Fondements et psychologie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 13,
+    "archived": false,
+    "code": "B2",
+    "theme": "01"
+  },
+  {
+    "path": [
+      "B2 - Sciences humaines et sociales",
+      "02 - Sociologie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 12,
+    "archived": false,
+    "code": "B2",
+    "theme": "02"
+  },
+  {
+    "path": [
+      "B2 - Sciences humaines et sociales",
+      "03 - Ethnologie et anthropologie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 9,
+    "archived": false,
+    "code": "B2",
+    "theme": "03"
+  },
+  {
+    "path": [
+      "B2 - Sciences humaines et sociales",
+      "04 - Violences, addictions et vulnerabilites",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 9,
+    "archived": false,
+    "code": "B2",
+    "theme": "04"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens"
+    ],
+    "count": 16,
+    "archived": false,
+    "code": "B3",
+    "theme": null
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "01 - Formations et sante mentale initiale",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B3",
+    "theme": "01"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "02 - Hygiene et prevention des infections",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 12,
+    "archived": false,
+    "code": "B3",
+    "theme": "02"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "03 - Douleur et demarche clinique",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 8,
+    "archived": false,
+    "code": "B3",
+    "theme": "03"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "04 - Consultation infirmiere",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B3",
+    "theme": "04"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "05 - Soins courants",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B3",
+    "theme": "05"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "06 - Pediatrie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 8,
+    "archived": false,
+    "code": "B3",
+    "theme": "06"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "07 - Psychiatrie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 10,
+    "archived": false,
+    "code": "B3",
+    "theme": "07"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "08 - Soins critiques et crises collectives",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 10,
+    "archived": false,
+    "code": "B3",
+    "theme": "08"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "09 - Geriatrie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B3",
+    "theme": "09"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "10 - Plaies et pansements",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 10,
+    "archived": false,
+    "code": "B3",
+    "theme": "10"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "11 - Vaccination addictions et fin de vie",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B3",
+    "theme": "11"
+  },
+  {
+    "path": [
+      "B3 - Medicaments, dispositifs et examens",
+      "12 - Medicaments dispositifs transfusion et examens",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 22,
+    "archived": false,
+    "code": "B3",
+    "theme": "12"
+  },
+  {
+    "path": [
+      "B4 - Demarche qualite et gestion des risques",
+      "01 - Fondements et pilotage de la qualite",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B4",
+    "theme": "01"
+  },
+  {
+    "path": [
+      "B4 - Demarche qualite et gestion des risques",
+      "02 - Experience usager tracabilite et evaluation des pratiques",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 4,
+    "archived": false,
+    "code": "B4",
+    "theme": "02"
+  },
+  {
+    "path": [
+      "B4 - Demarche qualite et gestion des risques",
+      "03 - Gestion des risques methodes et vigilances",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 6,
+    "archived": false,
+    "code": "B4",
+    "theme": "03"
+  },
+  {
+    "path": [
+      "B4 - Demarche qualite et gestion des risques",
+      "04 - Facteurs humains et culture de securite",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 7,
+    "archived": false,
+    "code": "B4",
+    "theme": "04"
+  },
+  {
+    "path": [
+      "B4 - Demarche qualite et gestion des risques",
+      "05 - Ressources et amelioration continue",
+      "v0.3 - A RELIRE"
+    ],
+    "count": 2,
+    "archived": false,
+    "code": "B4",
+    "theme": "05"
+  },
+  {
+    "path": [
+      "C1 - Sante publique promotion prevention ETP",
+      "01 - Concepts et comportements de sante",
+      "ARCHIVE - upload partiel - ne pas utiliser"
+    ],
+    "count": 9,
+    "archived": true,
+    "code": "C1",
+    "theme": "01"
+  }
+]

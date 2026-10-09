@@ -91,13 +91,18 @@ final class OI_Drive {
             $candidates=$job['done']?self::candidates($job['files']):[];$missing=[];
             if($job['done']&&!$qcm){
                 $known=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','numberposts'=>-1,'meta_key'=>'oi_drive_file_id']);
-                foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId||(!empty($candidate['code'])&&$candidate['code']===(get_post_meta($post->ID,'oi_source_code',true)?:OI_Imports::code($post->post_title)))){$found=true;if($candidate['id']===$fileId&&!empty($candidate['code'])&&!get_post_meta($post->ID,'oi_source_code',true))update_post_meta($post->ID,'oi_source_code',$candidate['code']);$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
+                foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId||(!empty($candidate['code'])&&$candidate['code']===(get_post_meta($post->ID,'oi_source_code',true)?:OI_Imports::code($post->post_title)))){$found=true;$candidate['published']=['id'=>$post->ID,'unit'=>(int)(wp_get_object_terms($post->ID,'oi_enseignement',['fields'=>'ids'])[0]??0),'theme'=>(int)(wp_get_object_terms($post->ID,'oi_theme',['fields'=>'ids'])[0]??0)];if($candidate['id']===$fileId&&!empty($candidate['code'])&&!get_post_meta($post->ID,'oi_source_code',true))update_post_meta($post->ID,'oi_source_code',$candidate['code']);$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
             }
-            return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing];
+            $classification=['matched'=>0,'unmatched'=>0,'archived'=>0,'published_mismatches'=>0];
+            if($job['done']&&!$qcm){
+                foreach($job['files'] as $file)if(self::archived($file['path']))$classification['archived']++;
+                foreach($candidates as &$candidate){[$u,$t]=self::classification($candidate['path']);$candidate['classification']=['unit'=>$u,'theme'=>$t,'label'=>$t?get_term($t,'oi_theme')->name:($u?'Dossier de thème absent ou inconnu':'Dossier UE absent ou inconnu')];$classification[$u&&$t?'matched':'unmatched']++;if($u&&$t&&!empty($candidate['published'])&&($candidate['published']['unit']!==$u||$candidate['published']['theme']!==$t)){$candidate['classification']['published_mismatch']=true;$classification['published_mismatches']++;}}unset($candidate);
+            }
+            return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing,'classification'=>$classification];
         }catch(Throwable $e){return new WP_Error('oi_drive',$e->getMessage(),['status'=>400]);}
     }
     public static function candidates(array $files): array {
-        $groups=[];foreach($files as $f){$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)$/i',trim($part),$m))$version=$m[1];else $path[]=$part;}
+        $groups=[];foreach($files as $f){if(self::archived($f['path']))continue;$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)(?:\s*[-–—]\s*.*)?$/iu',trim($part),$m))$version=$m[1];else $path[]=$part;}
             $stem=preg_replace('/_qcm$/i','',pathinfo($f['name'],PATHINFO_FILENAME));if($version==='0'&&preg_match('/[_ -]v(\d+(?:\.\d+)+)$/i',$stem,$m))$version=$m[1];$stem=preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$stem);$f['code']=OI_Imports::code($f['name']);$key=$f['code']?'code:'.$f['code']:hash('sha256',mb_strtolower(implode('/',$path).'/'.$stem));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
             if(!isset($groups[$key])||version_compare($version,$groups[$key][0]['version'],'>'))$groups[$key]=[$f];elseif(version_compare($version,$groups[$key][0]['version'],'='))$groups[$key][]=$f;
         }
@@ -112,9 +117,13 @@ final class OI_Drive {
             }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
         }return $result;
     }
+    public static function archived(array $path): bool {
+        foreach($path as $part)if(preg_match('/^archives?(?:$|[\s_\-–—])/iu',trim($part)))return true;
+        return false;
+    }
     public static function classification(array $path): array {
         $unit=0;$code='';
-        foreach($path as $part)if(preg_match('/^([A-E])\.?([1-9])\b/i',$part,$m)){
+        foreach($path as $part)if(preg_match('/^([A-E])\.?([1-9])(?=$|[\s_\-–—])/iu',trim($part),$m)){
             $candidate=strtoupper($m[1].$m[2]);$term=get_term_by('slug','programme-2026-'.strtolower($candidate),'oi_enseignement');
             if($term){if($unit&&$unit!==(int)$term->term_id)return [0,0];$unit=(int)$term->term_id;$code=$candidate;}
         }
@@ -123,11 +132,11 @@ final class OI_Drive {
         if(is_wp_error($themes))return [$unit,0];
         $matches=[];
         foreach($path as $part){
-            $label=preg_replace('/^'.preg_quote($code,'/').'\s*[-–—]\s*/ui','',$part);
+            $label=preg_replace('/^'.substr($code,0,1).'\.?'.substr($code,1).'[\s_\-–—]+/ui','',$part);
             foreach($themes as $t){
-                $name=preg_replace('/^'.preg_quote($code,'/').'\s*[-–—]\s*/ui','',$t->name);
+                $name=preg_replace('/^'.substr($code,0,1).'\.?'.substr($code,1).'[\s_\-–—]+/ui','',$t->name);
                 $exact=sanitize_title($part)===sanitize_title($t->name)||sanitize_title($label)===sanitize_title($name);
-                $number=preg_match('/^(\d{1,2})\s*[-–—]\s*/u',$label,$a)&&preg_match('/^programme-2026-'.strtolower($code).'-(\d{1,2})$/',$t->slug,$b)&&(int)$a[1]===(int)$b[1];
+                $number=preg_match('/^(\d{1,2})(?=$|[\s_\-–—])/u',trim($label),$a)&&preg_match('/^programme-2026-'.strtolower($code).'-(\d{1,2})$/',$t->slug,$b)&&(int)$a[1]===(int)$b[1];
                 if($exact||$number)$matches[(int)$t->term_id]=true;
             }
         }
@@ -145,7 +154,7 @@ final class OI_Drive {
                 $tmp=wp_tempnam('oi-word');
                 if(!$tmp||file_put_contents($tmp,$body)!==strlen($body))throw new RuntimeException('Impossible de créer le fichier Word temporaire. Réessaie ou vérifie l’espace disponible sur le serveur.');
                 [$unit,$theme]=self::classification($file['path']);
-                $stage=OI_Imports::stage($tmp,$file['name'],['key'=>$file['key'],'file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label'],'unit'=>$unit,'theme'=>$theme]);$result[]=['file'=>$file['name'],'id'=>$stage,'ok'=>true,'unchanged'=>$stage===0];
+                $stage=OI_Imports::stage($tmp,$file['name'],['key'=>$file['key'],'file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label'],'path_parts'=>$file['path'],'unit'=>$unit,'theme'=>$theme]);$result[]=['file'=>$file['name'],'id'=>$stage,'ok'=>true,'unchanged'=>$stage===0];
             }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
         }return $result;
     }

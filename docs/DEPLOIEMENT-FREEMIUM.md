@@ -120,3 +120,11 @@ Sept cas de classement validés et 50 assertions d’import réussies. Archive S
 ## Suivi des imports — 0.3.0-rc.16
 
 9 octobre 2026 : panneau de suivi fixe, indicateur animé, compteur réel par lots et bilan fermable. Visible au-dessus du contenu et hors du menu mobile ; la région de statut reste hors de la zone marquée occupée pour annoncer les mises à jour. Tests navigateur ordinateur/iPhone avec requête de préparation suspendue : visibilité du panneau pendant l’attente, progression 0/21, lots 10/10/1, bilan de 21 préparations puis fermeture. Position mobile contrôlée visuellement et par rapport à la navigation. Archive rc.15 conservée.
+
+## Revue complète du classement — 0.3.0-rc.17
+
+9 octobre 2026 : audit des 453 Word visibles dans l’arborescence, référentiel à codes explicites, formats de dossiers normalisés, B4 complété, proposition pour les préparations anciennes restées vides, exclusion des archives et signalement des divergences entre publication et Drive. Migration du référentiel version 2 : IDs existants conservés, B4-01 précisé et B4-02 à B4-05 ajoutés. Aucun document Drive déplacé et aucun classement publié réattribué automatiquement.
+
+569 assertions sur l’ensemble du référentiel et des chemins réels, sept cas de classement, 50 assertions Word/Drive, 13 révision et parcours navigateur Word (publication, mise à jour, restauration et protections) réussis. Archive SHA-256 `88358a8d1c7e8101a62ac1229f5ede5356328831a48fbda18a216b2140dc5070`. Rc.16 conservée ; un retour au code précédent conserve les nouveaux thèmes et les identifiants.
+
+Vérification production : 425 classés / 19 à compléter / 9 archivés ignorés, 0 divergence publiée parmi les chemins identifiables. IDs des thèmes existants conservés et cinq thèmes B4 confirmés. Aucun contenu pédagogique préparé ou publié par ce contrôle.

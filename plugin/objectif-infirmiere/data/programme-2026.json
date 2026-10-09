@@ -3,155 +3,366 @@
     "code": "A1",
     "name": "Fondements des sciences infirmières et raisonnement clinique",
     "themes": [
-      "Profession et sciences infirmières",
-      "Raisonnement et jugement cliniques"
+      {
+        "code": "01",
+        "name": "Profession et sciences infirmières"
+      },
+      {
+        "code": "02",
+        "name": "Raisonnement et jugement cliniques"
+      }
     ]
   },
   {
     "code": "A2",
     "name": "Législation, déontologie, éthique",
     "themes": [
-      "Droit et exercice professionnel",
-      "Situations juridiques particulières",
-      "Éthique et bioéthique"
+      {
+        "code": "01",
+        "name": "Droit et exercice professionnel"
+      },
+      {
+        "code": "02",
+        "name": "Situations juridiques particulières"
+      },
+      {
+        "code": "03",
+        "name": "Éthique et bioéthique"
+      }
     ]
   },
   {
     "code": "B1",
     "name": "Sciences biomédicales",
     "themes": [
-      "Fondements biologiques et développement humain",
-      "Système cardiovasculaire, respiratoire et sang",
-      "Système nerveux",
-      "Système locomoteur",
-      "Système urinaire",
-      "Système digestif",
-      "Système endocrinien",
-      "Systèmes urogénital et reproducteur",
-      "Système tégumentaire",
-      "Immunité, infections et inflammation",
-      "ORL et ophtalmologie",
-      "Cancérologie et hémopathies",
-      "Développement de l’enfant et de l’adolescent, pathologies infantiles",
-      "Psychiatrie de l’adulte, de l’enfant et de l’adolescent",
-      "Situations critiques et urgences",
-      "Vieillissement et gériatrie",
-      "Soins palliatifs et médecine sociale"
+      {
+        "code": "01",
+        "name": "Fondements biologiques et développement humain"
+      },
+      {
+        "code": "02",
+        "name": "Système cardiovasculaire, respiratoire et sang"
+      },
+      {
+        "code": "03",
+        "name": "Système nerveux"
+      },
+      {
+        "code": "04",
+        "name": "Système locomoteur"
+      },
+      {
+        "code": "05",
+        "name": "Système urinaire"
+      },
+      {
+        "code": "06",
+        "name": "Système digestif"
+      },
+      {
+        "code": "07",
+        "name": "Système endocrinien"
+      },
+      {
+        "code": "08",
+        "name": "Systèmes urogénital et reproducteur"
+      },
+      {
+        "code": "09",
+        "name": "Système tégumentaire"
+      },
+      {
+        "code": "10",
+        "name": "Immunité, infections et inflammation"
+      },
+      {
+        "code": "11",
+        "name": "ORL et ophtalmologie"
+      },
+      {
+        "code": "12",
+        "name": "Cancérologie et hémopathies"
+      },
+      {
+        "code": "13",
+        "name": "Développement de l’enfant et de l’adolescent, pathologies infantiles"
+      },
+      {
+        "code": "14",
+        "name": "Psychiatrie de l’adulte, de l’enfant et de l’adolescent"
+      },
+      {
+        "code": "15",
+        "name": "Situations critiques et urgences"
+      },
+      {
+        "code": "16",
+        "name": "Vieillissement et gériatrie"
+      },
+      {
+        "code": "17",
+        "name": "Soins palliatifs et médecine sociale"
+      }
     ]
   },
   {
     "code": "B2",
     "name": "Sciences humaines et sociales",
     "themes": [
-      "Fondements et psychologie",
-      "Sociologie",
-      "Ethnologie et anthropologie",
-      "Violences, addictions et vulnérabilités"
+      {
+        "code": "01",
+        "name": "Fondements et psychologie"
+      },
+      {
+        "code": "02",
+        "name": "Sociologie"
+      },
+      {
+        "code": "03",
+        "name": "Ethnologie et anthropologie"
+      },
+      {
+        "code": "04",
+        "name": "Violences, addictions et vulnérabilités"
+      }
     ]
   },
   {
     "code": "B3",
     "name": "Pratiques et interventions infirmières",
     "themes": [
-      "Formations et repérages initiaux",
-      "Hygiène et prévention des infections",
-      "Douleur et démarche clinique appliquée",
-      "Consultation infirmière",
-      "Soins courants à tous les âges",
-      "Pédiatrie",
-      "Psychiatrie",
-      "Soins critiques, urgences et crises collectives",
-      "Gériatrie",
-      "Plaies et pansements",
-      "Vaccination, addictions et fin de vie",
-      "Médicaments, dispositifs et examens"
+      {
+        "code": "01",
+        "name": "Formations et repérages initiaux"
+      },
+      {
+        "code": "02",
+        "name": "Hygiène et prévention des infections"
+      },
+      {
+        "code": "03",
+        "name": "Douleur et démarche clinique appliquée"
+      },
+      {
+        "code": "04",
+        "name": "Consultation infirmière"
+      },
+      {
+        "code": "05",
+        "name": "Soins courants à tous les âges"
+      },
+      {
+        "code": "06",
+        "name": "Pédiatrie"
+      },
+      {
+        "code": "07",
+        "name": "Psychiatrie"
+      },
+      {
+        "code": "08",
+        "name": "Soins critiques, urgences et crises collectives"
+      },
+      {
+        "code": "09",
+        "name": "Gériatrie"
+      },
+      {
+        "code": "10",
+        "name": "Plaies et pansements"
+      },
+      {
+        "code": "11",
+        "name": "Vaccination, addictions et fin de vie"
+      },
+      {
+        "code": "12",
+        "name": "Médicaments, dispositifs et examens"
+      }
     ]
   },
   {
     "code": "B4",
     "name": "Démarche qualité et gestion des risques",
     "themes": [
-      "Démarche qualité et gestion des risques"
+      {
+        "code": "01",
+        "name": "Fondements et pilotage de la qualité"
+      },
+      {
+        "code": "02",
+        "name": "Expérience usager, traçabilité et évaluation des pratiques"
+      },
+      {
+        "code": "03",
+        "name": "Gestion des risques, méthodes et vigilances"
+      },
+      {
+        "code": "04",
+        "name": "Facteurs humains et culture de sécurité"
+      },
+      {
+        "code": "05",
+        "name": "Ressources et amélioration continue"
+      }
     ]
   },
   {
     "code": "C1",
     "name": "Santé publique, promotion de la santé et prévention, éducation thérapeutique",
     "themes": [
-      "Concepts et comportements de santé",
-      "Thématiques de prévention",
-      "Méthodologie et service sanitaire",
-      "Système de santé et politiques publiques",
-      "Prévention individuelle et ETP",
-      "Risques professionnels des soignants"
+      {
+        "code": "01",
+        "name": "Concepts et comportements de santé"
+      },
+      {
+        "code": "02",
+        "name": "Thématiques de prévention"
+      },
+      {
+        "code": "03",
+        "name": "Méthodologie et service sanitaire"
+      },
+      {
+        "code": "04",
+        "name": "Système de santé et politiques publiques"
+      },
+      {
+        "code": "05",
+        "name": "Prévention individuelle et ETP"
+      },
+      {
+        "code": "06",
+        "name": "Risques professionnels des soignants"
+      }
     ]
   },
   {
     "code": "C2",
     "name": "Santé environnementale et transition écologique",
     "themes": [
-      "Santé environnementale et transition écologique"
+      {
+        "code": "01",
+        "name": "Santé environnementale et transition écologique"
+      }
     ]
   },
   {
     "code": "D1",
     "name": "Savoir-être, communication professionnelle et leadership",
     "themes": [
-      "Posture et communication",
-      "Collaboration et compétences psychosociales",
-      "Leadership, violences et gestion de groupe"
+      {
+        "code": "01",
+        "name": "Posture et communication"
+      },
+      {
+        "code": "02",
+        "name": "Collaboration et compétences psychosociales"
+      },
+      {
+        "code": "03",
+        "name": "Leadership, violences et gestion de groupe"
+      }
     ]
   },
   {
     "code": "D2",
     "name": "Coordination des activités et des soins et gestion d’une structure",
     "themes": [
-      "Coordination des activités et des soins et gestion d’une structure"
+      {
+        "code": "01",
+        "name": "Coordination des activités et des soins et gestion d’une structure"
+      }
     ]
   },
   {
     "code": "D3",
     "name": "Formation, développement des compétences et analyse des pratiques professionnelles",
     "themes": [
-      "Pédagogie et conception de formation",
-      "Accompagnement et évaluation",
-      "Analyse des pratiques"
+      {
+        "code": "01",
+        "name": "Pédagogie et conception de formation"
+      },
+      {
+        "code": "02",
+        "name": "Accompagnement et évaluation"
+      },
+      {
+        "code": "03",
+        "name": "Analyse des pratiques"
+      }
     ]
   },
   {
     "code": "D4",
     "name": "Numérique en santé",
     "themes": [
-      "Données de santé",
-      "Cybersécurité",
-      "Communication et outils",
-      "IA et télésanté"
+      {
+        "code": "01",
+        "name": "Données de santé"
+      },
+      {
+        "code": "02",
+        "name": "Cybersécurité"
+      },
+      {
+        "code": "03",
+        "name": "Communication et outils"
+      },
+      {
+        "code": "04",
+        "name": "IA et télésanté"
+      }
     ]
   },
   {
     "code": "E1",
     "name": "Recherche, méthodes, analyse critique et données probantes",
     "themes": [
-      "Organisation et démarche scientifiques",
-      "Recherche documentaire et lecture critique",
-      "Méthodes qualitatives et quantitatives",
-      "Synthèse et restitution"
+      {
+        "code": "01",
+        "name": "Organisation et démarche scientifiques"
+      },
+      {
+        "code": "02",
+        "name": "Recherche documentaire et lecture critique"
+      },
+      {
+        "code": "03",
+        "name": "Méthodes qualitatives et quantitatives"
+      },
+      {
+        "code": "04",
+        "name": "Synthèse et restitution"
+      }
     ]
   },
   {
     "code": "E2",
     "name": "Langue vivante étrangère",
     "themes": [
-      "Anglais professionnel et scientifique"
+      {
+        "code": "01",
+        "name": "Anglais professionnel et scientifique"
+      }
     ]
   },
   {
     "code": "E3",
     "name": "Méthodes de travail et aide à la réussite",
     "themes": [
-      "Entrée dans la formation et méthodes",
-      "Progression et coopération",
-      "Autonomie, insertion et engagement"
+      {
+        "code": "01",
+        "name": "Entrée dans la formation et méthodes"
+      },
+      {
+        "code": "02",
+        "name": "Progression et coopération"
+      },
+      {
+        "code": "03",
+        "name": "Autonomie, insertion et engagement"
+      }
     ]
   }
 ]

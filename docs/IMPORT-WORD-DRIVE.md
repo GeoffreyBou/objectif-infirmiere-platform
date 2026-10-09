@@ -100,3 +100,6 @@ Lors de la préparation Drive, un dossier numéroté tel que « 12 - Medicaments
 
 ### Suivi visible (rc.16)
 Un panneau fixe indique le traitement en cours et reste visible lorsque la longue liste Drive défile. La préparation affiche les Word traités, le lot en cours et une barre de progression mise à jour entre les lots de 10. Le bilan final reste affiché jusqu’à fermeture. Sur mobile, le panneau apparaît en haut pour éviter le menu de navigation. Aucune estimation fictive du temps restant.
+
+### Référentiel et contrôle complet (rc.17)
+Les codes de thèmes sont désormais explicites dans `programme-2026.json`, indépendants de leur rang. Le classement reconnaît le couple UE/thème avec espaces, tirets ou underscores, et conserve les choix manuels. Le chargement des anciennes préparations restées vides propose le classement reconnu sans mutation avant publication. B4 comporte les cinq thèmes observés dans le Drive. Les dossiers d’archives sont exclus et les versions annotées reconnues. L’analyse expose un bilan de classement, les dossiers à compléter et les divergences éventuelles avec les classements déjà publiés. Voir `AUDIT-CLASSEMENT-DRIVE-2026-10-09.md` pour tous les chemins observés et les 19 Word à ranger.

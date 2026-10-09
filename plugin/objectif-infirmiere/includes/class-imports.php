@@ -70,7 +70,9 @@ final class OI_Imports {
         update_post_meta($id,'oi_unit',(int)$unit);update_post_meta($id,'oi_theme',(int)$theme);return (int)$id;
     }
     private static function row(WP_Post $p): array {
-        return ['id'=>$p->ID,'title'=>$p->post_title,'target'=>(int)get_post_meta($p->ID,'oi_target',true),'unit'=>(int)get_post_meta($p->ID,'oi_unit',true),'theme'=>(int)get_post_meta($p->ID,'oi_theme',true),'source'=>get_post_meta($p->ID,'oi_source',true),'warnings'=>get_post_meta($p->ID,'oi_warnings',true)?:[]];
+        $source=get_post_meta($p->ID,'oi_source',true)?:[];$unit=(int)get_post_meta($p->ID,'oi_unit',true);$theme=(int)get_post_meta($p->ID,'oi_theme',true);
+        if(!$unit||!$theme){[$suggestedUnit,$suggestedTheme]=OI_Drive::classification($source['path_parts']??explode(' / ',$source['path']??''));if(!$unit)$unit=$suggestedUnit;if(!$theme&&$unit===$suggestedUnit)$theme=$suggestedTheme;}
+        return ['id'=>$p->ID,'title'=>$p->post_title,'target'=>(int)get_post_meta($p->ID,'oi_target',true),'unit'=>$unit,'theme'=>$theme,'source'=>$source,'warnings'=>get_post_meta($p->ID,'oi_warnings',true)?:[]];
     }
     public static function listing(): array {
         $terms=fn($tax)=>array_map(fn($t)=>['id'=>$t->term_id,'name'=>$t->name,'unit'=>(int)get_term_meta($t->term_id,'oi_programme_unit',true)],get_terms(['taxonomy'=>$tax,'hide_empty'=>false]));
