@@ -1,3 +1,5 @@
+> Audit historique remplacé par le [programme de référence](THEMES-PROGRAMME-2026.md) : les dossiers Drive ne font plus autorité pour la définition des thèmes.
+
 # Audit du classement Drive / programme — 9 octobre 2026
 
 Audit de l’arborescence contenant les Word et du référentiel de classement du site ; ne constitue pas une validation pédagogique des contenus.

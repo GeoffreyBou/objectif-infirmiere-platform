@@ -103,3 +103,8 @@ Un panneau fixe indique le traitement en cours et reste visible lorsque la longu
 
 ### Référentiel et contrôle complet (rc.17)
 Les codes de thèmes sont désormais explicites dans `programme-2026.json`, indépendants de leur rang. Le classement reconnaît le couple UE/thème avec espaces, tirets ou underscores, et conserve les choix manuels. Le chargement des anciennes préparations restées vides propose le classement reconnu sans mutation avant publication. B4 comporte les cinq thèmes observés dans le Drive. Les dossiers d’archives sont exclus et les versions annotées reconnues. L’analyse expose un bilan de classement, les dossiers à compléter et les divergences éventuelles avec les classements déjà publiés. Voir `AUDIT-CLASSEMENT-DRIVE-2026-10-09.md` pour tous les chemins observés et les 19 Word à ranger.
+
+
+## Programme de référence (rc.18)
+
+Les 15 UE et 158 thèmes sont définis dans [le référentiel](THEMES-PROGRAMME-2026.md), indépendamment de la présence de fiches Drive. Le [CSV](THEMES-PROGRAMME-2026.csv) contient les notions. Le rapprochement utilise le libellé du dossier ou un titre Word correspondant exactement à une notion, après normalisation des accents et de la ponctuation. Aucun rapprochement par seul numéro de dossier. Les anciens thèmes incompatibles restent attachés aux contenus existants, mais ne sont plus proposés à la publication. Les préparations concernées sont rapprochées par titre ou demandent un choix manuel.

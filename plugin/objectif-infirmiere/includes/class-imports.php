@@ -38,6 +38,9 @@ final class OI_Imports {
         $title=$converted['title']?:$fallback;$source['hash']=hash_file('sha256',$file);
         $source['code']=self::code($name);$source['name']=$name;$source['word_title']=$title;
         $source['key']=$source['key']??($source['code']?'code:'.$source['code']:'upload:'.hash('sha256',mb_strtolower(preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$fallback))));
+        if(!empty($source['path_parts'])||!empty($source['path'])){
+            [$source['unit'],$source['theme']]=OI_Drive::classification($source['path_parts']??explode(' / ',$source['path']),$title);
+        }
         $key=$source['key'];$target=self::source_target($source);
         if(!$target&&empty($source['code'])&&empty($source['file_id'])){
             $matches=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','title'=>$fallback,'numberposts'=>2]);
@@ -71,11 +74,16 @@ final class OI_Imports {
     }
     private static function row(WP_Post $p): array {
         $source=get_post_meta($p->ID,'oi_source',true)?:[];$unit=(int)get_post_meta($p->ID,'oi_unit',true);$theme=(int)get_post_meta($p->ID,'oi_theme',true);
-        if(!$unit||!$theme){[$suggestedUnit,$suggestedTheme]=OI_Drive::classification($source['path_parts']??explode(' / ',$source['path']??''));if(!$unit)$unit=$suggestedUnit;if(!$theme&&$unit===$suggestedUnit)$theme=$suggestedTheme;}
+        if($theme&&get_term_meta($theme,'oi_programme_legacy',true))$theme=0;
+        if(!$unit||!$theme){[$suggestedUnit,$suggestedTheme]=OI_Drive::classification($source['path_parts']??explode(' / ',$source['path']??''),$p->post_title);if(!$unit)$unit=$suggestedUnit;if(!$theme&&$unit===$suggestedUnit)$theme=$suggestedTheme;}
         return ['id'=>$p->ID,'title'=>$p->post_title,'target'=>(int)get_post_meta($p->ID,'oi_target',true),'unit'=>$unit,'theme'=>$theme,'source'=>$source,'warnings'=>get_post_meta($p->ID,'oi_warnings',true)?:[]];
     }
     public static function listing(): array {
-        $terms=fn($tax)=>array_map(fn($t)=>['id'=>$t->term_id,'name'=>$t->name,'unit'=>(int)get_term_meta($t->term_id,'oi_programme_unit',true)],get_terms(['taxonomy'=>$tax,'hide_empty'=>false]));
+        $terms=static function($tax){
+            $items=get_terms(['taxonomy'=>$tax,'hide_empty'=>false]);
+            if($tax==='oi_theme')$items=array_filter($items,fn($t)=>get_term_meta($t->term_id,'oi_programme_unit',true)&&!get_term_meta($t->term_id,'oi_programme_legacy',true));
+            return array_values(array_map(fn($t)=>['id'=>$t->term_id,'name'=>$t->name,'unit'=>(int)get_term_meta($t->term_id,'oi_programme_unit',true)],$items));
+        };
         return ['total_stages'=>(int)(wp_count_posts('oi_import')->draft ?? 0),'stages'=>array_map([self::class,'row'],get_posts(['post_type'=>'oi_import','post_status'=>'draft','numberposts'=>100,'orderby'=>'date','order'=>'DESC'])),'targets'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>$p->post_title],get_posts(['post_type'=>'oi_fiche','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC'])),'units'=>$terms('oi_enseignement'),'themes'=>$terms('oi_theme'),'drive'=>OI_Drive::status()];
     }
     public static function upload(WP_REST_Request $r): array|WP_Error {
@@ -87,7 +95,8 @@ final class OI_Imports {
         $p=get_post(absint($r['id']));if(!$p||$p->post_type!=='oi_import'||$p->post_status!=='draft')return new WP_Error('oi_import','Préparation introuvable.',['status'=>404]);
         $target=absint($r['target']);if($target&&(get_post_type($target)!=='oi_fiche'||!in_array(get_post_status($target),['publish','draft'],true)))return new WP_Error('oi_target','Fiche cible invalide.',['status'=>400]);
         $unit=absint($r['unit']);$theme=absint($r['theme']);$title=sanitize_text_field($r['title']);
-        if(!$title||!term_exists($unit,'oi_enseignement')||!term_exists($theme,'oi_theme')||(($parent=(int)get_term_meta($theme,'oi_programme_unit',true))&&$parent!==$unit))return new WP_Error('oi_classification','Choisis un titre, une UE et un thème cohérents.',['status'=>400]);
+        if(get_term_meta($theme,'oi_programme_legacy',true))return new WP_Error('oi_classification','Choisis un thème du programme de référence.',['status'=>400]);
+        if(!$title||!term_exists($unit,'oi_enseignement')||!term_exists($theme,'oi_theme')||(int)get_term_meta($theme,'oi_programme_unit',true)!==$unit)return new WP_Error('oi_classification','Choisis un titre, une UE et un thème cohérents.',['status'=>400]);
         wp_update_post(['ID'=>$p->ID,'post_title'=>$title]);foreach(['oi_target'=>$target,'oi_unit'=>$unit,'oi_theme'=>$theme] as $key=>$value)update_post_meta($p->ID,$key,$value);
         $token=wp_generate_password(32,false);update_post_meta($p->ID,'oi_review',['token'=>hash('sha256',$token),'user'=>get_current_user_id(),'base'=>$target?self::fingerprint($target):'','stage'=>self::fingerprint($p->ID)]);
         $before=$target?get_post_field('post_content',$target):'';

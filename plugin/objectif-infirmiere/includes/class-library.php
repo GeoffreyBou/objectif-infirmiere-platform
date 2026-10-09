@@ -23,7 +23,7 @@ final class OI_Library {
         $taxonomy=$has_unit?'oi_theme':'oi_enseignement';
         $folders=[];
         $programme=get_terms(['taxonomy'=>$taxonomy,'hide_empty'=>false,'meta_query'=>[$has_unit?['key'=>'oi_programme_unit','value'=>absint($r['enseignement'])]:['key'=>'oi_programme_code','compare'=>'EXISTS']]]);
-        if(!is_wp_error($programme))foreach($programme as $term)$folders[$term->term_id]=['id'=>(int)$term->term_id,'name'=>$term->name,'count'=>0];
+        if(!is_wp_error($programme))foreach($programme as $term)if(!get_term_meta($term->term_id,'oi_programme_legacy',true))$folders[$term->term_id]=['id'=>(int)$term->term_id,'name'=>$term->name,'count'=>0];
         foreach($ids as $id){
             $terms=wp_get_post_terms($id,$taxonomy);
             if(is_wp_error($terms))continue;

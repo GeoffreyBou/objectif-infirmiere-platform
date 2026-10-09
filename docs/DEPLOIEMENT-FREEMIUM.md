@@ -128,3 +128,12 @@ Sept cas de classement validés et 50 assertions d’import réussies. Archive S
 569 assertions sur l’ensemble du référentiel et des chemins réels, sept cas de classement, 50 assertions Word/Drive, 13 révision et parcours navigateur Word (publication, mise à jour, restauration et protections) réussis. Archive SHA-256 `88358a8d1c7e8101a62ac1229f5ede5356328831a48fbda18a216b2140dc5070`. Rc.16 conservée ; un retour au code précédent conserve les nouveaux thèmes et les identifiants.
 
 Vérification production : 425 classés / 19 à compléter / 9 archivés ignorés, 0 divergence publiée parmi les chemins identifiables. IDs des thèmes existants conservés et cinq thèmes B4 confirmés. Aucun contenu pédagogique préparé ou publié par ce contrôle.
+
+
+## 9 octobre 2026 — rc.18, programme de référence
+
+Déployé et vérifié sur app-dev.objectif-infirmiere.fr. Les 15 UE et les 158 thèmes du document confirmé par le propriétaire sont disponibles, dont 29 C2. Les anciennes catégories incompatibles sont conservées sur les contenus existants, mais exclues des choix de publication. Rapprochement par libellé ou notion/titre exact ; les numéros Drive seuls ne font plus autorité. Aucun contenu utilisateur publié ou supprimé lors de cette migration.
+
+Sauvegarde SQL préalable téléchargée et vérifiée (237 687 975 octets, emplacement privé). Contrôle production : chaque intitulé comparé au référentiel, 112 préparations présentes, Drive connecté, trois assets identiques à la livraison. Tests : imports (50), révision (13), référentiel (655), audit de classement (203), variantes Drive (7), parcours navigateur import/publication/restauration, sélecteur C2 (29 thèmes). Syntaxe PHP et JavaScript vérifiée.
+
+Archive SHA-256 : `b5d4654d9eae9b8c8e043e3b12cf5469546b1232dee77dce69cc2818574b7bd9`. [Liste des thèmes](THEMES-PROGRAMME-2026.md) et [export CSV](THEMES-PROGRAMME-2026.csv).

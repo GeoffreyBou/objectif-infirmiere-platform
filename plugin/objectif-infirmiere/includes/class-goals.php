@@ -14,7 +14,7 @@ final class OI_Goals {
     public static function catalogue(): array {
         $units=[];$themes=[];
         foreach(get_terms(['taxonomy'=>'oi_enseignement','hide_empty'=>false]) as $t)$units[$t->term_id]=['id'=>$t->term_id,'name'=>$t->name,'themes'=>[]];
-        foreach(get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false]) as $t){$parent=(int)get_term_meta($t->term_id,'oi_programme_unit',true);if(isset($units[$parent])){$themes[$t->term_id]=$parent;$units[$parent]['themes'][$t->term_id]=['id'=>$t->term_id,'name'=>$t->name,'fiches'=>[]];}}
+        foreach(get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false]) as $t){if(get_term_meta($t->term_id,'oi_programme_legacy',true))continue;$parent=(int)get_term_meta($t->term_id,'oi_programme_unit',true);if(isset($units[$parent])){$themes[$t->term_id]=$parent;$units[$parent]['themes'][$t->term_id]=['id'=>$t->term_id,'name'=>$t->name,'fiches'=>[]];}}
         $posts=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','post__in'=>OI_Library::catalogue()?:[0],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC']);
         foreach($posts as $p){$ues=wp_get_object_terms($p->ID,'oi_enseignement',['fields'=>'ids']);$ts=wp_get_object_terms($p->ID,'oi_theme',['fields'=>'ids']);$u=$ues[0]??0;$t=0;foreach($ts as $candidate)if(($themes[$candidate]??-1)===$u){$t=$candidate;break;}
             if(!isset($units[$u]))$units[$u]=['id'=>$u,'name'=>'Autres unités','themes'=>[]];if(!isset($units[$u]['themes'][$t]))$units[$u]['themes'][$t]=['id'=>$t,'name'=>'Autres notions','fiches'=>[]];

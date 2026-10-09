@@ -96,7 +96,7 @@ final class OI_Drive {
             $classification=['matched'=>0,'unmatched'=>0,'archived'=>0,'published_mismatches'=>0];
             if($job['done']&&!$qcm){
                 foreach($job['files'] as $file)if(self::archived($file['path']))$classification['archived']++;
-                foreach($candidates as &$candidate){[$u,$t]=self::classification($candidate['path']);$candidate['classification']=['unit'=>$u,'theme'=>$t,'label'=>$t?get_term($t,'oi_theme')->name:($u?'Dossier de thème absent ou inconnu':'Dossier UE absent ou inconnu')];$classification[$u&&$t?'matched':'unmatched']++;if($u&&$t&&!empty($candidate['published'])&&($candidate['published']['unit']!==$u||$candidate['published']['theme']!==$t)){$candidate['classification']['published_mismatch']=true;$classification['published_mismatches']++;}}unset($candidate);
+                foreach($candidates as &$candidate){[$u,$t]=self::classification($candidate['path']);$candidate['classification']=['unit'=>$u,'theme'=>$t,'label'=>$t?get_term($t,'oi_theme')->name:($u?'Thème à rapprocher du programme à la lecture du titre Word':'Dossier UE absent ou inconnu')];$classification[$u&&$t?'matched':'unmatched']++;if($u&&$t&&!empty($candidate['published'])&&($candidate['published']['unit']!==$u||$candidate['published']['theme']!==$t)){$candidate['classification']['published_mismatch']=true;$classification['published_mismatches']++;}}unset($candidate);
             }
             return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing,'classification'=>$classification];
         }catch(Throwable $e){return new WP_Error('oi_drive',$e->getMessage(),['status'=>400]);}
@@ -121,25 +121,29 @@ final class OI_Drive {
         foreach($path as $part)if(preg_match('/^archives?(?:$|[\s_\-–—])/iu',trim($part)))return true;
         return false;
     }
-    public static function classification(array $path): array {
+    public static function classification(array $path,string $title=''): array {
         $unit=0;$code='';
         foreach($path as $part)if(preg_match('/^([A-E])\.?([1-9])(?=$|[\s_\-–—])/iu',trim($part),$m)){
             $candidate=strtoupper($m[1].$m[2]);$term=get_term_by('slug','programme-2026-'.strtolower($candidate),'oi_enseignement');
             if($term){if($unit&&$unit!==(int)$term->term_id)return [0,0];$unit=(int)$term->term_id;$code=$candidate;}
         }
         if(!$unit)return [0,0];
-        $themes=get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false,'meta_key'=>'oi_programme_unit','meta_value'=>$unit]);
-        if(is_wp_error($themes))return [$unit,0];
-        $matches=[];
-        foreach($path as $part){
-            $label=preg_replace('/^'.substr($code,0,1).'\.?'.substr($code,1).'[\s_\-–—]+/ui','',$part);
-            foreach($themes as $t){
-                $name=preg_replace('/^'.substr($code,0,1).'\.?'.substr($code,1).'[\s_\-–—]+/ui','',$t->name);
-                $exact=sanitize_title($part)===sanitize_title($t->name)||sanitize_title($label)===sanitize_title($name);
-                $number=preg_match('/^(\d{1,2})(?=$|[\s_\-–—])/u',trim($label),$a)&&preg_match('/^programme-2026-'.strtolower($code).'-(\d{1,2})$/',$t->slug,$b)&&(int)$a[1]===(int)$b[1];
-                if($exact||$number)$matches[(int)$t->term_id]=true;
+        $themes=get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false,'meta_key'=>'oi_programme_unit','meta_value'=>$unit]);if(is_wp_error($themes))return [$unit,0];
+        $normalize=static fn($s)=>sanitize_title(html_entity_decode($s,ENT_QUOTES|ENT_HTML5,'UTF-8'));
+        $matches=[];$titleMatches=[];
+        foreach($themes as $t){
+            if(get_term_meta($t->term_id,'oi_programme_legacy',true))continue;
+            $name=preg_replace('/^'.preg_quote($code,'/').'\s*[-–—]\s*\d+\s*/u','',$t->name);
+            if($title!=='')foreach(array_merge([$name],get_term_meta($t->term_id,'oi_programme_notions',true)?:[]) as $notion)if($normalize($title)===$normalize($notion))$titleMatches[$t->term_id]=true;
+            foreach($path as $part){
+                $label=preg_replace('/^'.substr($code,0,1).'\.?'.substr($code,1).'[\s_\-–—]+/ui','',trim($part));
+                if($label!==trim($part)&&!preg_match('/^\d{1,2}(?=$|[\s_\-–—])/u',$label))continue; // UE folder itself is not a theme.
+                $label=preg_replace('/^\d{1,2}(?:[\s_\-–—]+|$)/u','',$label);
+                if($label!==''&&$normalize($label)===$normalize($name))$matches[$t->term_id]=true;
             }
         }
+        // The reference title or notion is authoritative; a folder number alone is not.
+        if(count($titleMatches)===1)return [$unit,(int)array_key_first($titleMatches)];
         return [$unit,count($matches)===1?(int)array_key_first($matches):0];
     }
     public static function prepare(WP_REST_Request $r): array|WP_Error {

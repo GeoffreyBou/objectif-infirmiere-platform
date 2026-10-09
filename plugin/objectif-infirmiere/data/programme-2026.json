@@ -5,11 +5,43 @@
     "themes": [
       {
         "code": "01",
-        "name": "Profession et sciences infirmières"
+        "name": "Profession et sciences infirmières",
+        "source_line": 8,
+        "notions": [
+          "Histoire des professions de santé et contribution à la construction du système de santé",
+          "Champs d’intervention des différentes professions et place dans les parcours de soins",
+          "Histoire et évolution de la profession infirmière",
+          "Sociologie, culture et identité professionnelles infirmières",
+          "Place de la profession dans les systèmes de santé français, européens et internationaux",
+          "Rôle et missions de l’infirmier",
+          "Épistémologie des sciences infirmières : construction et nature des connaissances",
+          "Concepts fondamentaux des sciences infirmières",
+          "Concepts de paradigme, modèle et courant de pensée",
+          "Modèles conceptuels et théories infirmières",
+          "Application des théories infirmières aux situations cliniques"
+        ]
       },
       {
         "code": "02",
-        "name": "Raisonnement et jugement cliniques"
+        "name": "Raisonnement et jugement cliniques",
+        "source_line": 20,
+        "notions": [
+          "Raisonnement clinique, jugement clinique et diagnostic infirmier",
+          "Questionnement, observation, induction et déduction",
+          "Pensée critique et biais sociocognitifs",
+          "Problématisation et résolution de problèmes",
+          "Formulation d’hypothèses et recherche d’alternatives",
+          "Pratique fondée sur les données probantes",
+          "Terminologie clinique et langage professionnel",
+          "Méthodes et outils de recueil de données et de mesure",
+          "Évaluation de l’autonomie, des ressources et des fragilités",
+          "Évaluation des risques de violences intrafamiliales et extrafamiliales",
+          "Analyse des données : problèmes, risques et priorités",
+          "Diagnostic infirmier et classifications",
+          "Construction du projet de soins",
+          "Choix des interventions infirmières",
+          "Critères d’évaluation, mesure des résultats et réajustement"
+        ]
       }
     ]
   },
@@ -19,15 +51,60 @@
     "themes": [
       {
         "code": "01",
-        "name": "Droit et exercice professionnel"
+        "name": "Droit et exercice professionnel",
+        "source_line": 38,
+        "notions": [
+          "Notions élémentaires de droit et hiérarchie des normes",
+          "Droit public, droit privé et organisation juridictionnelle",
+          "Cadre juridique de l’exercice professionnel",
+          "Organisation de la profession infirmière",
+          "Déontologie infirmière et normes applicables",
+          "Responsabilités civile, pénale et disciplinaire",
+          "Devoirs professionnels et droits des usagers",
+          "Information de la personne soignée",
+          "Consentement et refus de soins",
+          "Vie privée, confidentialité et secret professionnel",
+          "Protection juridique des personnes vulnérables",
+          "Personne de confiance",
+          "Place et accompagnement des proches et des aidants",
+          "Protocoles de coopération",
+          "Coopération interprofessionnelle et structures d’exercice coordonné",
+          "Violences envers les professionnels de santé",
+          "Violences sexistes et sexuelles",
+          "Dignité de la personne",
+          "Bientraitance et prévention de la maltraitance ordinaire"
+        ]
       },
       {
         "code": "02",
-        "name": "Situations juridiques particulières"
+        "name": "Situations juridiques particulières",
+        "source_line": 58,
+        "notions": [
+          "Fin de vie, directives anticipées et obstination déraisonnable",
+          "Organisation des soins palliatifs",
+          "Obligations de soins et restrictions des libertés",
+          "Soins sans consentement",
+          "Isolement et contention",
+          "Cadres particuliers : santé au travail, santé scolaire, milieu pénitentiaire et psychiatrie"
+        ]
       },
       {
         "code": "03",
-        "name": "Éthique et bioéthique"
+        "name": "Éthique et bioéthique",
+        "source_line": 65,
+        "notions": [
+          "Distinction entre droit, morale, déontologie et éthique",
+          "Fondements philosophiques de l’éthique",
+          "Autonomie, bienfaisance, non-malfaisance et justice",
+          "Questionnement et raisonnement éthiques",
+          "Dilemmes éthiques en contexte de soins",
+          "Décision partagée avec la personne et son entourage",
+          "Éthique du care et éthique de la discussion",
+          "Questions éthiques propres aux soins infirmiers",
+          "Recherches impliquant la personne humaine",
+          "Don et utilisation des éléments et produits du corps humain",
+          "Enjeux éthiques et déontologiques des outils numériques"
+        ]
       }
     ]
   },
@@ -37,71 +114,291 @@
     "themes": [
       {
         "code": "01",
-        "name": "Fondements biologiques et développement humain"
+        "name": "Fondements biologiques et développement humain",
+        "source_line": 81,
+        "notions": [
+          "Biochimie",
+          "Biologie moléculaire",
+          "Biologie cellulaire",
+          "Hématologie",
+          "Anatomie et physiologie des différents systèmes",
+          "Développement humain, de la naissance au vieillissement et à la mort",
+          "Douleur aiguë et chronique : bases anatomophysiologiques, physiopathologiques, psychologiques et manifestations cliniques",
+          "Médecine intégrative et thérapies complémentaires : place, regard critique et risques"
+        ]
       },
       {
         "code": "02",
-        "name": "Système cardiovasculaire, respiratoire et sang"
+        "name": "Système cardiovasculaire, respiratoire et sang",
+        "source_line": 90,
+        "notions": [
+          "Insuffisance cardiaque",
+          "Infarctus du myocarde",
+          "Hypertension artérielle",
+          "Troubles du rythme",
+          "Pathologies artérielles",
+          "Phlébite et embolie pulmonaire",
+          "Pathologies valvulaires",
+          "Asthme",
+          "Bronchopneumopathie chronique obstructive",
+          "Anémie",
+          "Pharmacologie associée : anticoagulants, antiagrégants, statines, diurétiques, antihypertenseurs, antiarythmiques et bronchodilatateurs"
+        ]
       },
       {
         "code": "03",
-        "name": "Système nerveux"
+        "name": "Système nerveux",
+        "source_line": 102,
+        "notions": [
+          "Accident vasculaire cérébral",
+          "Épilepsie",
+          "Maladie de Parkinson",
+          "Neuropathies périphériques",
+          "Lésions médullaires",
+          "Déficits sensoriels",
+          "Pharmacologie associée, notamment antiépileptiques et psychotropes"
+        ]
       },
       {
         "code": "04",
-        "name": "Système locomoteur"
+        "name": "Système locomoteur",
+        "source_line": 110,
+        "notions": [
+          "Traumatismes et fractures",
+          "Amputations de membres",
+          "Lombalgies et arthroses",
+          "Douleurs chroniques",
+          "Ostéoporose",
+          "Pharmacologie associée, notamment antalgiques"
+        ]
       },
       {
         "code": "05",
-        "name": "Système urinaire"
+        "name": "Système urinaire",
+        "source_line": 117,
+        "notions": [
+          "Insuffisance rénale aiguë",
+          "Insuffisance rénale chronique et terminale",
+          "Dialyses et greffes",
+          "Pathologies glomérulaires",
+          "Lithiases urinaires",
+          "Troubles de la miction",
+          "Adaptation des traitements en cas d’insuffisance rénale"
+        ]
       },
       {
         "code": "06",
-        "name": "Système digestif"
+        "name": "Système digestif",
+        "source_line": 125,
+        "notions": [
+          "Pathologies buccodentaires",
+          "Reflux gastro-œsophagien",
+          "Ulcères gastriques et duodénaux",
+          "Hémorragies digestives",
+          "Troubles du transit",
+          "Pathologies du foie et des voies biliaires",
+          "Pathologies de l’intestin grêle et du côlon",
+          "Maladies inflammatoires chroniques de l’intestin",
+          "Pharmacologie associée, notamment laxatifs et antiulcéreux"
+        ]
       },
       {
         "code": "07",
-        "name": "Système endocrinien"
+        "name": "Système endocrinien",
+        "source_line": 135,
+        "notions": [
+          "Pathologies des glandes endocrines",
+          "Diabète",
+          "Insulines et antidiabétiques oraux",
+          "Traitements hormonaux, notamment thyroxine"
+        ]
       },
       {
         "code": "08",
-        "name": "Systèmes urogénital et reproducteur"
+        "name": "Systèmes urogénital et reproducteur",
+        "source_line": 140,
+        "notions": [
+          "Puberté",
+          "Santé sexuelle",
+          "Reproduction humaine",
+          "Grossesse et accouchement physiologique",
+          "Contraception",
+          "Ménopause",
+          "Pathologies du pré-, per- et post-partum",
+          "Endométriose",
+          "Infertilité",
+          "Troubles de l’érection",
+          "Incontinence masculine et féminine",
+          "Infections sexuellement transmissibles",
+          "Pharmacologie associée"
+        ]
       },
       {
         "code": "09",
-        "name": "Système tégumentaire"
+        "name": "Système tégumentaire",
+        "source_line": 154,
+        "notions": [
+          "Causes de rupture de l’intégrité cutanée",
+          "Plaies et cicatrisation",
+          "Brûlures",
+          "Escarres",
+          "Maladies inflammatoires de la peau",
+          "Traitements médicamenteux : antalgiques, traitements topiques",
+          "Traitements non médicamenteux, notamment photothérapie et cryothérapie"
+        ]
       },
       {
         "code": "10",
-        "name": "Immunité, infections et inflammation"
+        "name": "Immunité, infections et inflammation",
+        "source_line": 162,
+        "notions": [
+          "Système immunitaire",
+          "Infections bactériennes : pneumopathies, infections urinaires hautes et basses, érysipèle, septicémies",
+          "Infections virales : grippe, Covid, VIH, hépatites et zona",
+          "Infections fongiques",
+          "Infections parasitaires, dont paludisme",
+          "Infections nosocomiales",
+          "Maladies auto-immunes : sclérose en plaques, maladie rhumatismale et vascularites",
+          "Antibiotiques, antiviraux, corticoïdes, immunosuppresseurs et anti-inflammatoires"
+        ]
       },
       {
         "code": "11",
-        "name": "ORL et ophtalmologie"
+        "name": "ORL et ophtalmologie",
+        "source_line": 171,
+        "notions": [
+          "Vertiges et acouphènes",
+          "Otites",
+          "Pathologies des glandes salivaires",
+          "Surdité",
+          "Pathologies du nerf optique, dont glaucome",
+          "Pathologies rétiniennes",
+          "Pathologies oculaires inflammatoires et infectieuses",
+          "Pathologies du cristallin",
+          "Troubles réfractifs",
+          "Pharmacologie associée"
+        ]
       },
       {
         "code": "12",
-        "name": "Cancérologie et hémopathies"
+        "name": "Cancérologie et hémopathies",
+        "source_line": 182,
+        "notions": [
+          "Cancers solides, notamment cutanés, neurologiques et gynécologiques",
+          "Hémopathies fréquentes",
+          "Soins de support : douleur, soutien psychologique, social, familial et professionnel",
+          "Activité physique adaptée",
+          "Préservation de la fertilité et troubles de la sexualité",
+          "Diététique et nutrition",
+          "Accompagnement des aidants",
+          "Prévention et dépistages organisés"
+        ]
       },
       {
         "code": "13",
-        "name": "Développement de l’enfant et de l’adolescent, pathologies infantiles"
+        "name": "Développement de l’enfant et de l’adolescent, pathologies infantiles",
+        "source_line": 191,
+        "notions": [
+          "Croissance et neurodéveloppement",
+          "Santé de l’adolescent",
+          "Suivi du nouveau-né et de l’enfant : allaitement, nutrition et vaccination",
+          "Santé mentale, alimentation, activité physique et santé orale de l’adolescent",
+          "Pathologies liées aux grossesses pathologiques, dont alcoolisation fœtale et syndrome de sevrage",
+          "Maladies infectieuses infantiles",
+          "Troubles du spectre de l’autisme",
+          "Troubles du développement intellectuel",
+          "Trouble déficit de l’attention avec ou sans hyperactivité",
+          "Troubles de la communication et du langage",
+          "Troubles spécifiques des apprentissages",
+          "Troubles de la coordination",
+          "Tics, dont syndrome de Gilles de la Tourette, et autres troubles du neurodéveloppement",
+          "Pathologies respiratoires, endocriniennes et métaboliques",
+          "Pathologies neurologiques, dont crises convulsives et épileptiques",
+          "Troubles de l’alimentation et addictions",
+          "Maladies génétiques : trisomie 21, mucoviscidose, drépanocytose et myopathies",
+          "Maladies orphelines",
+          "Paralysie cérébrale et polyhandicap",
+          "Maltraitance et situations à risque : bébé secoué, violences, harcèlement et prostitution des mineurs"
+        ]
       },
       {
         "code": "14",
-        "name": "Psychiatrie de l’adulte, de l’enfant et de l’adolescent"
+        "name": "Psychiatrie de l’adulte, de l’enfant et de l’adolescent",
+        "source_line": 212,
+        "notions": [
+          "Organisation de la psychiatrie en France",
+          "Schizophrénie et autres troubles psychotiques",
+          "Troubles de l’humeur",
+          "Troubles anxieux et phobiques",
+          "Troubles du sommeil",
+          "Troubles de la personnalité",
+          "Troubles des conduites alimentaires",
+          "Troubles relationnels précoces",
+          "Troubles du comportement",
+          "Troubles de l’humeur du nourrisson, de l’enfant et de l’adolescent",
+          "Addictions avec substances : tabac, alcool, drogues et médicaments, dont opioïdes",
+          "Addictions sans substance : jeux d’argent, écrans, etc",
+          "Réhabilitation psychosociale",
+          "Épisodes et risques suicidaires",
+          "Prévention de la rechute et réduction des risques",
+          "Psychotropes et antidépresseurs",
+          "Soins non médicamenteux en santé mentale"
+        ]
       },
       {
         "code": "15",
-        "name": "Situations critiques et urgences"
+        "name": "Situations critiques et urgences",
+        "source_line": 230,
+        "notions": [
+          "États de choc",
+          "Arrêt cardiorespiratoire",
+          "Polytraumatismes",
+          "Brûlures",
+          "Hémorragies",
+          "Septicémies et sepsis",
+          "Urgences psychiatriques, crises suicidaires et sidération psychologique",
+          "Urgences pédiatriques",
+          "Situations sanitaires exceptionnelles",
+          "Risques épidémiologiques et biologiques",
+          "Expositions radiologiques et nucléaires",
+          "Psychotraumatisme",
+          "Damage control",
+          "Violences conjugales, intrafamiliales et envers les personnes vulnérables"
+        ]
       },
       {
         "code": "16",
-        "name": "Vieillissement et gériatrie"
+        "name": "Vieillissement et gériatrie",
+        "source_line": 245,
+        "notions": [
+          "Vieillissement physiologique et pathologique",
+          "Vieillissement en santé et stéréotypes liés à l’âge",
+          "Approche gériatrique globale",
+          "Polypathologie",
+          "Syndromes gériatriques : confusion, dénutrition, déshydratation, chutes, escarres, incontinence et perte d’autonomie",
+          "Traitements médicamenteux et non médicamenteux",
+          "Prévention de la dépendance iatrogène",
+          "Troubles neurocognitifs majeurs",
+          "Approches non médicamenteuses des symptômes psychologiques et comportementaux"
+        ]
       },
       {
         "code": "17",
-        "name": "Soins palliatifs et médecine sociale"
+        "name": "Soins palliatifs et médecine sociale",
+        "source_line": 255,
+        "notions": [
+          "Étapes de la fin de vie et du deuil",
+          "Démarche palliative précoce",
+          "Accompagnement des personnes polypathologiques",
+          "Traitements médicamenteux et non médicamenteux en fin de vie",
+          "Précarité et réduction des inégalités sociales de santé",
+          "Approche interculturelle et interprofessionnelle",
+          "Autonomie fonctionnelle et réseau d’aide",
+          "Repérage et prise en charge des violences",
+          "Santé scolaire",
+          "Santé au travail",
+          "Santé en milieu pénitentiaire"
+        ]
       }
     ]
   },
@@ -111,19 +408,74 @@
     "themes": [
       {
         "code": "01",
-        "name": "Fondements et psychologie"
+        "name": "Fondements et psychologie",
+        "source_line": 269,
+        "notions": [
+          "Fondements et approches scientifiques de la psychologie, sociologie, ethnologie et anthropologie",
+          "Psychologie du développement, de l’enfance à l’âge adulte",
+          "Diversité des genres et des sexualités, stigmatisation",
+          "Psychologie de la santé",
+          "Santé mentale et facteurs individuels",
+          "Influence des facteurs psychiques sur la maladie : stress, coping et psychobiologie",
+          "Approche centrée sur la personne et interventions en psychologie",
+          "Psychométrie et différences interindividuelles",
+          "Psychologie sociale et phénomènes psychosociaux dans la relation de soin",
+          "Relations interindividuelles et intergroupes",
+          "Stratégies d’adaptation",
+          "Psychopathologie : normal et pathologique",
+          "Étapes du deuil"
+        ]
       },
       {
         "code": "02",
-        "name": "Sociologie"
+        "name": "Sociologie",
+        "source_line": 283,
+        "notions": [
+          "Structures sociales contemporaines",
+          "Famille, entourage, pairs et institutions : influence sur la santé",
+          "Sociologie de la santé et inégalités sociales",
+          "Déterminants sociaux, culturels, économiques et environnementaux",
+          "Ressources et obstacles à l’accès aux soins",
+          "Mondialisation, genre et enjeux sociaux du soin",
+          "Démocratie sanitaire et partenariat",
+          "Sociologie des professions",
+          "Travail interprofessionnel : collaboration, coopération, délégation et hiérarchie",
+          "Handicap, inclusion et répercussions sur les aidants",
+          "Territoires et mobilités sociales dans le champ de la santé",
+          "Marketing social et dénormalisation des comportements défavorables à la santé"
+        ]
       },
       {
         "code": "03",
-        "name": "Ethnologie et anthropologie"
+        "name": "Ethnologie et anthropologie",
+        "source_line": 296,
+        "notions": [
+          "Caractéristiques socioculturelles des groupes humains",
+          "Histoire, migrations et métissages",
+          "Religions, croyances, rites et rituels",
+          "Place et représentations du corps",
+          "Anthropologie culturelle",
+          "Diversité des modes de vie et rapports à la santé",
+          "Perceptions culturelles de la maladie et de la guérison",
+          "Pratiques traditionnelles et médecines alternatives",
+          "Approche interculturelle des soins"
+        ]
       },
       {
         "code": "04",
-        "name": "Violences, addictions et vulnérabilités"
+        "name": "Violences, addictions et vulnérabilités",
+        "source_line": 306,
+        "notions": [
+          "Violences sexistes et sexuelles : consentement et données sur le phénomène",
+          "Psychotraumatisme et conséquences sanitaires pour les victimes et témoins",
+          "VSS en milieu étudiant et rôle des associations",
+          "Discriminations dans les soins, notamment liées à l’origine et à l’orientation sexuelle",
+          "Pratiques addictives avec et sans substances",
+          "Conséquences sociales : sécurité routière, violences intrafamiliales, etc",
+          "Conduites à risque en milieu festif",
+          "Addictions et inégalités sociales de santé",
+          "Besoins physiques, psychologiques, sociaux et spirituels, notamment en soins palliatifs"
+        ]
       }
     ]
   },
@@ -133,51 +485,213 @@
     "themes": [
       {
         "code": "01",
-        "name": "Formations et repérages initiaux"
+        "name": "Formations et repérages initiaux",
+        "source_line": 318,
+        "notions": [
+          "Formation aux gestes et soins d’urgence de niveau 2",
+          "Bien-être psychologique",
+          "Gestion du stress et de l’anxiété",
+          "Organisation de l’offre de soins en santé mentale",
+          "Repérage de la détresse psychologique et des troubles psychiques",
+          "Premières interventions et orientation"
+        ]
       },
       {
         "code": "02",
-        "name": "Hygiène et prévention des infections"
+        "name": "Hygiène et prévention des infections",
+        "source_line": 325,
+        "notions": [
+          "Hygiène hospitalière et extrahospitalière",
+          "Hygiène des mains",
+          "Tenue professionnelle et équipements de protection",
+          "Circuits propres et sales",
+          "Gestion des déchets, dont DASRI",
+          "Prédésinfection, nettoyage, désinfection, décontamination et stérilisation",
+          "Précautions standard et complémentaires",
+          "Isolement protecteur",
+          "Protocoles d’hygiène",
+          "Hygiène à domicile et en collectivité",
+          "Antibiorésistance",
+          "Asepsie"
+        ]
       },
       {
         "code": "03",
-        "name": "Douleur et démarche clinique appliquée"
+        "name": "Douleur et démarche clinique appliquée",
+        "source_line": 338,
+        "notions": [
+          "Prévention de la douleur",
+          "Évaluation et suivi de la douleur aiguë et chronique",
+          "Douleurs induites par les soins",
+          "Stratégies médicamenteuses et non médicamenteuses",
+          "Analyse clinique selon un modèle conceptuel",
+          "Jugement clinique, projet individualisé et planification",
+          "Transmissions",
+          "Évaluation des interventions et réajustement",
+          "Soins techniques, éducatifs et relationnels fondés sur les données probantes"
+        ]
       },
       {
         "code": "04",
-        "name": "Consultation infirmière"
+        "name": "Consultation infirmière",
+        "source_line": 348,
+        "notions": [
+          "Organisation et conduite d’une consultation",
+          "Anamnèse et entretien",
+          "Recueil des données et résultats d’examens",
+          "Examen clinique : inspection, palpation, percussion et auscultation",
+          "Construction d’un plan personnalisé",
+          "Conseils et informations adaptés",
+          "Prescription infirmière sécurisée",
+          "Orientation vers un autre professionnel"
+        ]
       },
       {
         "code": "05",
-        "name": "Soins courants à tous les âges"
+        "name": "Soins courants à tous les âges",
+        "source_line": 357,
+        "notions": [
+          "Hygiène et confort",
+          "Hygiène buccodentaire",
+          "Équilibre alimentaire",
+          "Prévention des plaies",
+          "Lever et aide à la mobilisation",
+          "Adaptation des soins à l’âge et aux besoins spécifiques"
+        ]
       },
       {
         "code": "06",
-        "name": "Pédiatrie"
+        "name": "Pédiatrie",
+        "source_line": 364,
+        "notions": [
+          "Soins au prématuré et au nouveau-né",
+          "Surveillance des signes vitaux",
+          "Soins nutritionnels et allaitement",
+          "Oxygénothérapie",
+          "Soins neurologiques",
+          "Soins psychologiques et soutien parental",
+          "Prévention des infections",
+          "Soins en incubateur",
+          "Parentalité en situation pathologique",
+          "Soins à l’enfant et à l’adolescent sain ou malade : vaccination, aérosols, nutrition, etc",
+          "Effets de la maladie d’un parent sur l’enfant et la fratrie"
+        ]
       },
       {
         "code": "07",
-        "name": "Psychiatrie"
+        "name": "Psychiatrie",
+        "source_line": 376,
+        "notions": [
+          "Entretien et fonction de référent en psychiatrie",
+          "Relation psychothérapeutique",
+          "Repérage des comportements problématiques et interventions",
+          "Isolement, contention et cadre thérapeutique",
+          "Gestion des crises psychiatriques",
+          "Protocoles de médication d’urgence",
+          "Plans de crise et hospitalisation d’urgence",
+          "Cures de sevrage",
+          "Cures de sommeil, mentionnées dans le texte",
+          "Évaluation de la souffrance psychique et du risque suicidaire",
+          "Prévention du suicide",
+          "Activités sociothérapeutiques et socioéducatives",
+          "Actes à visée psychothérapeutique et médiations thérapeutiques"
+        ]
       },
       {
         "code": "08",
-        "name": "Soins critiques, urgences et crises collectives"
+        "name": "Soins critiques, urgences et crises collectives",
+        "source_line": 390,
+        "notions": [
+          "Surveillance clinique et monitorée des fonctions neurologiques, respiratoires et circulatoires",
+          "Signes de gravité et priorisation des actions",
+          "Techniques de soins critiques",
+          "Facteurs humains : communication, collaboration et gestion du stress",
+          "Prise en soin des victimes de violences",
+          "Identification, prévention et anticipation des crises",
+          "Plans de réponse aux situations sanitaires exceptionnelles",
+          "Dispositifs ORSAN et ORSEC ; plans adaptés aux établissements et structures",
+          "Intégration dans une organisation de crise",
+          "Adaptation des soins en ville, en établissement sanitaire et médicosocial",
+          "Gestion des flux et priorisation des soins",
+          "Parcours des blessés graves civils et militaires, du préhospitalier à la réadaptation",
+          "Prise en charge médicopsychologique",
+          "Premiers secours psychologiques opérationnels",
+          "Blessés d’attentat et de guerre ; introduction à SAFE MARCHE RYAN"
+        ]
       },
       {
         "code": "09",
-        "name": "Gériatrie"
+        "name": "Gériatrie",
+        "source_line": 406,
+        "notions": [
+          "Repérage des fragilités et des ressources",
+          "Évaluation gériatrique standardisée",
+          "Soins cutanés et prévention des escarres",
+          "Mobilité et prévention des chutes",
+          "Nutrition et accompagnement alimentaire",
+          "Soins éducatifs, relationnels et psychologiques",
+          "Accompagnement des aidants",
+          "Dispositifs spécialisés pour la personne âgée",
+          "Approche multidisciplinaire : douleur, anxiété, confort et soutien de l’entourage"
+        ]
       },
       {
         "code": "10",
-        "name": "Plaies et pansements"
+        "name": "Plaies et pansements",
+        "source_line": 416,
+        "notions": [
+          "Prévalence et typologies des plaies",
+          "Évaluation clinique d’une plaie",
+          "Pansements : types, indications et prescriptions",
+          "Réalisation du soin ; pansements primaires et secondaires",
+          "Brûlures, ulcères et escarres",
+          "Plaies postopératoires, dont plasties",
+          "Fistules et stomies",
+          "Traitement par pression négative",
+          "Bandes de contention",
+          "Prescription de matériel, dispositifs et examens biologiques spécifiques",
+          "Complications : infections, allergies, etc",
+          "Surveillance de la cicatrisation et orientation"
+        ]
       },
       {
         "code": "11",
-        "name": "Vaccination, addictions et fin de vie"
+        "name": "Vaccination, addictions et fin de vie",
+        "source_line": 429,
+        "notions": [
+          "Maladies à prévention vaccinale",
+          "Calendrier, politique vaccinale et types de vaccins",
+          "Prescription, administration et surveillance vaccinales",
+          "Traçabilité et transmission",
+          "Réduction des risques et dommages liés aux addictions",
+          "Accompagnement de l’arrêt du tabac",
+          "Substituts nicotiniques",
+          "Traitements substitutifs des opioïdes",
+          "Soins palliatifs et accompagnement de la fin de vie"
+        ]
       },
       {
         "code": "12",
-        "name": "Médicaments, dispositifs et examens"
+        "name": "Médicaments, dispositifs et examens",
+        "source_line": 439,
+        "notions": [
+          "Caractéristiques, mécanismes, indications et modes d’administration des produits de santé",
+          "Effets indésirables, interactions et iatrogénie",
+          "Circuit du médicament",
+          "Réglementation des produits de santé",
+          "Pharmacovigilance et signalement",
+          "Prescription médicale et infirmière",
+          "Analyse d’une ordonnance",
+          "Bilan et conciliation médicamenteux",
+          "Préparation, administration et calculs de doses",
+          "Surveillance des traitements",
+          "Transfusion sanguine",
+          "Cathéters périphériques, périnerveux, intrathécaux et veineux centraux",
+          "Chambres implantables",
+          "Examens biologiques, imagerie, endoscopie, explorations électrophysiologiques et examens anatomocytopathologiques",
+          "Règles de prescription des examens",
+          "Préparation, réalisation et surveillance des examens"
+        ]
       }
     ]
   },
@@ -187,23 +701,203 @@
     "themes": [
       {
         "code": "01",
-        "name": "Fondements et pilotage de la qualité"
+        "name": "Histoire, principes et enjeux de la qualité en santé",
+        "source_line": 459,
+        "notions": [
+          "Histoire, principes et enjeux de la qualité en santé"
+        ]
       },
       {
         "code": "02",
-        "name": "Expérience usager, traçabilité et évaluation des pratiques"
+        "name": "Cadre réglementaire et référentiels qualité",
+        "source_line": 460,
+        "notions": [
+          "Cadre réglementaire et référentiels qualité"
+        ]
       },
       {
         "code": "03",
-        "name": "Gestion des risques, méthodes et vigilances"
+        "name": "Qualité dans les secteurs sanitaire, médicosocial, social et éducatif",
+        "source_line": 461,
+        "notions": [
+          "Qualité dans les secteurs sanitaire, médicosocial, social et éducatif"
+        ]
       },
       {
         "code": "04",
-        "name": "Facteurs humains et culture de sécurité"
+        "name": "Qualité dans les secteurs à risques : biologie, radiothérapie, médecine nucléaire, imagerie",
+        "source_line": 462,
+        "notions": [
+          "Qualité dans les secteurs à risques : biologie, radiothérapie, médecine nucléaire, imagerie"
+        ]
       },
       {
         "code": "05",
-        "name": "Ressources et amélioration continue"
+        "name": "Cycle PDCA et roue de Deming",
+        "source_line": 463,
+        "notions": [
+          "Cycle PDCA et roue de Deming"
+        ]
+      },
+      {
+        "code": "06",
+        "name": "Indicateurs qualité",
+        "source_line": 464,
+        "notions": [
+          "Indicateurs qualité"
+        ]
+      },
+      {
+        "code": "07",
+        "name": "Expérience des usagers : plaintes, satisfaction et observations",
+        "source_line": 465,
+        "notions": [
+          "Expérience des usagers : plaintes, satisfaction et observations"
+        ]
+      },
+      {
+        "code": "08",
+        "name": "Traçabilité, transmissions, protocoles et plans d’action",
+        "source_line": 466,
+        "notions": [
+          "Traçabilité, transmissions, protocoles et plans d’action"
+        ]
+      },
+      {
+        "code": "09",
+        "name": "Audits internes et externes",
+        "source_line": 467,
+        "notions": [
+          "Audits internes et externes"
+        ]
+      },
+      {
+        "code": "10",
+        "name": "Évaluation des pratiques professionnelles",
+        "source_line": 468,
+        "notions": [
+          "Évaluation des pratiques professionnelles"
+        ]
+      },
+      {
+        "code": "11",
+        "name": "Risques iatrogènes, organisationnels, psychosociaux et éthiques",
+        "source_line": 469,
+        "notions": [
+          "Risques iatrogènes, organisationnels, psychosociaux et éthiques"
+        ]
+      },
+      {
+        "code": "12",
+        "name": "Cartographie des risques",
+        "source_line": 470,
+        "notions": [
+          "Cartographie des risques"
+        ]
+      },
+      {
+        "code": "13",
+        "name": "Arbre des causes et méthode des « cinq pourquoi »",
+        "source_line": 471,
+        "notions": [
+          "Arbre des causes et méthode des « cinq pourquoi »"
+        ]
+      },
+      {
+        "code": "14",
+        "name": "AMDEC et méthode ALARM",
+        "source_line": 472,
+        "notions": [
+          "AMDEC et méthode ALARM"
+        ]
+      },
+      {
+        "code": "15",
+        "name": "Identitovigilance, matériovigilance, infectiovigilance et hémovigilance",
+        "source_line": 473,
+        "notions": [
+          "Identitovigilance, matériovigilance, infectiovigilance et hémovigilance"
+        ]
+      },
+      {
+        "code": "16",
+        "name": "Prévention, déclaration et gestion des événements indésirables",
+        "source_line": 474,
+        "notions": [
+          "Prévention, déclaration et gestion des événements indésirables"
+        ]
+      },
+      {
+        "code": "17",
+        "name": "Facteurs humains et organisationnels",
+        "source_line": 475,
+        "notions": [
+          "Facteurs humains et organisationnels"
+        ]
+      },
+      {
+        "code": "18",
+        "name": "Simulation en équipe pour prévenir les risques",
+        "source_line": 476,
+        "notions": [
+          "Simulation en équipe pour prévenir les risques"
+        ]
+      },
+      {
+        "code": "19",
+        "name": "Rencontres sécurité et briefings",
+        "source_line": 477,
+        "notions": [
+          "Rencontres sécurité et briefings"
+        ]
+      },
+      {
+        "code": "20",
+        "name": "Culture de sécurité, place de l’erreur et culture juste non punitive",
+        "source_line": 478,
+        "notions": [
+          "Culture de sécurité, place de l’erreur et culture juste non punitive"
+        ]
+      },
+      {
+        "code": "21",
+        "name": "Sensibilisation et formation des équipes",
+        "source_line": 479,
+        "notions": [
+          "Sensibilisation et formation des équipes"
+        ]
+      },
+      {
+        "code": "22",
+        "name": "Patient acteur de la sécurité",
+        "source_line": 480,
+        "notions": [
+          "Patient acteur de la sécurité"
+        ]
+      },
+      {
+        "code": "23",
+        "name": "Leadership partagé, soutien entre pairs et retours constructifs",
+        "source_line": 481,
+        "notions": [
+          "Leadership partagé, soutien entre pairs et retours constructifs"
+        ]
+      },
+      {
+        "code": "24",
+        "name": "Ressources et organismes auxquels demander conseil",
+        "source_line": 482,
+        "notions": [
+          "Ressources et organismes auxquels demander conseil"
+        ]
+      },
+      {
+        "code": "25",
+        "name": "Amélioration continue des pratiques",
+        "source_line": 483,
+        "notions": [
+          "Amélioration continue des pratiques"
+        ]
       }
     ]
   },
@@ -213,27 +907,101 @@
     "themes": [
       {
         "code": "01",
-        "name": "Concepts et comportements de santé"
+        "name": "Concepts et comportements de santé",
+        "source_line": 486,
+        "notions": [
+          "Santé publique, communautaire et populationnelle",
+          "Déterminants et représentations de santé",
+          "Prévention, éducation et promotion de la santé",
+          "Comportements de santé et changements d’attitudes",
+          "Freins et leviers au changement",
+          "Approche écologique et milieux de vie",
+          "Approche salutogénique",
+          "Éthique en santé publique",
+          "Littératie en santé",
+          "Santé globale"
+        ]
       },
       {
         "code": "02",
-        "name": "Thématiques de prévention"
+        "name": "Thématiques de prévention",
+        "source_line": 497,
+        "notions": [
+          "Alimentation",
+          "Activité physique",
+          "Vaccination",
+          "Sommeil",
+          "Exposition aux écrans",
+          "Santé environnementale",
+          "Vie affective, relationnelle et sexuelle",
+          "Addictions",
+          "Santé physique et mentale des étudiants et des soignants"
+        ]
       },
       {
         "code": "03",
-        "name": "Méthodologie et service sanitaire"
+        "name": "Méthodologie et service sanitaire",
+        "source_line": 507,
+        "notions": [
+          "Recueil et analyse des besoins de santé",
+          "Construction d’un projet de promotion de la santé",
+          "Méthodes et indicateurs d’évaluation",
+          "Service sanitaire : préparation et action auprès du public",
+          "Posture éducative",
+          "Méthodes et outils de communication adaptés",
+          "Plaidoyer et représentation d’intérêts",
+          "Lutte contre les fausses informations et la désinformation",
+          "Construction d’une argumentation scientifique"
+        ]
       },
       {
         "code": "04",
-        "name": "Système de santé et politiques publiques"
+        "name": "Système de santé et politiques publiques",
+        "source_line": 517,
+        "notions": [
+          "Fondements, fonctions et approches de la santé publique",
+          "Acteurs et organismes nationaux et internationaux",
+          "Mesure et surveillance de la santé des populations",
+          "Indicateurs de santé",
+          "État de santé en France et dans le monde",
+          "Inégalités, besoins, accès et recours aux soins",
+          "Organisation et fonctionnement du système français",
+          "Approche intersectorielle",
+          "Politiques publiques : nutrition, santé mentale, tabac, 1 000 premiers jours, santé sexuelle, etc",
+          "Économie de la santé : financement, dépenses et rémunération des professionnels",
+          "Parcours de soins et de santé",
+          "Exercice coordonné",
+          "Alertes, crises sanitaires et pandémies"
+        ]
       },
       {
         "code": "05",
-        "name": "Prévention individuelle et ETP"
+        "name": "Prévention individuelle et ETP",
+        "source_line": 531,
+        "notions": [
+          "Prévention individuelle et dépistages organisés",
+          "Éducation thérapeutique : définition, objectifs et enjeux",
+          "Cadre réglementaire de l’ETP",
+          "Décision partagée",
+          "Bilan éducatif partagé",
+          "Planification et organisation des activités",
+          "Animation de séances individuelles et collectives",
+          "Évaluation des compétences acquises",
+          "Repérage précoce et intervention brève",
+          "Entretien motivationnel, écoute active et posture relationnelle",
+          "Partenariat avec les patients-experts, pairs-aidants, proches et aidants"
+        ]
       },
       {
         "code": "06",
-        "name": "Risques professionnels des soignants"
+        "name": "Risques professionnels des soignants",
+        "source_line": 543,
+        "notions": [
+          "Troubles musculosquelettiques",
+          "Risques psychosociaux",
+          "Discriminations et souffrance au travail",
+          "Impacts émotionnels et exposition répétée à la souffrance et aux décès"
+        ]
       }
     ]
   },
@@ -243,7 +1011,235 @@
     "themes": [
       {
         "code": "01",
-        "name": "Santé environnementale et transition écologique"
+        "name": "Formation socle à la transition écologique pour un développement soutenable — TEDS",
+        "source_line": 550,
+        "notions": [
+          "Formation socle à la transition écologique pour un développement soutenable — TEDS"
+        ]
+      },
+      {
+        "code": "02",
+        "name": "Concepts de santé environnementale",
+        "source_line": 551,
+        "notions": [
+          "Concepts de santé environnementale"
+        ]
+      },
+      {
+        "code": "03",
+        "name": "Organisation des politiques de santé environnementale en France et dans le monde",
+        "source_line": 552,
+        "notions": [
+          "Organisation des politiques de santé environnementale en France et dans le monde"
+        ]
+      },
+      {
+        "code": "04",
+        "name": "Écoconception et pratiques de soins écoresponsables",
+        "source_line": 553,
+        "notions": [
+          "Écoconception et pratiques de soins écoresponsables"
+        ]
+      },
+      {
+        "code": "05",
+        "name": "Vulnérabilités et environnement",
+        "source_line": 554,
+        "notions": [
+          "Vulnérabilités et environnement"
+        ]
+      },
+      {
+        "code": "06",
+        "name": "Catastrophes naturelles et technologiques",
+        "source_line": 555,
+        "notions": [
+          "Catastrophes naturelles et technologiques"
+        ]
+      },
+      {
+        "code": "07",
+        "name": "Plans d’urgence et rôle des soignants",
+        "source_line": 556,
+        "notions": [
+          "Plans d’urgence et rôle des soignants"
+        ]
+      },
+      {
+        "code": "08",
+        "name": "Collaboration avec les institutions locales, régionales, nationales et internationales",
+        "source_line": 557,
+        "notions": [
+          "Collaboration avec les institutions locales, régionales, nationales et internationales"
+        ]
+      },
+      {
+        "code": "09",
+        "name": "Acteurs de la santé environnementale",
+        "source_line": 558,
+        "notions": [
+          "Acteurs de la santé environnementale"
+        ]
+      },
+      {
+        "code": "10",
+        "name": "Plans santé-environnement et santé au travail",
+        "source_line": 559,
+        "notions": [
+          "Plans santé-environnement et santé au travail"
+        ]
+      },
+      {
+        "code": "11",
+        "name": "Perturbateurs endocriniens",
+        "source_line": 560,
+        "notions": [
+          "Perturbateurs endocriniens"
+        ]
+      },
+      {
+        "code": "12",
+        "name": "Pesticides",
+        "source_line": 561,
+        "notions": [
+          "Pesticides"
+        ]
+      },
+      {
+        "code": "13",
+        "name": "Risques liés à l’environnement intérieur",
+        "source_line": 562,
+        "notions": [
+          "Risques liés à l’environnement intérieur"
+        ]
+      },
+      {
+        "code": "14",
+        "name": "Pollution intérieure et extérieure : solvants, produits chimiques et d’hygiène, pollens, tabac, particules",
+        "source_line": 563,
+        "notions": [
+          "Pollution intérieure et extérieure : solvants, produits chimiques et d’hygiène, pollens, tabac, particules"
+        ]
+      },
+      {
+        "code": "15",
+        "name": "Vulnérabilité du système de santé aux changements environnementaux",
+        "source_line": 564,
+        "notions": [
+          "Vulnérabilité du système de santé aux changements environnementaux"
+        ]
+      },
+      {
+        "code": "16",
+        "name": "Transition écologique et développement durable dans le système de santé",
+        "source_line": 565,
+        "notions": [
+          "Transition écologique et développement durable dans le système de santé"
+        ]
+      },
+      {
+        "code": "17",
+        "name": "Expositions chimiques, physiques et biologiques",
+        "source_line": 566,
+        "notions": [
+          "Expositions chimiques, physiques et biologiques"
+        ]
+      },
+      {
+        "code": "18",
+        "name": "Expositions professionnelles",
+        "source_line": 567,
+        "notions": [
+          "Expositions professionnelles"
+        ]
+      },
+      {
+        "code": "19",
+        "name": "Évaluation des risques sanitaires environnementaux",
+        "source_line": 568,
+        "notions": [
+          "Évaluation des risques sanitaires environnementaux"
+        ]
+      },
+      {
+        "code": "20",
+        "name": "Inégalités environnementales",
+        "source_line": 569,
+        "notions": [
+          "Inégalités environnementales"
+        ]
+      },
+      {
+        "code": "21",
+        "name": "Effets directs et indirects du changement climatique",
+        "source_line": 570,
+        "notions": [
+          "Effets directs et indirects du changement climatique"
+        ]
+      },
+      {
+        "code": "22",
+        "name": "Maladies environnementales",
+        "source_line": 571,
+        "notions": [
+          "Maladies environnementales"
+        ]
+      },
+      {
+        "code": "23",
+        "name": "Zoonoses",
+        "source_line": 572,
+        "notions": [
+          "Zoonoses"
+        ]
+      },
+      {
+        "code": "24",
+        "name": "Antibiorésistance",
+        "source_line": 573,
+        "notions": [
+          "Antibiorésistance"
+        ]
+      },
+      {
+        "code": "25",
+        "name": "Éco-anxiété et santé mentale",
+        "source_line": 574,
+        "notions": [
+          "Éco-anxiété et santé mentale"
+        ]
+      },
+      {
+        "code": "26",
+        "name": "Promotion de la santé environnementale",
+        "source_line": 575,
+        "notions": [
+          "Promotion de la santé environnementale"
+        ]
+      },
+      {
+        "code": "27",
+        "name": "Approche « Une seule santé »",
+        "source_line": 576,
+        "notions": [
+          "Approche « Une seule santé »"
+        ]
+      },
+      {
+        "code": "28",
+        "name": "Cobénéfices santé-environnement : mobilité active, alimentation durable, contact avec la nature",
+        "source_line": 577,
+        "notions": [
+          "Cobénéfices santé-environnement : mobilité active, alimentation durable, contact avec la nature"
+        ]
+      },
+      {
+        "code": "29",
+        "name": "Éducation à la santé environnementale et à la santé au travail",
+        "source_line": 578,
+        "notions": [
+          "Éducation à la santé environnementale et à la santé au travail"
+        ]
       }
     ]
   },
@@ -253,15 +1249,67 @@
     "themes": [
       {
         "code": "01",
-        "name": "Posture et communication"
+        "name": "Posture et communication",
+        "source_line": 581,
+        "notions": [
+          "Respect, écoute, empathie, congruence et adaptabilité",
+          "Ponctualité, tenue, langage, gestuelle et comportements professionnels",
+          "Communication verbale, non verbale, écrite et numérique",
+          "Communication interpersonnelle",
+          "Diversités culturelles, sociales et religieuses",
+          "Lutte contre la stigmatisation",
+          "Handicap, vulnérabilité, accessibilité et inclusion",
+          "Écoute active",
+          "Reformulation, clarification et validation des messages",
+          "Entretiens d’accueil, d’évaluation, éducatifs et d’accompagnement",
+          "Communication avec les familles",
+          "Situations difficiles : fin de vie, refus de soins, etc",
+          "Consultation d’annonce",
+          "Communication dans l’équipe : disponibilité, ouverture d’esprit et remise en question",
+          "Transmissions orales et écrites",
+          "Dossier patient et réunions préparatoires",
+          "Animation de réunions et prise de parole en public"
+        ]
       },
       {
         "code": "02",
-        "name": "Collaboration et compétences psychosociales"
+        "name": "Collaboration et compétences psychosociales",
+        "source_line": 599,
+        "notions": [
+          "Rôles et responsabilités des professionnels",
+          "Supervision et évaluation des actes et soins délégués",
+          "Communication interprofessionnelle et outils de transmission",
+          "Communication en téléconsultation et télésoin",
+          "Coordination et continuité des soins",
+          "Compétences psychosociales cognitives, émotionnelles et sociales",
+          "Conscience de soi, autogestion et conscience sociale",
+          "Habiletés relationnelles et décision responsable",
+          "Régulation des émotions, intelligence émotionnelle et empathie cognitive",
+          "Réflexivité",
+          "Gestion du stress",
+          "Médiation"
+        ]
       },
       {
         "code": "03",
-        "name": "Leadership, violences et gestion de groupe"
+        "name": "Leadership, violences et gestion de groupe",
+        "source_line": 612,
+        "notions": [
+          "Concepts et attributs du leadership clinique",
+          "Styles transformationnel, situationnel et collaboratif",
+          "Qualités et compétences du leader",
+          "Effets du leadership sur la qualité, la sécurité et le travail collectif",
+          "Mécanismes des comportements agressifs",
+          "Réactions et postures face aux conflits",
+          "Anticipation et prévention des violences",
+          "Techniques d’apaisement des tensions",
+          "Coordination et supervision infirmières",
+          "Organisation des interventions et gestion des ressources",
+          "Dynamique de groupe, motivation et négociation",
+          "Cohésion et participation de l’équipe",
+          "Résolution des conflits",
+          "Gestion de crise et décision en urgence"
+        ]
       }
     ]
   },
@@ -271,7 +1319,147 @@
     "themes": [
       {
         "code": "01",
-        "name": "Coordination des activités et des soins et gestion d’une structure"
+        "name": "Procédures administratives, réglementaires et financières",
+        "source_line": 629,
+        "notions": [
+          "Procédures administratives, réglementaires et financières"
+        ]
+      },
+      {
+        "code": "02",
+        "name": "Organisation et gestion d’une structure individuelle ou collective",
+        "source_line": 630,
+        "notions": [
+          "Organisation et gestion d’une structure individuelle ou collective"
+        ]
+      },
+      {
+        "code": "03",
+        "name": "Budgets, facturation et gestion des ressources",
+        "source_line": 631,
+        "notions": [
+          "Budgets, facturation et gestion des ressources"
+        ]
+      },
+      {
+        "code": "04",
+        "name": "Gestion des rendez-vous et des plannings",
+        "source_line": 632,
+        "notions": [
+          "Gestion des rendez-vous et des plannings"
+        ]
+      },
+      {
+        "code": "05",
+        "name": "Organisation de l’espace professionnel et du plateau technique",
+        "source_line": 633,
+        "notions": [
+          "Organisation de l’espace professionnel et du plateau technique"
+        ]
+      },
+      {
+        "code": "06",
+        "name": "Écoconception et développement durable",
+        "source_line": 634,
+        "notions": [
+          "Écoconception et développement durable"
+        ]
+      },
+      {
+        "code": "07",
+        "name": "Approvisionnement et gestion des stocks",
+        "source_line": 635,
+        "notions": [
+          "Approvisionnement et gestion des stocks"
+        ]
+      },
+      {
+        "code": "08",
+        "name": "Entretien et maintenance des équipements",
+        "source_line": 636,
+        "notions": [
+          "Entretien et maintenance des équipements"
+        ]
+      },
+      {
+        "code": "09",
+        "name": "Gestion des déchets",
+        "source_line": 637,
+        "notions": [
+          "Gestion des déchets"
+        ]
+      },
+      {
+        "code": "10",
+        "name": "Organisation de sa propre activité et limites de son champ d’intervention",
+        "source_line": 638,
+        "notions": [
+          "Organisation de sa propre activité et limites de son champ d’intervention"
+        ]
+      },
+      {
+        "code": "11",
+        "name": "Travail en équipe",
+        "source_line": 639,
+        "notions": [
+          "Travail en équipe"
+        ]
+      },
+      {
+        "code": "12",
+        "name": "Coordination de la continuité des soins",
+        "source_line": 640,
+        "notions": [
+          "Coordination de la continuité des soins"
+        ]
+      },
+      {
+        "code": "13",
+        "name": "Transmission et archivage des données",
+        "source_line": 641,
+        "notions": [
+          "Transmission et archivage des données"
+        ]
+      },
+      {
+        "code": "14",
+        "name": "Partenariats et collaboration avec les acteurs locaux",
+        "source_line": 642,
+        "notions": [
+          "Partenariats et collaboration avec les acteurs locaux"
+        ]
+      },
+      {
+        "code": "15",
+        "name": "Communication avec les partenaires externes",
+        "source_line": 643,
+        "notions": [
+          "Communication avec les partenaires externes"
+        ]
+      },
+      {
+        "code": "16",
+        "name": "Responsabilité sociale : équité, inclusion et soutien aux populations vulnérables",
+        "source_line": 644,
+        "notions": [
+          "Responsabilité sociale : équité, inclusion et soutien aux populations vulnérables"
+        ]
+      },
+      {
+        "code": "17",
+        "name": "Innovation organisationnelle",
+        "source_line": 645,
+        "notions": [
+          "Innovation organisationnelle"
+        ]
+      },
+      {
+        "code": "18",
+        "name": "Numérique et interopérabilité des systèmes",
+        "source_line": 646,
+        "notions": [
+          "Numérique et interopérabilité des systèmes"
+        ]
       }
     ]
   },
@@ -281,15 +1469,55 @@
     "themes": [
       {
         "code": "01",
-        "name": "Pédagogie et conception de formation"
+        "name": "Pédagogie et conception de formation",
+        "source_line": 648,
+        "notions": [
+          "Théories de l’apprentissage en santé",
+          "Méthodes et outils pédagogiques",
+          "Approche par compétences et référentiels métiers",
+          "Identification des besoins de formation",
+          "Objectifs pédagogiques adaptés et mesurables",
+          "Construction de séances théoriques et pratiques",
+          "Organisation de l’évaluation des apprentissages"
+        ]
       },
       {
         "code": "02",
-        "name": "Accompagnement et évaluation"
+        "name": "Accompagnement et évaluation",
+        "source_line": 656,
+        "notions": [
+          "Accueil et intégration des apprenants et des nouveaux professionnels",
+          "Qualité de vie et conditions de travail dans l’accompagnement",
+          "Tutorat et mentorat : différences, rôles et responsabilités",
+          "Relation pédagogique et techniques d’encadrement",
+          "Développement de l’autonomie et de l’initiative",
+          "Difficultés d’apprentissage : stress, démotivation et handicap",
+          "Concepts de l’évaluation",
+          "Grilles d’observation, tests et évaluations cliniques",
+          "Analyse des performances",
+          "Retours constructifs",
+          "Autoévaluation et réflexion critique",
+          "Entretien d’évaluation"
+        ]
       },
       {
         "code": "03",
-        "name": "Analyse des pratiques"
+        "name": "Analyse des pratiques",
+        "source_line": 669,
+        "notions": [
+          "Démarche réflexive",
+          "Recherche sur les pratiques pédagogiques et cliniques",
+          "Outils, modèles et étapes de l’analyse des pratiques professionnelles",
+          "Responsabilité infirmière et respect des protocoles",
+          "Sécurité et efficacité des interventions",
+          "Écarts entre théorie et pratique",
+          "Invariants du soin",
+          "Analyse des compétences et savoir-faire mobilisés",
+          "Gestion du temps et organisation des soins",
+          "Coordination interprofessionnelle",
+          "Effets des contraintes et ressources organisationnelles, y compris en situation exceptionnelle",
+          "Identification des besoins de formation et d’accompagnement"
+        ]
       }
     ]
   },
@@ -299,19 +1527,68 @@
     "themes": [
       {
         "code": "01",
-        "name": "Données de santé"
+        "name": "Données de santé",
+        "source_line": 684,
+        "notions": [
+          "Définition, histoire et effets du numérique sur le système de santé",
+          "Identitovigilance",
+          "Données personnelles de santé et RGPD",
+          "Cycle de vie des données",
+          "Règles d’accès et de stockage",
+          "Carte professionnelle de santé numérique",
+          "Exploitation des données, algorithmes et intelligence artificielle"
+        ]
       },
       {
         "code": "02",
-        "name": "Cybersécurité"
+        "name": "Cybersécurité",
+        "source_line": 692,
+        "notions": [
+          "Mots de passe, authentification et chiffrement",
+          "Sécurisation de l’environnement de travail",
+          "Prévention des cyberattaques et violations de données",
+          "Conduite à tenir en cas d’incident"
+        ]
       },
       {
         "code": "03",
-        "name": "Communication et outils"
+        "name": "Communication et outils",
+        "source_line": 697,
+        "notions": [
+          "Applications, portails et outils de communication avec les usagers",
+          "Échanges avec les professionnels, aidants, institutions et administrations",
+          "Identité numérique et moteurs de recherche",
+          "Bénéfices et limites du numérique dans la relation de soin",
+          "Définition de l’e-santé",
+          "Impact environnemental du numérique",
+          "Logiciels de prescription électronique",
+          "Dossier patient informatisé",
+          "Dossier médical partagé",
+          "Plateformes de coordination et outils collaboratifs",
+          "Objets connectés, capteurs et dispositifs de surveillance",
+          "Applications de santé",
+          "Réalité augmentée et virtuelle",
+          "Évaluation des technologies : efficacité, sécurité et acceptabilité",
+          "Fiabilité des sources, sites frauduleux et désinformation"
+        ]
       },
       {
         "code": "04",
-        "name": "IA et télésanté"
+        "name": "IA et télésanté",
+        "source_line": 713,
+        "notions": [
+          "Concepts, histoire et types d’intelligence artificielle",
+          "Applications de l’IA en santé",
+          "Usages pertinents pour le raisonnement, la décision et les pratiques",
+          "Définition et cadre juridique de la télésanté",
+          "Téléconsultation",
+          "Téléassistance",
+          "Téléexpertise",
+          "Télésurveillance",
+          "Télésoin",
+          "Bonnes pratiques, risques et enjeux éthiques et déontologiques",
+          "Conduite d’un projet de télésanté"
+        ]
       }
     ]
   },
@@ -321,19 +1598,75 @@
     "themes": [
       {
         "code": "01",
-        "name": "Organisation et démarche scientifiques"
+        "name": "Organisation et démarche scientifiques",
+        "source_line": 726,
+        "notions": [
+          "Organisation de la recherche en France : universités, organismes et CHU",
+          "Acteurs et professionnels de la recherche en santé",
+          "Recherche en sciences expérimentales et en sciences humaines et sociales",
+          "Éthique et réglementation des recherches impliquant la personne humaine",
+          "RGPD, comités de protection des personnes, information et consentement",
+          "Intégrité et publication scientifiques",
+          "Histoire de la démarche scientifique",
+          "Observation, hypothèse, problématisation, expérimentation et communication",
+          "Production et diffusion des connaissances",
+          "Revues scientifiques et évaluation par les pairs",
+          "Recommandations, conférences et ouvrages"
+        ]
       },
       {
         "code": "02",
-        "name": "Recherche documentaire et lecture critique"
+        "name": "Recherche documentaire et lecture critique",
+        "source_line": 738,
+        "notions": [
+          "Bases documentaires biomédicales et en sciences humaines et sociales",
+          "Construction d’une équation de recherche",
+          "Recherche bibliographique et sélection d’articles",
+          "Études observationnelles",
+          "Études contrôlées",
+          "Revues systématiques et méta-analyses",
+          "Études qualitatives",
+          "Niveaux de preuve",
+          "Structure des articles scientifiques",
+          "Grilles de lecture critique",
+          "Analyse du résultat principal",
+          "Limites méthodologiques"
+        ]
       },
       {
         "code": "03",
-        "name": "Méthodes qualitatives et quantitatives"
+        "name": "Méthodes qualitatives et quantitatives",
+        "source_line": 751,
+        "notions": [
+          "Théorie ancrée",
+          "Ethnométhodes",
+          "Validité, fiabilité et généralisation",
+          "Méthodes mixtes",
+          "Variables qualitatives et quantitatives",
+          "Proportion, moyenne et médiane",
+          "Écart-type, percentiles et intervalle interquartile",
+          "Graphiques et histogrammes",
+          "Incidence et prévalence",
+          "Différence absolue",
+          "Risque relatif",
+          "Risque relatif rapproché — odds ratio",
+          "Principes des tests statistiques selon le type de variable"
+        ]
       },
       {
         "code": "04",
-        "name": "Synthèse et restitution"
+        "name": "Synthèse et restitution",
+        "source_line": 765,
+        "notions": [
+          "Construction d’une question clinique ou professionnelle",
+          "Synthèse critique de la littérature",
+          "Rédaction, arborescence et sommaire",
+          "Figures et schémas",
+          "Références bibliographiques",
+          "Utilisation des outils bureautiques",
+          "Présentation orale",
+          "IA dans la recherche : outils, éthique et précautions"
+        ]
       }
     ]
   },
@@ -343,7 +1676,203 @@
     "themes": [
       {
         "code": "01",
-        "name": "Anglais professionnel et scientifique"
+        "name": "Vocabulaire médical courant",
+        "source_line": 777,
+        "notions": [
+          "Vocabulaire médical courant"
+        ]
+      },
+      {
+        "code": "02",
+        "name": "Anatomie et physiologie",
+        "source_line": 778,
+        "notions": [
+          "Anatomie et physiologie"
+        ]
+      },
+      {
+        "code": "03",
+        "name": "Pathologies",
+        "source_line": 779,
+        "notions": [
+          "Pathologies"
+        ]
+      },
+      {
+        "code": "04",
+        "name": "Médicaments et traitements",
+        "source_line": 780,
+        "notions": [
+          "Médicaments et traitements"
+        ]
+      },
+      {
+        "code": "05",
+        "name": "Procédures de soins",
+        "source_line": 781,
+        "notions": [
+          "Procédures de soins"
+        ]
+      },
+      {
+        "code": "06",
+        "name": "Dispositifs médicaux et matériels",
+        "source_line": 782,
+        "notions": [
+          "Dispositifs médicaux et matériels"
+        ]
+      },
+      {
+        "code": "07",
+        "name": "Accueil du patient",
+        "source_line": 783,
+        "notions": [
+          "Accueil du patient"
+        ]
+      },
+      {
+        "code": "08",
+        "name": "Questionnement et évaluation des symptômes",
+        "source_line": 784,
+        "notions": [
+          "Questionnement et évaluation des symptômes"
+        ]
+      },
+      {
+        "code": "09",
+        "name": "Explication des traitements",
+        "source_line": 785,
+        "notions": [
+          "Explication des traitements"
+        ]
+      },
+      {
+        "code": "10",
+        "name": "Lecture de documents professionnels et scientifiques",
+        "source_line": 786,
+        "notions": [
+          "Lecture de documents professionnels et scientifiques"
+        ]
+      },
+      {
+        "code": "11",
+        "name": "Communication avec les personnes non francophones",
+        "source_line": 787,
+        "notions": [
+          "Communication avec les personnes non francophones"
+        ]
+      },
+      {
+        "code": "12",
+        "name": "Écoute et réponse aux préoccupations",
+        "source_line": 788,
+        "notions": [
+          "Écoute et réponse aux préoccupations"
+        ]
+      },
+      {
+        "code": "13",
+        "name": "Vocabulaire de l’annonce d’un diagnostic",
+        "source_line": 789,
+        "notions": [
+          "Vocabulaire de l’annonce d’un diagnostic"
+        ]
+      },
+      {
+        "code": "14",
+        "name": "Présentation d’un traitement",
+        "source_line": 790,
+        "notions": [
+          "Présentation d’un traitement"
+        ]
+      },
+      {
+        "code": "15",
+        "name": "Communication en urgence",
+        "source_line": 791,
+        "notions": [
+          "Communication en urgence"
+        ]
+      },
+      {
+        "code": "16",
+        "name": "Instructions et explication des procédures",
+        "source_line": 792,
+        "notions": [
+          "Instructions et explication des procédures"
+        ]
+      },
+      {
+        "code": "17",
+        "name": "Rédaction de synthèses",
+        "source_line": 793,
+        "notions": [
+          "Rédaction de synthèses"
+        ]
+      },
+      {
+        "code": "18",
+        "name": "Transmissions écrites",
+        "source_line": 794,
+        "notions": [
+          "Transmissions écrites"
+        ]
+      },
+      {
+        "code": "19",
+        "name": "Documents administratifs professionnels",
+        "source_line": 795,
+        "notions": [
+          "Documents administratifs professionnels"
+        ]
+      },
+      {
+        "code": "20",
+        "name": "Communication en équipe pluriprofessionnelle",
+        "source_line": 796,
+        "notions": [
+          "Communication en équipe pluriprofessionnelle"
+        ]
+      },
+      {
+        "code": "21",
+        "name": "Coordination et partage d’informations cliniques",
+        "source_line": 797,
+        "notions": [
+          "Coordination et partage d’informations cliniques"
+        ]
+      },
+      {
+        "code": "22",
+        "name": "Échanges professionnels européens et internationaux",
+        "source_line": 798,
+        "notions": [
+          "Échanges professionnels européens et internationaux"
+        ]
+      },
+      {
+        "code": "23",
+        "name": "Dimensions culturelles de la communication",
+        "source_line": 799,
+        "notions": [
+          "Dimensions culturelles de la communication"
+        ]
+      },
+      {
+        "code": "24",
+        "name": "Représentations de la santé, valeurs et habitudes de soins",
+        "source_line": 800,
+        "notions": [
+          "Représentations de la santé, valeurs et habitudes de soins"
+        ]
+      },
+      {
+        "code": "25",
+        "name": "Posture interculturelle",
+        "source_line": 801,
+        "notions": [
+          "Posture interculturelle"
+        ]
       }
     ]
   },
@@ -353,15 +1882,52 @@
     "themes": [
       {
         "code": "01",
-        "name": "Entrée dans la formation et méthodes"
+        "name": "Entrée dans la formation et méthodes",
+        "source_line": 804,
+        "notions": [
+          "Autoévaluation des acquis et des besoins",
+          "Méthodes de travail",
+          "Ressources documentaires",
+          "Compétences numériques",
+          "Approche par compétences",
+          "Alternance et parcours de professionnalisation",
+          "Représentations de la profession",
+          "Confrontation aux réalités professionnelles",
+          "Intégration des valeurs professionnelles",
+          "Estime de soi et posture d’apprenant",
+          "Communication interpersonnelle",
+          "Identification et expression des émotions"
+        ]
       },
       {
         "code": "02",
-        "name": "Progression et coopération"
+        "name": "Progression et coopération",
+        "source_line": 817,
+        "notions": [
+          "Analyse de ses méthodes de travail",
+          "Plan personnalisé d’acquisition des connaissances et compétences",
+          "Évolution des représentations socioprofessionnelles",
+          "Analyse des pratiques",
+          "Négociation, coopération et gestion des conflits",
+          "Projets collaboratifs"
+        ]
       },
       {
         "code": "03",
-        "name": "Autonomie, insertion et engagement"
+        "name": "Autonomie, insertion et engagement",
+        "source_line": 824,
+        "notions": [
+          "Analyse des situations professionnelles complexes",
+          "Développement de l’autonomie",
+          "Construction, argumentation et affirmation du projet professionnel",
+          "Identification des leviers d’action",
+          "Préparation à la prise de poste",
+          "Facteurs favorisant l’engagement étudiant",
+          "Stratégies et outils d’implication dans la formation",
+          "Réseau professionnel et associatif",
+          "Actions solidaires et citoyennes",
+          "Mobilités européennes et internationales"
+        ]
       }
     ]
   }

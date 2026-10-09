@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 final class OI_Curriculum {
-    public const VERSION = 2;
+    public const VERSION = 3;
     public static function install(): void {
         $installedVersion=(int)get_option('oi_curriculum_version');if($installedVersion>=self::VERSION)return;
         // A short lease avoids duplicate term creation on simultaneous first requests.
@@ -16,9 +16,15 @@ final class OI_Curriculum {
                 update_term_meta($id,'oi_programme_code',$code);$index[$code]=['id'=>$id,'themes'=>[]];
                 foreach($unit['themes'] as $definition){
                     $number=$definition['code'];$title=$definition['name'];
-                    $theme=self::term('oi_theme','programme-2026-'.strtolower($code).'-'.$number,$code.' - '.$number.' '.$title);
+                    $slug='programme-2026-'.strtolower($code).'-'.$number;$name=$code.' - '.$number.' '.$title;
+                    $old=get_term_by('slug',$slug,'oi_theme');
+                    if($old&&sanitize_title($old->name)!==sanitize_title($name)){
+                        $renamed=wp_update_term($old->term_id,'oi_theme',['slug'=>$slug.'-ancien-'.$old->term_id]);if(is_wp_error($renamed))throw new RuntimeException('Migration de thème impossible');
+                        update_term_meta($old->term_id,'oi_programme_legacy',1);
+                    }
+                    $theme=self::term('oi_theme',$slug,$name);delete_term_meta($theme,'oi_programme_legacy');
+                    update_term_meta($theme,'oi_programme_notions',$definition['notions']);update_term_meta($theme,'oi_programme_source_line',$definition['source_line']);
                     update_term_meta($theme,'oi_programme_unit',$id);update_term_meta($theme,'oi_programme_code',$code.'-'.$number);$index[$code]['themes'][(int)$number]=$theme;
-                    if($code==='B4'&&$number==='01'&&get_term($theme,'oi_theme')->name==='B4 - 01 Démarche qualité et gestion des risques')wp_update_term($theme,'oi_theme',['name'=>$code.' - '.$number.' '.$title]);
                 }
             }
             // Initial catalogue only. Never overwrite an existing UE classification.
