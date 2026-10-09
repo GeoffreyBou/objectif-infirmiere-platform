@@ -94,3 +94,6 @@ La sélection est traitée fiche par fiche avec compteur. Une fiche invalide aff
 
 ### Publication directe facultativement prévisualisée (rc.13)
 La prévisualisation n’est plus un préalable. « Tout sélectionner » puis « Publier la sélection (N) » publie directement les fiches par lots de 20. Chaque fiche est validée côté serveur (titre, UE/thème, identité de la source et cohérence du contenu) ; une erreur conserve cette fiche en préparation sans bloquer les suivantes. Le bouton individuel fonctionne aussi sans aperçu. Les comparaisons restent disponibles pour une relecture facultative.
+
+### Classement par code de thème (rc.14)
+Lors de la préparation Drive, un dossier numéroté tel que « 12 - Medicaments dispositifs transfusion et examens » est rapproché du thème de code `programme-2026-b3-12` dans l’UE B3. Le texte du libellé peut varier. L’UE doit être reconnue et le thème unique ; des UE ou numéros contradictoires ne sont pas classés automatiquement. Les corrections manuelles des fiches publiées sont conservées.

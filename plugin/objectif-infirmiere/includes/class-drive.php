@@ -112,6 +112,27 @@ final class OI_Drive {
             }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
         }return $result;
     }
+    public static function classification(array $path): array {
+        $unit=0;$code='';
+        foreach($path as $part)if(preg_match('/^([A-E])\.?([1-9])\b/i',$part,$m)){
+            $candidate=strtoupper($m[1].$m[2]);$term=get_term_by('slug','programme-2026-'.strtolower($candidate),'oi_enseignement');
+            if($term){if($unit&&$unit!==(int)$term->term_id)return [0,0];$unit=(int)$term->term_id;$code=$candidate;}
+        }
+        if(!$unit)return [0,0];
+        $themes=get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false,'meta_key'=>'oi_programme_unit','meta_value'=>$unit]);
+        if(is_wp_error($themes))return [$unit,0];
+        $matches=[];
+        foreach($path as $part){
+            $label=preg_replace('/^'.preg_quote($code,'/').'\s*[-–—]\s*/ui','',$part);
+            foreach($themes as $t){
+                $name=preg_replace('/^'.preg_quote($code,'/').'\s*[-–—]\s*/ui','',$t->name);
+                $exact=sanitize_title($part)===sanitize_title($t->name)||sanitize_title($label)===sanitize_title($name);
+                $number=preg_match('/^(\d{1,2})\s*[-–—]\s*/u',$label,$a)&&preg_match('/^programme-2026-'.strtolower($code).'-(\d{1,2})$/',$t->slug,$b)&&(int)$a[1]===(int)$b[1];
+                if($exact||$number)$matches[(int)$t->term_id]=true;
+            }
+        }
+        return [$unit,count($matches)===1?(int)array_key_first($matches):0];
+    }
     public static function prepare(WP_REST_Request $r): array|WP_Error {
         $job=get_transient('oi_drive_scan_'.get_current_user_id());$ids=$r['ids'];if(!$job||empty($job['done'])||!is_array($ids)||count($ids)>10)return new WP_Error('oi_scan','Termine une analyse puis sélectionne jusqu’à 10 Word.',['status'=>400]);
         $result=[];foreach(self::candidates($job['files']) as $file){if(!in_array($file['id'],$ids,true))continue;$tmp='';
@@ -123,8 +144,7 @@ final class OI_Drive {
                 require_once ABSPATH.'wp-admin/includes/file.php';
                 $tmp=wp_tempnam('oi-word');
                 if(!$tmp||file_put_contents($tmp,$body)!==strlen($body))throw new RuntimeException('Impossible de créer le fichier Word temporaire. Réessaie ou vérifie l’espace disponible sur le serveur.');
-                $unit=0;$theme=0;foreach($file['path'] as $part){if(preg_match('/^([A-E])\.?([1-9])\b/i',$part,$m)){$term=get_term_by('slug','programme-2026-'.strtolower($m[1].$m[2]),'oi_enseignement');if($term)$unit=(int)$term->term_id;}}
-                if($unit){$themes=get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false,'meta_key'=>'oi_programme_unit','meta_value'=>$unit]);foreach($themes as $t)foreach($file['path'] as $part)if(sanitize_title($part)===sanitize_title($t->name)||sanitize_title($part)===sanitize_title(preg_replace('/^[A-E][1-9] - /','',$t->name)))$theme=(int)$t->term_id;}
+                [$unit,$theme]=self::classification($file['path']);
                 $stage=OI_Imports::stage($tmp,$file['name'],['key'=>$file['key'],'file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label'],'unit'=>$unit,'theme'=>$theme]);$result[]=['file'=>$file['name'],'id'=>$stage,'ok'=>true,'unchanged'=>$stage===0];
             }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
         }return $result;

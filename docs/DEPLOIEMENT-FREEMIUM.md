@@ -106,3 +106,9 @@ Test navigateur local avec 100 vraies préparations et REST réel : 99 réussite
 Archive SHA-256 `ea24e0a845083fe000d39cc9cc995e289e7e102f51d62c08e92ab146b123d4c8`. Retour arrière disponible vers rc.12.
 
 Validation locale : 50 assertions serveur et deux parcours navigateur avec 100 préparations réelles, publication après prévisualisation et publication directe sans aucun appel d’aperçu. Dans ce dernier parcours, une UE invalide laisse 99 publications réussies ; la dernière est ensuite publiée individuellement après correction. Fixtures locales nettoyées.
+
+## Classement Drive B3 / 12 — 0.3.0-rc.14
+
+9 octobre 2026 : classement des dossiers par UE et numéro du thème, en complément des correspondances textuelles existantes. Le libellé Drive incluant « transfusion » rejoint le thème B3 / 12 du programme. Les correspondances ambiguës ou sans UE restent à classer manuellement. Aucune modification des fiches déjà classées.
+
+Sept cas de classement validés et 50 assertions d’import réussies. Archive SHA-256 `4ddb4cff6a285fe86a7d0edff10962a0b4286c4332ca21a1a9a9767b8218d618` ; rc.13 conservée.
