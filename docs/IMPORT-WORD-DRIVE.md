@@ -97,3 +97,6 @@ La prévisualisation n’est plus un préalable. « Tout sélectionner » puis �
 
 ### Classement par code de thème (rc.14)
 Lors de la préparation Drive, un dossier numéroté tel que « 12 - Medicaments dispositifs transfusion et examens » est rapproché du thème de code `programme-2026-b3-12` dans l’UE B3. Le texte du libellé peut varier. L’UE doit être reconnue et le thème unique ; des UE ou numéros contradictoires ne sont pas classés automatiquement. Les corrections manuelles des fiches publiées sont conservées.
+
+### Suivi visible (rc.16)
+Un panneau fixe indique le traitement en cours et reste visible lorsque la longue liste Drive défile. La préparation affiche les Word traités, le lot en cours et une barre de progression mise à jour entre les lots de 10. Le bilan final reste affiché jusqu’à fermeture. Sur mobile, le panneau apparaît en haut pour éviter le menu de navigation. Aucune estimation fictive du temps restant.

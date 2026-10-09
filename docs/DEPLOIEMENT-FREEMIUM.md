@@ -116,3 +116,7 @@ Sept cas de classement validés et 50 assertions d’import réussies. Archive S
 ## Bouton de déblocage — 0.3.0-rc.15
 
 9 octobre 2026 : remplacement de la composition verticale par un bouton compact de 78 px, bleu soutenu, cadenas sur fond translucide, texte sur deux lignes et flèche alignée. Largeur alignée sur les onglets, focus clavier visible. Contrôle visuel à 1440 px et navigation vers l’offre vérifiés dans Chromium. Aucun changement des accès ou du paiement. Archive rc.14 conservée.
+
+## Suivi des imports — 0.3.0-rc.16
+
+9 octobre 2026 : panneau de suivi fixe, indicateur animé, compteur réel par lots et bilan fermable. Visible au-dessus du contenu et hors du menu mobile ; la région de statut reste hors de la zone marquée occupée pour annoncer les mises à jour. Tests navigateur ordinateur/iPhone avec requête de préparation suspendue : visibilité du panneau pendant l’attente, progression 0/21, lots 10/10/1, bilan de 21 préparations puis fermeture. Position mobile contrôlée visuellement et par rapport à la navigation. Archive rc.15 conservée.
