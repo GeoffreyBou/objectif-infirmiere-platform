@@ -112,3 +112,7 @@ Validation locale : 50 assertions serveur et deux parcours navigateur avec 100 p
 9 octobre 2026 : classement des dossiers par UE et numéro du thème, en complément des correspondances textuelles existantes. Le libellé Drive incluant « transfusion » rejoint le thème B3 / 12 du programme. Les correspondances ambiguës ou sans UE restent à classer manuellement. Aucune modification des fiches déjà classées.
 
 Sept cas de classement validés et 50 assertions d’import réussies. Archive SHA-256 `4ddb4cff6a285fe86a7d0edff10962a0b4286c4332ca21a1a9a9767b8218d618` ; rc.13 conservée.
+
+## Bouton de déblocage — 0.3.0-rc.15
+
+9 octobre 2026 : remplacement de la composition verticale par un bouton compact de 78 px, bleu soutenu, cadenas sur fond translucide, texte sur deux lignes et flèche alignée. Largeur alignée sur les onglets, focus clavier visible. Contrôle visuel à 1440 px et navigation vers l’offre vérifiés dans Chromium. Aucun changement des accès ou du paiement. Archive rc.14 conservée.
