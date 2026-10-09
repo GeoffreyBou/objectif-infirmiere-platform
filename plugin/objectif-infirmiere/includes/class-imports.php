@@ -125,7 +125,16 @@ final class OI_Imports {
     }
     public static function publish_batch(WP_REST_Request $r): array|WP_Error {
         $items=$r['items'];if(!is_array($items)||!$items||count($items)>20)return new WP_Error('oi_batch','Sélectionne entre 1 et 20 fiches.',['status'=>400]);$results=[];
-        foreach($items as $item){$id=absint($item['id']??0);try{$results[]=self::publish_one($id,(string)($item['token']??''));}catch(Throwable $e){$results[]=['id'=>$id,'ok'=>false,'message'=>$e->getMessage()];}}return $results;
+        foreach($items as $item){$id=absint($item['id']??0);try{
+            $token=(string)($item['token']??'');
+            if($token===''&&($item['direct']??false)===true){
+                $check=new WP_REST_Request('POST');$check->set_param('id',$id);
+                foreach(['title','target','unit','theme'] as $field)$check->set_param($field,$item[$field]??'');
+                $validated=self::preview($check);if(is_wp_error($validated))throw new RuntimeException($validated->get_error_message());
+                $token=$validated['token'];
+            }
+            $results[]=self::publish_one($id,$token);
+        }catch(Throwable $e){$results[]=['id'=>$id,'ok'=>false,'message'=>$e->getMessage()];}}return $results;
     }
     public static function discard(WP_REST_Request $r): array|WP_Error {
         $id=absint($r['id']);if(get_post_type($id)!=='oi_import'||get_post_status($id)!=='draft')return new WP_Error('oi_import','Préparation introuvable.',['status'=>404]);wp_delete_post($id,true);return ['ok'=>true];

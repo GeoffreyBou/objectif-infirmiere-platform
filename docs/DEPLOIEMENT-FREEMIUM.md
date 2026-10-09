@@ -98,3 +98,11 @@ Validation : 50 assertions serveur Word/Drive et quatre parcours navigateur ordi
 8 octobre 2026 : prévisualisation robuste aux erreurs individuelles, compteur, reprise des seules fiches sans aperçu valide et comparaisons repliées avec cadres montés à la demande. Évite l’arrêt au premier classement incomplet et le chargement simultané de 200 iframes pour 100 fiches. Les contrôles de publication restent inchangés.
 
 Test navigateur local avec 100 vraies préparations et REST réel : 99 réussites malgré une UE invalide, puis 100 après correction avec une seule requête supplémentaire ; ouverture/fermeture de la comparaison, aucun iframe conservé lorsque replié. Parcours Word de publication, mise à jour, restauration et protections également réussi. Archive SHA-256 `b9e91561b699ed6fd7effae2a6366875922418e1f88763acefab154ee94f58fe` ; rc.11 conservée pour retour arrière.
+
+## Publication directe — 0.3.0-rc.13
+
+9 octobre 2026 : prévisualisation facultative sur demande du propriétaire produit. Publication de toute la sélection par lots de 20 sans ouvrir ni générer d’aperçu côté interface. Validation serveur de chaque fiche avant publication ; les erreurs individuelles restent en préparation et sont identifiées par leur titre. Les contrôles d’identité, de classement, de concurrence et d’autorisation sont conservés.
+
+Archive SHA-256 `ea24e0a845083fe000d39cc9cc995e289e7e102f51d62c08e92ab146b123d4c8`. Retour arrière disponible vers rc.12.
+
+Validation locale : 50 assertions serveur et deux parcours navigateur avec 100 préparations réelles, publication après prévisualisation et publication directe sans aucun appel d’aperçu. Dans ce dernier parcours, une UE invalide laisse 99 publications réussies ; la dernière est ensuite publiée individuellement après correction. Fixtures locales nettoyées.

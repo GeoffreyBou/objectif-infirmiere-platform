@@ -91,3 +91,6 @@ La liste présente les 100 préparations les plus récentes et indique le total 
 
 ### Prévisualisation de 100 fiches (rc.12)
 La sélection est traitée fiche par fiche avec compteur. Une fiche invalide affiche son erreur sans interrompre les suivantes. Après correction, relancer la prévisualisation ne recalcule que les aperçus manquants ou invalidés par une modification. Les comparaisons sont repliées et leurs cadres chargés uniquement à l’ouverture, puis libérés à la fermeture. La publication conserve ses contrôles de prévisualisation et de contenu à jour.
+
+### Publication directe facultativement prévisualisée (rc.13)
+La prévisualisation n’est plus un préalable. « Tout sélectionner » puis « Publier la sélection (N) » publie directement les fiches par lots de 20. Chaque fiche est validée côté serveur (titre, UE/thème, identité de la source et cohérence du contenu) ; une erreur conserve cette fiche en préparation sans bloquer les suivantes. Le bouton individuel fonctionne aussi sans aperçu. Les comparaisons restent disponibles pour une relecture facultative.
