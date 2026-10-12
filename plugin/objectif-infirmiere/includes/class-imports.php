@@ -113,6 +113,8 @@ final class OI_Imports {
         $target=0;$pack=0;$history=0;
         try{
             $p=get_post($id);if(!$p||$p->post_type!=='oi_import'||$p->post_status!=='draft')throw new RuntimeException('Cette préparation a déjà été publiée ou retirée.');
+            $theme=(int)get_post_meta($id,'oi_theme',true);$unit=(int)get_post_meta($id,'oi_unit',true);
+            if(!$theme||get_term_meta($theme,'oi_programme_legacy',true)||(int)get_term_meta($theme,'oi_programme_unit',true)!==$unit)throw new RuntimeException('Le classement a changé. Choisis un thème actuel avant de publier.');
             $review=get_post_meta($id,'oi_review',true);$target=(int)get_post_meta($id,'oi_target',true);
             if(!$review||$review['user']!==get_current_user_id()||!hash_equals($review['token'],hash('sha256',$token))||$review['stage']!==self::fingerprint($id)||($target&&$review['base']!==self::fingerprint($target)))throw new RuntimeException('Le contenu a changé ou n’a pas été prévisualisé. Relance la prévisualisation.');
             $source=get_post_meta($id,'oi_source',true)?:[];$matched=self::source_target($source);

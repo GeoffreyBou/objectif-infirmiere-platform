@@ -701,204 +701,62 @@
     "themes": [
       {
         "code": "01",
-        "name": "Histoire, principes et enjeux de la qualité en santé",
-        "source_line": 459,
-        "notions": [
-          "Histoire, principes et enjeux de la qualité en santé"
-        ]
+        "name": "Fondements et pilotage de la qualite",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "02",
-        "name": "Cadre réglementaire et référentiels qualité",
-        "source_line": 460,
-        "notions": [
-          "Cadre réglementaire et référentiels qualité"
-        ]
+        "name": "Experience usager tracabilite et evaluation des pratiques",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "03",
-        "name": "Qualité dans les secteurs sanitaire, médicosocial, social et éducatif",
-        "source_line": 461,
-        "notions": [
-          "Qualité dans les secteurs sanitaire, médicosocial, social et éducatif"
-        ]
+        "name": "Gestion des risques methodes et vigilances",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "04",
-        "name": "Qualité dans les secteurs à risques : biologie, radiothérapie, médecine nucléaire, imagerie",
-        "source_line": 462,
-        "notions": [
-          "Qualité dans les secteurs à risques : biologie, radiothérapie, médecine nucléaire, imagerie"
-        ]
+        "name": "Facteurs humains et culture de securite",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "05",
-        "name": "Cycle PDCA et roue de Deming",
-        "source_line": 463,
-        "notions": [
-          "Cycle PDCA et roue de Deming"
-        ]
-      },
-      {
-        "code": "06",
-        "name": "Indicateurs qualité",
-        "source_line": 464,
-        "notions": [
-          "Indicateurs qualité"
-        ]
-      },
-      {
-        "code": "07",
-        "name": "Expérience des usagers : plaintes, satisfaction et observations",
-        "source_line": 465,
-        "notions": [
-          "Expérience des usagers : plaintes, satisfaction et observations"
-        ]
-      },
-      {
-        "code": "08",
-        "name": "Traçabilité, transmissions, protocoles et plans d’action",
-        "source_line": 466,
-        "notions": [
-          "Traçabilité, transmissions, protocoles et plans d’action"
-        ]
-      },
-      {
-        "code": "09",
-        "name": "Audits internes et externes",
-        "source_line": 467,
-        "notions": [
-          "Audits internes et externes"
-        ]
-      },
-      {
-        "code": "10",
-        "name": "Évaluation des pratiques professionnelles",
-        "source_line": 468,
-        "notions": [
-          "Évaluation des pratiques professionnelles"
-        ]
-      },
-      {
-        "code": "11",
-        "name": "Risques iatrogènes, organisationnels, psychosociaux et éthiques",
-        "source_line": 469,
-        "notions": [
-          "Risques iatrogènes, organisationnels, psychosociaux et éthiques"
-        ]
-      },
-      {
-        "code": "12",
-        "name": "Cartographie des risques",
-        "source_line": 470,
-        "notions": [
-          "Cartographie des risques"
-        ]
-      },
-      {
-        "code": "13",
-        "name": "Arbre des causes et méthode des « cinq pourquoi »",
-        "source_line": 471,
-        "notions": [
-          "Arbre des causes et méthode des « cinq pourquoi »"
-        ]
-      },
-      {
-        "code": "14",
-        "name": "AMDEC et méthode ALARM",
-        "source_line": 472,
-        "notions": [
-          "AMDEC et méthode ALARM"
-        ]
-      },
-      {
-        "code": "15",
-        "name": "Identitovigilance, matériovigilance, infectiovigilance et hémovigilance",
-        "source_line": 473,
-        "notions": [
-          "Identitovigilance, matériovigilance, infectiovigilance et hémovigilance"
-        ]
-      },
-      {
-        "code": "16",
-        "name": "Prévention, déclaration et gestion des événements indésirables",
-        "source_line": 474,
-        "notions": [
-          "Prévention, déclaration et gestion des événements indésirables"
-        ]
-      },
-      {
-        "code": "17",
-        "name": "Facteurs humains et organisationnels",
-        "source_line": 475,
-        "notions": [
-          "Facteurs humains et organisationnels"
-        ]
-      },
-      {
-        "code": "18",
-        "name": "Simulation en équipe pour prévenir les risques",
-        "source_line": 476,
-        "notions": [
-          "Simulation en équipe pour prévenir les risques"
-        ]
-      },
-      {
-        "code": "19",
-        "name": "Rencontres sécurité et briefings",
-        "source_line": 477,
-        "notions": [
-          "Rencontres sécurité et briefings"
-        ]
-      },
-      {
-        "code": "20",
-        "name": "Culture de sécurité, place de l’erreur et culture juste non punitive",
-        "source_line": 478,
-        "notions": [
-          "Culture de sécurité, place de l’erreur et culture juste non punitive"
-        ]
-      },
-      {
-        "code": "21",
-        "name": "Sensibilisation et formation des équipes",
-        "source_line": 479,
-        "notions": [
-          "Sensibilisation et formation des équipes"
-        ]
-      },
-      {
-        "code": "22",
-        "name": "Patient acteur de la sécurité",
-        "source_line": 480,
-        "notions": [
-          "Patient acteur de la sécurité"
-        ]
-      },
-      {
-        "code": "23",
-        "name": "Leadership partagé, soutien entre pairs et retours constructifs",
-        "source_line": 481,
-        "notions": [
-          "Leadership partagé, soutien entre pairs et retours constructifs"
-        ]
-      },
-      {
-        "code": "24",
-        "name": "Ressources et organismes auxquels demander conseil",
-        "source_line": 482,
-        "notions": [
-          "Ressources et organismes auxquels demander conseil"
-        ]
-      },
-      {
-        "code": "25",
-        "name": "Amélioration continue des pratiques",
-        "source_line": 483,
-        "notions": [
-          "Amélioration continue des pratiques"
-        ]
+        "name": "Ressources et amelioration continue",
+        "notions": [],
+        "source_line": null
       }
+    ],
+    "theme_source": "drive",
+    "notions": [
+      "Histoire, principes et enjeux de la qualité en santé",
+      "Cadre réglementaire et référentiels qualité",
+      "Qualité dans les secteurs sanitaire, médicosocial, social et éducatif",
+      "Qualité dans les secteurs à risques : biologie, radiothérapie, médecine nucléaire, imagerie",
+      "Cycle PDCA et roue de Deming",
+      "Indicateurs qualité",
+      "Expérience des usagers : plaintes, satisfaction et observations",
+      "Traçabilité, transmissions, protocoles et plans d’action",
+      "Audits internes et externes",
+      "Évaluation des pratiques professionnelles",
+      "Risques iatrogènes, organisationnels, psychosociaux et éthiques",
+      "Cartographie des risques",
+      "Arbre des causes et méthode des « cinq pourquoi »",
+      "AMDEC et méthode ALARM",
+      "Identitovigilance, matériovigilance, infectiovigilance et hémovigilance",
+      "Prévention, déclaration et gestion des événements indésirables",
+      "Facteurs humains et organisationnels",
+      "Simulation en équipe pour prévenir les risques",
+      "Rencontres sécurité et briefings",
+      "Culture de sécurité, place de l’erreur et culture juste non punitive",
+      "Sensibilisation et formation des équipes",
+      "Patient acteur de la sécurité",
+      "Leadership partagé, soutien entre pairs et retours constructifs",
+      "Ressources et organismes auxquels demander conseil",
+      "Amélioration continue des pratiques"
     ]
   },
   {
@@ -1011,236 +869,72 @@
     "themes": [
       {
         "code": "01",
-        "name": "Formation socle à la transition écologique pour un développement soutenable — TEDS",
-        "source_line": 550,
-        "notions": [
-          "Formation socle à la transition écologique pour un développement soutenable — TEDS"
-        ]
+        "name": "Fondements politiques et acteurs",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "02",
-        "name": "Concepts de santé environnementale",
-        "source_line": 551,
-        "notions": [
-          "Concepts de santé environnementale"
-        ]
+        "name": "Expositions pollutions et risques sanitaires",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "03",
-        "name": "Organisation des politiques de santé environnementale en France et dans le monde",
-        "source_line": 552,
-        "notions": [
-          "Organisation des politiques de santé environnementale en France et dans le monde"
-        ]
+        "name": "Climat vulnerabilites et crises",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "04",
-        "name": "Écoconception et pratiques de soins écoresponsables",
-        "source_line": 553,
-        "notions": [
-          "Écoconception et pratiques de soins écoresponsables"
-        ]
+        "name": "Systeme de sante ecoresponsable",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "05",
-        "name": "Vulnérabilités et environnement",
-        "source_line": 554,
-        "notions": [
-          "Vulnérabilités et environnement"
-        ]
+        "name": "One Health zoonoses et antibioresistance",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "06",
-        "name": "Catastrophes naturelles et technologiques",
-        "source_line": 555,
-        "notions": [
-          "Catastrophes naturelles et technologiques"
-        ]
-      },
-      {
-        "code": "07",
-        "name": "Plans d’urgence et rôle des soignants",
-        "source_line": 556,
-        "notions": [
-          "Plans d’urgence et rôle des soignants"
-        ]
-      },
-      {
-        "code": "08",
-        "name": "Collaboration avec les institutions locales, régionales, nationales et internationales",
-        "source_line": 557,
-        "notions": [
-          "Collaboration avec les institutions locales, régionales, nationales et internationales"
-        ]
-      },
-      {
-        "code": "09",
-        "name": "Acteurs de la santé environnementale",
-        "source_line": 558,
-        "notions": [
-          "Acteurs de la santé environnementale"
-        ]
-      },
-      {
-        "code": "10",
-        "name": "Plans santé-environnement et santé au travail",
-        "source_line": 559,
-        "notions": [
-          "Plans santé-environnement et santé au travail"
-        ]
-      },
-      {
-        "code": "11",
-        "name": "Perturbateurs endocriniens",
-        "source_line": 560,
-        "notions": [
-          "Perturbateurs endocriniens"
-        ]
-      },
-      {
-        "code": "12",
-        "name": "Pesticides",
-        "source_line": 561,
-        "notions": [
-          "Pesticides"
-        ]
-      },
-      {
-        "code": "13",
-        "name": "Risques liés à l’environnement intérieur",
-        "source_line": 562,
-        "notions": [
-          "Risques liés à l’environnement intérieur"
-        ]
-      },
-      {
-        "code": "14",
-        "name": "Pollution intérieure et extérieure : solvants, produits chimiques et d’hygiène, pollens, tabac, particules",
-        "source_line": 563,
-        "notions": [
-          "Pollution intérieure et extérieure : solvants, produits chimiques et d’hygiène, pollens, tabac, particules"
-        ]
-      },
-      {
-        "code": "15",
-        "name": "Vulnérabilité du système de santé aux changements environnementaux",
-        "source_line": 564,
-        "notions": [
-          "Vulnérabilité du système de santé aux changements environnementaux"
-        ]
-      },
-      {
-        "code": "16",
-        "name": "Transition écologique et développement durable dans le système de santé",
-        "source_line": 565,
-        "notions": [
-          "Transition écologique et développement durable dans le système de santé"
-        ]
-      },
-      {
-        "code": "17",
-        "name": "Expositions chimiques, physiques et biologiques",
-        "source_line": 566,
-        "notions": [
-          "Expositions chimiques, physiques et biologiques"
-        ]
-      },
-      {
-        "code": "18",
-        "name": "Expositions professionnelles",
-        "source_line": 567,
-        "notions": [
-          "Expositions professionnelles"
-        ]
-      },
-      {
-        "code": "19",
-        "name": "Évaluation des risques sanitaires environnementaux",
-        "source_line": 568,
-        "notions": [
-          "Évaluation des risques sanitaires environnementaux"
-        ]
-      },
-      {
-        "code": "20",
-        "name": "Inégalités environnementales",
-        "source_line": 569,
-        "notions": [
-          "Inégalités environnementales"
-        ]
-      },
-      {
-        "code": "21",
-        "name": "Effets directs et indirects du changement climatique",
-        "source_line": 570,
-        "notions": [
-          "Effets directs et indirects du changement climatique"
-        ]
-      },
-      {
-        "code": "22",
-        "name": "Maladies environnementales",
-        "source_line": 571,
-        "notions": [
-          "Maladies environnementales"
-        ]
-      },
-      {
-        "code": "23",
-        "name": "Zoonoses",
-        "source_line": 572,
-        "notions": [
-          "Zoonoses"
-        ]
-      },
-      {
-        "code": "24",
-        "name": "Antibiorésistance",
-        "source_line": 573,
-        "notions": [
-          "Antibiorésistance"
-        ]
-      },
-      {
-        "code": "25",
-        "name": "Éco-anxiété et santé mentale",
-        "source_line": 574,
-        "notions": [
-          "Éco-anxiété et santé mentale"
-        ]
-      },
-      {
-        "code": "26",
-        "name": "Promotion de la santé environnementale",
-        "source_line": 575,
-        "notions": [
-          "Promotion de la santé environnementale"
-        ]
-      },
-      {
-        "code": "27",
-        "name": "Approche « Une seule santé »",
-        "source_line": 576,
-        "notions": [
-          "Approche « Une seule santé »"
-        ]
-      },
-      {
-        "code": "28",
-        "name": "Cobénéfices santé-environnement : mobilité active, alimentation durable, contact avec la nature",
-        "source_line": 577,
-        "notions": [
-          "Cobénéfices santé-environnement : mobilité active, alimentation durable, contact avec la nature"
-        ]
-      },
-      {
-        "code": "29",
-        "name": "Éducation à la santé environnementale et à la santé au travail",
-        "source_line": 578,
-        "notions": [
-          "Éducation à la santé environnementale et à la santé au travail"
-        ]
+        "name": "Promotion cobenefices et education",
+        "notions": [],
+        "source_line": null
       }
+    ],
+    "theme_source": "drive",
+    "notions": [
+      "Formation socle à la transition écologique pour un développement soutenable — TEDS",
+      "Concepts de santé environnementale",
+      "Organisation des politiques de santé environnementale en France et dans le monde",
+      "Écoconception et pratiques de soins écoresponsables",
+      "Vulnérabilités et environnement",
+      "Catastrophes naturelles et technologiques",
+      "Plans d’urgence et rôle des soignants",
+      "Collaboration avec les institutions locales, régionales, nationales et internationales",
+      "Acteurs de la santé environnementale",
+      "Plans santé-environnement et santé au travail",
+      "Perturbateurs endocriniens",
+      "Pesticides",
+      "Risques liés à l’environnement intérieur",
+      "Pollution intérieure et extérieure : solvants, produits chimiques et d’hygiène, pollens, tabac, particules",
+      "Vulnérabilité du système de santé aux changements environnementaux",
+      "Transition écologique et développement durable dans le système de santé",
+      "Expositions chimiques, physiques et biologiques",
+      "Expositions professionnelles",
+      "Évaluation des risques sanitaires environnementaux",
+      "Inégalités environnementales",
+      "Effets directs et indirects du changement climatique",
+      "Maladies environnementales",
+      "Zoonoses",
+      "Antibiorésistance",
+      "Éco-anxiété et santé mentale",
+      "Promotion de la santé environnementale",
+      "Approche « Une seule santé »",
+      "Cobénéfices santé-environnement : mobilité active, alimentation durable, contact avec la nature",
+      "Éducation à la santé environnementale et à la santé au travail"
     ]
   },
   {
@@ -1319,148 +1013,43 @@
     "themes": [
       {
         "code": "01",
-        "name": "Procédures administratives, réglementaires et financières",
-        "source_line": 629,
-        "notions": [
-          "Procédures administratives, réglementaires et financières"
-        ]
+        "name": "Organisation administrative et ressources",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "02",
-        "name": "Organisation et gestion d’une structure individuelle ou collective",
-        "source_line": 630,
-        "notions": [
-          "Organisation et gestion d’une structure individuelle ou collective"
-        ]
+        "name": "Logistique environnement et activite professionnelle",
+        "notions": [],
+        "source_line": null
       },
       {
         "code": "03",
-        "name": "Budgets, facturation et gestion des ressources",
-        "source_line": 631,
-        "notions": [
-          "Budgets, facturation et gestion des ressources"
-        ]
-      },
-      {
-        "code": "04",
-        "name": "Gestion des rendez-vous et des plannings",
-        "source_line": 632,
-        "notions": [
-          "Gestion des rendez-vous et des plannings"
-        ]
-      },
-      {
-        "code": "05",
-        "name": "Organisation de l’espace professionnel et du plateau technique",
-        "source_line": 633,
-        "notions": [
-          "Organisation de l’espace professionnel et du plateau technique"
-        ]
-      },
-      {
-        "code": "06",
-        "name": "Écoconception et développement durable",
-        "source_line": 634,
-        "notions": [
-          "Écoconception et développement durable"
-        ]
-      },
-      {
-        "code": "07",
-        "name": "Approvisionnement et gestion des stocks",
-        "source_line": 635,
-        "notions": [
-          "Approvisionnement et gestion des stocks"
-        ]
-      },
-      {
-        "code": "08",
-        "name": "Entretien et maintenance des équipements",
-        "source_line": 636,
-        "notions": [
-          "Entretien et maintenance des équipements"
-        ]
-      },
-      {
-        "code": "09",
-        "name": "Gestion des déchets",
-        "source_line": 637,
-        "notions": [
-          "Gestion des déchets"
-        ]
-      },
-      {
-        "code": "10",
-        "name": "Organisation de sa propre activité et limites de son champ d’intervention",
-        "source_line": 638,
-        "notions": [
-          "Organisation de sa propre activité et limites de son champ d’intervention"
-        ]
-      },
-      {
-        "code": "11",
-        "name": "Travail en équipe",
-        "source_line": 639,
-        "notions": [
-          "Travail en équipe"
-        ]
-      },
-      {
-        "code": "12",
-        "name": "Coordination de la continuité des soins",
-        "source_line": 640,
-        "notions": [
-          "Coordination de la continuité des soins"
-        ]
-      },
-      {
-        "code": "13",
-        "name": "Transmission et archivage des données",
-        "source_line": 641,
-        "notions": [
-          "Transmission et archivage des données"
-        ]
-      },
-      {
-        "code": "14",
-        "name": "Partenariats et collaboration avec les acteurs locaux",
-        "source_line": 642,
-        "notions": [
-          "Partenariats et collaboration avec les acteurs locaux"
-        ]
-      },
-      {
-        "code": "15",
-        "name": "Communication avec les partenaires externes",
-        "source_line": 643,
-        "notions": [
-          "Communication avec les partenaires externes"
-        ]
-      },
-      {
-        "code": "16",
-        "name": "Responsabilité sociale : équité, inclusion et soutien aux populations vulnérables",
-        "source_line": 644,
-        "notions": [
-          "Responsabilité sociale : équité, inclusion et soutien aux populations vulnérables"
-        ]
-      },
-      {
-        "code": "17",
-        "name": "Innovation organisationnelle",
-        "source_line": 645,
-        "notions": [
-          "Innovation organisationnelle"
-        ]
-      },
-      {
-        "code": "18",
-        "name": "Numérique et interopérabilité des systèmes",
-        "source_line": 646,
-        "notions": [
-          "Numérique et interopérabilité des systèmes"
-        ]
+        "name": "Coordination partenariats innovation et numerique",
+        "notions": [],
+        "source_line": null
       }
+    ],
+    "theme_source": "drive",
+    "notions": [
+      "Procédures administratives, réglementaires et financières",
+      "Organisation et gestion d’une structure individuelle ou collective",
+      "Budgets, facturation et gestion des ressources",
+      "Gestion des rendez-vous et des plannings",
+      "Organisation de l’espace professionnel et du plateau technique",
+      "Écoconception et développement durable",
+      "Approvisionnement et gestion des stocks",
+      "Entretien et maintenance des équipements",
+      "Gestion des déchets",
+      "Organisation de sa propre activité et limites de son champ d’intervention",
+      "Travail en équipe",
+      "Coordination de la continuité des soins",
+      "Transmission et archivage des données",
+      "Partenariats et collaboration avec les acteurs locaux",
+      "Communication avec les partenaires externes",
+      "Responsabilité sociale : équité, inclusion et soutien aux populations vulnérables",
+      "Innovation organisationnelle",
+      "Numérique et interopérabilité des systèmes"
     ]
   },
   {
@@ -1673,207 +1262,34 @@
   {
     "code": "E2",
     "name": "Langue vivante étrangère",
-    "themes": [
-      {
-        "code": "01",
-        "name": "Vocabulaire médical courant",
-        "source_line": 777,
-        "notions": [
-          "Vocabulaire médical courant"
-        ]
-      },
-      {
-        "code": "02",
-        "name": "Anatomie et physiologie",
-        "source_line": 778,
-        "notions": [
-          "Anatomie et physiologie"
-        ]
-      },
-      {
-        "code": "03",
-        "name": "Pathologies",
-        "source_line": 779,
-        "notions": [
-          "Pathologies"
-        ]
-      },
-      {
-        "code": "04",
-        "name": "Médicaments et traitements",
-        "source_line": 780,
-        "notions": [
-          "Médicaments et traitements"
-        ]
-      },
-      {
-        "code": "05",
-        "name": "Procédures de soins",
-        "source_line": 781,
-        "notions": [
-          "Procédures de soins"
-        ]
-      },
-      {
-        "code": "06",
-        "name": "Dispositifs médicaux et matériels",
-        "source_line": 782,
-        "notions": [
-          "Dispositifs médicaux et matériels"
-        ]
-      },
-      {
-        "code": "07",
-        "name": "Accueil du patient",
-        "source_line": 783,
-        "notions": [
-          "Accueil du patient"
-        ]
-      },
-      {
-        "code": "08",
-        "name": "Questionnement et évaluation des symptômes",
-        "source_line": 784,
-        "notions": [
-          "Questionnement et évaluation des symptômes"
-        ]
-      },
-      {
-        "code": "09",
-        "name": "Explication des traitements",
-        "source_line": 785,
-        "notions": [
-          "Explication des traitements"
-        ]
-      },
-      {
-        "code": "10",
-        "name": "Lecture de documents professionnels et scientifiques",
-        "source_line": 786,
-        "notions": [
-          "Lecture de documents professionnels et scientifiques"
-        ]
-      },
-      {
-        "code": "11",
-        "name": "Communication avec les personnes non francophones",
-        "source_line": 787,
-        "notions": [
-          "Communication avec les personnes non francophones"
-        ]
-      },
-      {
-        "code": "12",
-        "name": "Écoute et réponse aux préoccupations",
-        "source_line": 788,
-        "notions": [
-          "Écoute et réponse aux préoccupations"
-        ]
-      },
-      {
-        "code": "13",
-        "name": "Vocabulaire de l’annonce d’un diagnostic",
-        "source_line": 789,
-        "notions": [
-          "Vocabulaire de l’annonce d’un diagnostic"
-        ]
-      },
-      {
-        "code": "14",
-        "name": "Présentation d’un traitement",
-        "source_line": 790,
-        "notions": [
-          "Présentation d’un traitement"
-        ]
-      },
-      {
-        "code": "15",
-        "name": "Communication en urgence",
-        "source_line": 791,
-        "notions": [
-          "Communication en urgence"
-        ]
-      },
-      {
-        "code": "16",
-        "name": "Instructions et explication des procédures",
-        "source_line": 792,
-        "notions": [
-          "Instructions et explication des procédures"
-        ]
-      },
-      {
-        "code": "17",
-        "name": "Rédaction de synthèses",
-        "source_line": 793,
-        "notions": [
-          "Rédaction de synthèses"
-        ]
-      },
-      {
-        "code": "18",
-        "name": "Transmissions écrites",
-        "source_line": 794,
-        "notions": [
-          "Transmissions écrites"
-        ]
-      },
-      {
-        "code": "19",
-        "name": "Documents administratifs professionnels",
-        "source_line": 795,
-        "notions": [
-          "Documents administratifs professionnels"
-        ]
-      },
-      {
-        "code": "20",
-        "name": "Communication en équipe pluriprofessionnelle",
-        "source_line": 796,
-        "notions": [
-          "Communication en équipe pluriprofessionnelle"
-        ]
-      },
-      {
-        "code": "21",
-        "name": "Coordination et partage d’informations cliniques",
-        "source_line": 797,
-        "notions": [
-          "Coordination et partage d’informations cliniques"
-        ]
-      },
-      {
-        "code": "22",
-        "name": "Échanges professionnels européens et internationaux",
-        "source_line": 798,
-        "notions": [
-          "Échanges professionnels européens et internationaux"
-        ]
-      },
-      {
-        "code": "23",
-        "name": "Dimensions culturelles de la communication",
-        "source_line": 799,
-        "notions": [
-          "Dimensions culturelles de la communication"
-        ]
-      },
-      {
-        "code": "24",
-        "name": "Représentations de la santé, valeurs et habitudes de soins",
-        "source_line": 800,
-        "notions": [
-          "Représentations de la santé, valeurs et habitudes de soins"
-        ]
-      },
-      {
-        "code": "25",
-        "name": "Posture interculturelle",
-        "source_line": 801,
-        "notions": [
-          "Posture interculturelle"
-        ]
-      }
+    "themes": [],
+    "theme_source": "drive",
+    "notions": [
+      "Vocabulaire médical courant",
+      "Anatomie et physiologie",
+      "Pathologies",
+      "Médicaments et traitements",
+      "Procédures de soins",
+      "Dispositifs médicaux et matériels",
+      "Accueil du patient",
+      "Questionnement et évaluation des symptômes",
+      "Explication des traitements",
+      "Lecture de documents professionnels et scientifiques",
+      "Communication avec les personnes non francophones",
+      "Écoute et réponse aux préoccupations",
+      "Vocabulaire de l’annonce d’un diagnostic",
+      "Présentation d’un traitement",
+      "Communication en urgence",
+      "Instructions et explication des procédures",
+      "Rédaction de synthèses",
+      "Transmissions écrites",
+      "Documents administratifs professionnels",
+      "Communication en équipe pluriprofessionnelle",
+      "Coordination et partage d’informations cliniques",
+      "Échanges professionnels européens et internationaux",
+      "Dimensions culturelles de la communication",
+      "Représentations de la santé, valeurs et habitudes de soins",
+      "Posture interculturelle"
     ]
   },
   {

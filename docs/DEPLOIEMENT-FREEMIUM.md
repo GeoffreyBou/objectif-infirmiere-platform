@@ -137,3 +137,14 @@ Déployé et vérifié sur app-dev.objectif-infirmiere.fr. Les 15 UE et les 158 
 Sauvegarde SQL préalable téléchargée et vérifiée (237 687 975 octets, emplacement privé). Contrôle production : chaque intitulé comparé au référentiel, 112 préparations présentes, Drive connecté, trois assets identiques à la livraison. Tests : imports (50), révision (13), référentiel (655), audit de classement (203), variantes Drive (7), parcours navigateur import/publication/restauration, sélecteur C2 (29 thèmes). Syntaxe PHP et JavaScript vérifiée.
 
 Archive SHA-256 : `b5d4654d9eae9b8c8e043e3b12cf5469546b1232dee77dce69cc2818574b7bd9`. [Liste des thèmes](THEMES-PROGRAMME-2026.md) et [export CSV](THEMES-PROGRAMME-2026.csv).
+
+
+## 12 octobre 2026 — rc.19, thèmes Drive pour les UE sans groupes
+
+B4, C2, D2 et E2 utilisent les dossiers Drive, jamais les lignes à puces du programme. Les 11 autres UE gardent les groupes du référentiel. Production vérifiée : 75 thèmes actifs, dont B4=5, C2=6, D2=3, E2=0 (aucun dossier E2 détecté). Les dossiers numérotés immédiats, même vides, sont ajoutés lors des analyses complètes.
+
+Sauvegarde SQL préalable téléchargée et vérifiée : 237 465 473 octets, emplacement privé. Analyse de 626 Word candidats : les 72 Word B4/C2/D2 sont tous classés ; 10 fiches publiées ont été reclassées depuis des thèmes retirés avec conservation de leur ancien classement. Aucun contenu, identifiant ou droit changé. Les 112 préparations sont conservées. Une deuxième lecture confirme une migration idempotente (0 fiche reclassée).
+
+Tests PHP : imports 50 assertions, référentiel 242, migration/dossiers vides 11, audit 120. Navigateur : sélecteur C2 à 6 thèmes et parcours import/publication/restauration réussis (après nettoyage d’une préparation de test résiduelle). Assets de production identiques. Les anciennes prévisualisations ne permettent plus de publier dans un thème retiré. Compte technique temporaire supprimé.
+
+SHA-256 : `e81d8c917c24a2cbfa62a600da637eadbf474f147084d6e557836fb19568a087`.

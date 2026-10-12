@@ -105,6 +105,12 @@ Un panneau fixe indique le traitement en cours et reste visible lorsque la longu
 Les codes de thèmes sont désormais explicites dans `programme-2026.json`, indépendants de leur rang. Le classement reconnaît le couple UE/thème avec espaces, tirets ou underscores, et conserve les choix manuels. Le chargement des anciennes préparations restées vides propose le classement reconnu sans mutation avant publication. B4 comporte les cinq thèmes observés dans le Drive. Les dossiers d’archives sont exclus et les versions annotées reconnues. L’analyse expose un bilan de classement, les dossiers à compléter et les divergences éventuelles avec les classements déjà publiés. Voir `AUDIT-CLASSEMENT-DRIVE-2026-10-09.md` pour tous les chemins observés et les 19 Word à ranger.
 
 
-## Programme de référence (rc.18)
+## Programme et dossiers Drive (rc.19)
 
-Les 15 UE et 158 thèmes sont définis dans [le référentiel](THEMES-PROGRAMME-2026.md), indépendamment de la présence de fiches Drive. Le [CSV](THEMES-PROGRAMME-2026.csv) contient les notions. Le rapprochement utilise le libellé du dossier ou un titre Word correspondant exactement à une notion, après normalisation des accents et de la ponctuation. Aucun rapprochement par seul numéro de dossier. Les anciens thèmes incompatibles restent attachés aux contenus existants, mais ne sont plus proposés à la publication. Les préparations concernées sont rapprochées par titre ou demandent un choix manuel.
+Les groupes explicitement nommés dans le programme définissent les thèmes. Exception : B4, C2, D2 et E2 n’ont pas de groupes dans le programme ; les dossiers numérotés directement sous leur UE dans Drive définissent leurs thèmes. Les lignes à puces restent des notions, pas des thèmes.
+
+Une analyse Drive complète découvre aussi les dossiers vides et ajoute les nouveaux thèmes de ces quatre UE. Les autres UE restent exclusivement rattachées au programme. Les chemins de version et les archives ne créent aucun thème.
+
+Le rapprochement exige le bon libellé, pas uniquement le numéro. Les préparations utilisant une ancienne catégorie sont rapprochées par leur dossier. Pour les fiches publiées, seuls les anciens thèmes retirés peuvent être remplacés automatiquement lorsqu’une identité Drive unique et un dossier précis sont retrouvés. Les identifiants, contenus et droits restent inchangés ; le classement précédent est enregistré. Les choix déjà valides ne sont pas écrasés. Une ancienne prévisualisation ne permet plus de publier dans un thème retiré.
+
+[Liste complète](THEMES-PROGRAMME-2026.md) · [CSV](THEMES-PROGRAMME-2026.csv).

@@ -72,7 +72,7 @@ final class OI_Drive {
     public static function scan(WP_REST_Request $r): array|WP_Error {
         try{
             $qcm=$r['kind']==='qcm';$key='oi_drive_scan_'.get_current_user_id().($qcm?'_qcm':'');$job=get_transient($key);
-            if($r['restart']||!$job)$job=['queue'=>[['id'=>self::ROOT,'path'=>[],'token'=>'']],'files'=>[],'visited'=>[],'count'=>0,'done'=>false];
+            if($r['restart']||!$job)$job=['queue'=>[['id'=>self::ROOT,'path'=>[],'token'=>'']],'files'=>[],'folders'=>[],'visited'=>[],'count'=>0,'done'=>false];
             for($step=0;$step<3&&$job['queue'];$step++){
                 $folder=array_shift($job['queue']);$data=json_decode(wp_remote_retrieve_body(self::request('files',['q'=>"'".$folder['id']."' in parents and trashed = false",'fields'=>'nextPageToken,files(id,name,mimeType,modifiedTime,size,md5Checksum)','pageSize'=>100,'pageToken'=>$folder['token'],'supportsAllDrives'=>'true','includeItemsFromAllDrives'=>'true'])),true);
                 if(!isset($data['files']))throw new RuntimeException('Liste Drive incomplète.');
@@ -80,6 +80,7 @@ final class OI_Drive {
                     if(++$job['count']>3000)throw new RuntimeException('Dossier trop volumineux pour une seule analyse (3 000 éléments).');
                     if($f['mimeType']==='application/vnd.google-apps.folder'){
                         if(count($folder['path'])>=12)throw new RuntimeException('Arborescence trop profonde.');
+                        $job['folders'][]=array_merge($folder['path'],[$f['name']]);
                         if(!isset($job['visited'][$f['id']])){$job['visited'][$f['id']]=true;$job['queue'][]=['id'=>$f['id'],'path'=>array_merge($folder['path'],[$f['name']]),'token'=>''];}
                     }elseif((!$qcm&&preg_match('/\.docx$/i',$f['name'])&&$f['mimeType']==='application/vnd.openxmlformats-officedocument.wordprocessingml.document')||($qcm&&preg_match('/_qcm(?:[_ -]v\d+(?:\.\d+)*)?\.xlsx$/i',$f['name'])&&$f['mimeType']==='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')){
                         $f['path']=$folder['path'];$job['files'][]=$f;
@@ -88,17 +89,18 @@ final class OI_Drive {
                 if(!empty($data['nextPageToken'])){$folder['token']=$data['nextPageToken'];array_unshift($job['queue'],$folder);}
             }
             $job['done']=!$job['queue'];set_transient($key,$job,3600);
+            if($job['done']&&!$qcm)OI_Curriculum::sync_drive_folders($job['folders']??[]);
             $candidates=$job['done']?self::candidates($job['files']):[];$missing=[];
             if($job['done']&&!$qcm){
                 $known=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','numberposts'=>-1,'meta_key'=>'oi_drive_file_id']);
                 foreach($known as $post){$key=get_post_meta($post->ID,'oi_source_key',true);$fileId=get_post_meta($post->ID,'oi_drive_file_id',true);$found=false;foreach($candidates as &$candidate){if($candidate['key']===$key||$candidate['id']===$fileId||(!empty($candidate['code'])&&$candidate['code']===(get_post_meta($post->ID,'oi_source_code',true)?:OI_Imports::code($post->post_title)))){$found=true;$candidate['published']=['id'=>$post->ID,'unit'=>(int)(wp_get_object_terms($post->ID,'oi_enseignement',['fields'=>'ids'])[0]??0),'theme'=>(int)(wp_get_object_terms($post->ID,'oi_theme',['fields'=>'ids'])[0]??0)];if($candidate['id']===$fileId&&!empty($candidate['code'])&&!get_post_meta($post->ID,'oi_source_code',true))update_post_meta($post->ID,'oi_source_code',$candidate['code']);$candidate['state']=$candidate['id']===$fileId&&$candidate['modifiedTime']===get_post_meta($post->ID,'oi_drive_modified',true)?'unchanged':'modified';}}unset($candidate);if(!$found)$missing[]=['id'=>$post->ID,'title'=>$post->post_title];}
             }
-            $classification=['matched'=>0,'unmatched'=>0,'archived'=>0,'published_mismatches'=>0];
+            $classification=['matched'=>0,'unmatched'=>0,'archived'=>0,'published_mismatches'=>0,'migrated'=>0];
             if($job['done']&&!$qcm){
                 foreach($job['files'] as $file)if(self::archived($file['path']))$classification['archived']++;
-                foreach($candidates as &$candidate){[$u,$t]=self::classification($candidate['path']);$candidate['classification']=['unit'=>$u,'theme'=>$t,'label'=>$t?get_term($t,'oi_theme')->name:($u?'Thème à rapprocher du programme à la lecture du titre Word':'Dossier UE absent ou inconnu')];$classification[$u&&$t?'matched':'unmatched']++;if($u&&$t&&!empty($candidate['published'])&&($candidate['published']['unit']!==$u||$candidate['published']['theme']!==$t)){$candidate['classification']['published_mismatch']=true;$classification['published_mismatches']++;}}unset($candidate);
+                foreach($candidates as &$candidate){[$u,$t]=self::classification($candidate['path']);if(empty($candidate['conflict'])&&!empty($candidate['published'])&&OI_Curriculum::migrate_drive_fiche($candidate['published']['id'],$u,$t)){$classification['migrated']++;$candidate['published']['theme']=$t;} $candidate['classification']=['unit'=>$u,'theme'=>$t,'label'=>$t?get_term($t,'oi_theme')->name:($u?'Thème à rapprocher du programme à la lecture du titre Word':'Dossier UE absent ou inconnu')];$classification[$u&&$t?'matched':'unmatched']++;if($u&&$t&&!empty($candidate['published'])&&($candidate['published']['unit']!==$u||$candidate['published']['theme']!==$t)){$candidate['classification']['published_mismatch']=true;$classification['published_mismatches']++;}}unset($candidate);
             }
-            return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing,'classification'=>$classification];
+            return ['done'=>$job['done'],'visited'=>$job['count'],'files'=>$candidates,'missing'=>$missing,'classification'=>$classification,'folders'=>$job['done']?($job['folders']??[]):[]];
         }catch(Throwable $e){return new WP_Error('oi_drive',$e->getMessage(),['status'=>400]);}
     }
     public static function candidates(array $files): array {
