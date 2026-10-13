@@ -180,3 +180,11 @@ Validation locale : 23 assertions ciblées, 50 assertions d’import existantes 
 Archive rc.22 SHA-256 : `6672ba5d535e393bdaf335885f7f44c21a01ba0b01d3a912a76189e960bd87d0`.
 
 Contrôle final PROD : logo d’ouverture exclu sur les fiches Sang, Premières interventions en santé mentale et Accompagnement de l’arrêt du tabac, avec comparaison exacte du reste du HTML, du titre et du classement. Fiche AVC et son illustration pédagogique inchangées. Profil et fiche tabac contrôlés dans Chromium à 1600/390/320 px, assets identiques et pages publiques accessibles. Compte technique temporaire supprimé.
+
+## 13 octobre 2026 — rc.23, page Premium simplifiée
+
+Bloc « Moins de limites. Plus de déclics. » supprimé ; mascotte déplacée à droite des avantages du bon de commande. Suppression des textes et du lien de pied de page, de la signature du bon de commande et du sous-texte « Assistant en préparation ». Les cartes affichent les libellés demandés : « Accès aux 700 Fiches », « Personnalise ton parcours » et « Ton assistant soignant ». Les nombres réels de fiches et de séries publiées restent présents dans les descriptions. Grille rééquilibrée et adaptation mobile ; prix, accès et logique de paiement inchangés.
+
+Contrôle local puis PROD dans Chromium à 1600, 1280, 820, 390 et 320 px : libellés exacts, blocs absents, mascotte chargée à côté de la liste, aucun débordement ni erreur JavaScript, disponibilité et identifiant du bouton de paiement conformes aux données du compte. Assets de production identiques. Sélecteur de l’image actualisé dans le test navigateur existant ; syntaxe JavaScript et diff vérifiés.
+
+Archive rc.22 (`7037f9f`) et manifeste conservés dans `.runtime/premium-rollback-2026-10-13/`, assets précédents comparés avant déploiement. Aucune migration de données. Archive rc.23 SHA-256 : `b301383d2e058827325732252b0d8fd22e8cb346352e91a0296eb4b57937ef9f`.
