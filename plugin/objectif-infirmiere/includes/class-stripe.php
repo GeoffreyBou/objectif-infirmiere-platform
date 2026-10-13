@@ -77,12 +77,14 @@ final class OI_Stripe {
         if ((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 3)', $lock)) !== 1) { return new WP_Error('oi_busy', 'Traitement en cours, réessayez.', ['status' => 503]); }
         try {
             $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments WHERE session_id=%s", $session));
+            if ($existing && $existing->purchase_kind==='ai_topup')return OI_AI_Topups::complete($existing,$event);
             if ($existing) { self::notify($existing); return ['received' => true, 'duplicate' => true]; }
             $verified = self::request('GET', 'checkout/sessions/' . rawurlencode($session));
             if (is_wp_error($verified)) { return $verified; }
             if (($verified['id'] ?? '') !== $session || ($verified['livemode'] ?? true) !== false || ($verified['mode'] ?? '') !== 'payment' || ($verified['payment_status'] ?? '') !== 'paid' || ($verified['status'] ?? '') !== 'complete') {
                 return new WP_Error('oi_unpaid', 'Paiement TEST non confirmé.', ['status' => 400]);
             }
+            if(($verified['metadata']['oi_purchase_kind']??'')==='ai_topup')return new WP_Error('oi_recharge_pending','Recharge en cours de préparation, réessayez.',['status'=>503]);
             $pack = absint($verified['metadata']['oi_pack_id'] ?? 0);
             $price = get_post_meta($pack, 'oi_price', true);
             $lines = self::request('GET', 'checkout/sessions/' . rawurlencode($session) . '/line_items');
@@ -136,9 +138,11 @@ final class OI_Stripe {
         if(!$amount)return ['received'=>true,'ignored'=>true];
         $result=OI_Credits::transaction((int)$payment->user_id,function()use($wpdb,$payment,$amount){
             $current=$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments WHERE id=%d",$payment->id));
+            $amount=max((int)$current->refunded_amount,$amount);
             $full=$amount===(int)$current->amount;
             $ok=$wpdb->update($wpdb->prefix.'oi_payments',['refunded_amount'=>max((int)$current->refunded_amount,$amount),'refund_status'=>$full?'full':'partial','status'=>$full?'refunded':$current->status],['id'=>$current->id]);
             if($ok===false)throw new RuntimeException('Remboursement non enregistré.');
+            if($full && $current->purchase_kind==='ai_topup')OI_Credits::revoke_ai_grant_locked((int)$current->user_id,'recharge:'.$current->session_id,'Remboursement intégral de la recharge IA');
             if($full && (int)$current->pack_id===OI_Offer::pack()&&!OI_Offer::premium((int)$current->user_id))OI_Credits::revoke_premium_locked((int)$current->user_id);
             return ['received'=>true,'refund'=>$full?'full':'partial_review'];
         });

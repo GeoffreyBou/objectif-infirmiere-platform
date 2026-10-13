@@ -188,3 +188,13 @@ Bloc « Moins de limites. Plus de déclics. » supprimé ; mascotte déplacée �
 Contrôle local puis PROD dans Chromium à 1600, 1280, 820, 390 et 320 px : libellés exacts, blocs absents, mascotte chargée à côté de la liste, aucun débordement ni erreur JavaScript, disponibilité et identifiant du bouton de paiement conformes aux données du compte. Assets de production identiques. Sélecteur de l’image actualisé dans le test navigateur existant ; syntaxe JavaScript et diff vérifiés.
 
 Archive rc.22 (`7037f9f`) et manifeste conservés dans `.runtime/premium-rollback-2026-10-13/`, assets précédents comparés avant déploiement. Aucune migration de données. Archive rc.23 SHA-256 : `b301383d2e058827325732252b0d8fd22e8cb346352e91a0296eb4b57937ef9f`.
+
+## 13 octobre 2026 — rc.24, recharge de l’assistant
+
+[Règles, configuration et validation](RECHARGE-ASSISTANT.md). Prix confirmé : 10 € pour 100 crédits IA. La carte Premium devient « Recharger mon assistant » uniquement pour les membres Premium à zéro crédit ; accès équivalent dans l’assistant sur mobile. Aucun compteur ajouté. Après paiement confirmé, 100 crédits sont ajoutés et la proposition disparaît. Aperçu administrateur disponible avec `?view=recharge&preview=1`.
+
+Commandes de recharge distinctes des packs, confirmation Stripe vérifiée côté serveur, attributions transactionnelles idempotentes, réutilisation des Checkout ouverts, remboursements isolés par achat et événements reçus dans le désordre pris en charge. Schéma 6 additif, migration répétée vérifiée. Sauvegarde SQL de 254 245 848 octets compressés téléchargée et vérifiée avant déploiement ; archive complète rc.23 (`742702c`) conservée dans `.runtime/recharge-rollback-2026-10-13/`.
+
+Validation : recharges 34 assertions, Stripe 20, crédits 34, remboursements Premium 13, IA 21 ; six parcours navigateur ordinateur/iPhone. Tests de paiement et d’IA simulés. PROD : version et assets identiques, offre de recharge 10 EUR / 100 crédits, réglage de prix présent, aperçu admin contrôlé à 1600/820/390/320 px sans débordement ni erreur JavaScript.
+
+La vente reste désactivée : assistant non activé et Stripe TEST non configuré sur le site. La tentative de créer le produit Stripe TEST avec la clé existante a reçu `403 more_permissions_required` ; l’écriture des produits/prix doit être autorisée avant raccordement. Aucun paiement réel n’a été effectué. Archive rc.24 SHA-256 : `0d71327c5f10e1bc6c47fe0460d23932e71dc2dcb7a0b73705f58c776c49feb1`.

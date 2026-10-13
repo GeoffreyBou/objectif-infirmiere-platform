@@ -66,7 +66,7 @@
   function shell() {
     if (document.querySelector('#oi-screen')) return;
     view.removeAttribute('aria-live');
-    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium"><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
+    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
   }
   function setTab(tab) {
     tocObserver?.disconnect();
@@ -133,17 +133,37 @@
   function verification() {
     screen().innerHTML=`<section class="oi-verification"><span class="oi-eyebrow">UNE DERNIÈRE ÉTAPE</span><h1>Vérifie ton adresse e-mail.</h1><p>${account.verification_email_sent?'Ouvre le message Objectif Infirmière reçu dans ta boîte mail, puis confirme ton adresse. Pense aussi aux indésirables.':'L’e-mail de confirmation n’a pas pu être envoyé. Tu peux demander un nouvel envoi ci-dessous.'}</p><p>Tu recevras ensuite 5 crédits Fiche, 5 crédits QCM et 5 crédits IA, une seule fois.</p><button type="button" data-resend>Renvoyer le lien de vérification</button><button type="button" data-refresh-account>J’ai confirmé mon adresse</button><p id="oi-status" role="status"></p></section>`;
   }
+  function canRecharge() { return !!account?.premium && Number(account?.balances?.IA)===0; }
+  function syncAccountNavigation() {
+    const button=document.querySelector('.oi-sidebar-unlock');
+    if(button){
+      const recharge=canRecharge();button.hidden=!!account.premium&&!recharge;button.dataset.tab=recharge?'recharge':'premium';
+      button.innerHTML=recharge?`<span class="oi-premium-card-title">${icon('spark')}<strong>Recharger mon assistant</strong></span><span class="oi-premium-card-copy">100 nouvelles questions pour continuer tes révisions</span><span class="oi-premium-card-cta">Découvrir la recharge ${icon('arrow')}</span>`:`<span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span>`;
+      if(button.dataset.tab===currentTab)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+    }
+    document.querySelectorAll('[data-recharge-shortcut]').forEach(button=>button.hidden=!canRecharge());
+  }
   async function loadAccount() {
     account=await api('account');
-    const premiumNav=document.querySelector('.oi-sidebar-unlock');if(premiumNav)premiumNav.hidden=account.premium;
+    syncAccountNavigation();
     if(account.verification_required){verification();return false;}return true;
   }
   async function premium() {
     const sequence=++routeSequence;shell();setTab('premium');if(!await loadAccount()||sequence!==routeSequence)return;
+    if(account.premium)return dashboard();
     const offer=account.offer;
     if(!account.premium)api('events',{event:'premium_view'}).catch(()=>{});
     const price=new Intl.NumberFormat('fr-FR',{style:'currency',currency:offer.currency||'EUR',maximumFractionDigits:0}).format(Number(offer.amount)/100);
     screen().innerHTML=`<section class="oi-premium-page oi-unlock-page"><header class="oi-unlock-hero"><span class="oi-unlock-kicker">${icon(account.premium?'check':'lock')}${account.premium?'Ton espace est débloqué':'Débloque toute la puissance Objectif Infirmière'}</span><h1>${account.premium?'Tout est prêt pour <span>tes révisions.</span>':'Accède à tout <span>en illimité</span> pour tes révisions.'}</h1><p>Des notions plus claires. Des entraînements qui font progresser.<br>Ton espace pour avancer des cours IFSI aux partiels, à ton rythme.</p></header><div class="oi-unlock-layout"><div class="oi-unlock-content"><div class="oi-unlock-features"><article><span class="oi-unlock-feature-icon">${icon('book')}</span><h3>Accès aux 700 Fiches</h3><p>${Number(offer.fiches)} fiches du catalogue, à consulter et revoir autant que tu en as besoin.</p></article><article><span class="oi-unlock-feature-icon">${icon('quiz')}</span><h3>Des QCM à volonté</h3><p>${Number(offer.qcm)} séries, des corrigés expliqués et des entraînements par fiche, thème ou UE.</p></article><article><span class="oi-unlock-feature-icon">${icon('pulse')}</span><h3>Personnalise ton parcours</h3><p>Tes objectifs, ton planning, tes favoris et ta progression restent réunis dans ton espace.</p></article><article><span class="oi-unlock-feature-icon">${icon('spark')}</span><h3>Ton assistant soignant</h3><p>100 crédits IA supplémentaires inclus, utilisables à ton rythme et non renouvelés automatiquement.</p></article></div></div><aside class="oi-unlock-offer" aria-label="Débloquer mon accès"><div class="oi-unlock-offer-top"><span>${icon('shield')}TON ACCÈS COMPLET</span><span class="oi-unlock-pill">${account.premium?'Déjà activé':'Sans abonnement'}</span></div><h2>${account.premium?'Bienvenue de l’autre côté.':'Tout commence ici.'}</h2>${account.premium?'<p class="oi-unlock-active">Tes fiches et QCM sont accessibles sans dépenser de crédits.</p>':`<div class="oi-unlock-price"><strong>${esc(price)}</strong><span>une seule fois</span></div><p class="oi-unlock-payment-note">Un paiement unique pour débloquer les fiches et QCM du catalogue.</p>`}<div class="oi-unlock-benefits"><ul>${['Fiches et QCM en accès illimité','Aucun crédit à dépenser pour les consulter','100 crédits IA supplémentaires','Tes favoris et ta progression conservés'].map(text=>`<li>${icon('check')}<span>${text}</span></li>`).join('')}</ul><img class="oi-unlock-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="500" height="500"></div>${account.premium?'<button type="button" data-tab="fiches">Reprendre mes révisions '+icon('arrow')+'</button>':`<button type="button" data-buy="${Number(offer.pack_id)}" ${!offer.available||!account.verified?'disabled':''}>Débloquer tout le contenu ${icon('arrow')}</button><p class="oi-unlock-checkout-note">${offer.available?icon('lock')+' Paiement via Stripe':'Le paiement n’est pas encore disponible.'}${offer.payment_mode==='test'?'<br>Paiement en mode test.':''}</p>`}</aside></div><p id="oi-status" role="status"></p></section>`;
+  }
+  async function recharge() {
+    const sequence=++routeSequence;shell();setTab('recharge');if(!await loadAccount()||sequence!==routeSequence)return;
+    const preview=OI.admin&&new URLSearchParams(location.search).get('preview')==='1';
+    if(!preview&&!account.premium)return premium();
+    if(!preview&&!canRecharge())return chat(false);
+    const offer=account.recharge,price=new Intl.NumberFormat('fr-FR',{style:'currency',currency:offer.currency,maximumFractionDigits:0}).format(offer.amount/100);
+    const cards=[['spark','100 réponses supplémentaires','Un crédit par réponse réussie, pour éclaircir les notions qui te posent question.'],['book','Tes sources de révision','Des réponses appuyées sur les fiches accessibles dans ton espace.'],['pulse','À ton rythme','Tes crédits restent disponibles jusqu’à leur utilisation, sans renouvellement automatique.'],['shield','Ton Premium reste actif','Tes fiches, tes QCM, tes favoris et ta progression restent accessibles.']];
+    screen().innerHTML=`<section class="oi-premium-page oi-unlock-page oi-recharge-page"><header class="oi-unlock-hero"><span class="oi-unlock-kicker">${icon('spark')}Ton assistant personnel soignant</span><h1>Encore des questions ?<br><span>Continue à progresser.</span></h1><p>Recharge ton assistant et reprends tes révisions là où tu en étais.</p></header><div class="oi-unlock-layout"><div class="oi-unlock-content"><div class="oi-unlock-features">${cards.map(([glyph,title,copy])=>`<article><span class="oi-unlock-feature-icon">${icon(glyph)}</span><h3>${title}</h3><p>${copy}</p></article>`).join('')}</div></div><aside class="oi-unlock-offer" aria-label="Recharger mon assistant"><div class="oi-unlock-offer-top"><span>${icon('spark')}TA RECHARGE IA</span><span class="oi-unlock-pill">Sans abonnement</span></div><h2>100 nouvelles questions.</h2><div class="oi-unlock-price"><strong>${esc(price)}</strong><span>une seule fois</span></div><p class="oi-unlock-payment-note">Un achat ponctuel pour recharger ton assistant.</p><div class="oi-unlock-benefits"><ul>${['100 crédits IA ajoutés après confirmation du paiement','1 crédit par réponse réussie','Crédit restitué en cas d’échec technique','Ton accès Premium reste inchangé'].map(t=>`<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul><img class="oi-unlock-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="500" height="500"></div><button type="button" data-buy-recharge ${preview||!offer.available||!account.verified||!canRecharge()?'disabled':''}>Recharger mon assistant ${icon('arrow')}</button><p class="oi-unlock-checkout-note">${preview?'Aperçu administrateur — achat désactivé.':offer.available?icon('lock')+' Paiement via Stripe':'La recharge sera disponible à l’ouverture de l’assistant.'}${offer.payment_mode==='test'?'<br>Paiement en mode test.':''}</p></aside></div><p id="oi-status" role="status"></p></section>`;
   }
   async function qcmImports(){if(!OI.admin)return;const sequence=++routeSequence;shell();setTab('qcm-imports');const host=document.createElement('div');screen().replaceChildren(host);await window.OIQCMImports.render(host);if(sequence!==routeSequence)host.remove();}
   async function imports(){if(!OI.admin)return;const sequence=++routeSequence;shell();setTab('imports');screen().innerHTML='<p role="status">Chargement de ton atelier…</p>';const host=document.createElement('div');screen().replaceChildren(host);await window.OIImports.render(host);if(sequence!==routeSequence)host.remove();}
@@ -326,7 +346,7 @@
     if(!await loadAccount())return;
     if(openingSequence!==routeSequence)return;
     aiRequestId=null;
-    screen().innerHTML = `<nav class="oi-breadcrumb"><button type="button" data-home>${icon('back')} Mes révisions</button><span>Ton espace pour comprendre</span></nav><section class="oi-chat-page"><div class="oi-chat-orb">${icon('spark')}</div><span class="oi-eyebrow">TON ASSISTANT PERSONNEL SOIGNANT</span><h1>Une question.<br><em>Un nouveau déclic.</em></h1>${!account.ai_available?'<p class="oi-chat-availability">L’assistant est en préparation. Découvre son espace ; les réponses seront disponibles prochainement.</p>':''}${Number(account.balances.IA)===0?`<p class="oi-credit-empty">${account.premium?'Tes crédits IA sont épuisés. Tes fiches et QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 questions supplémentaires.'}</p>`:''}<p class="oi-chat-intro">Reformuler une notion, relier deux idées, préparer une révision.<br>Tu n’as plus à rester bloqué devant ton cours.</p>${goalContext?`<div class="oi-chat-context">${icon('pulse')} Mon objectif : <strong>${esc(goalContext.title)}</strong></div>`:''}${context?`<div class="oi-chat-context">${icon('book')} On parle de : <strong>${esc(context.title)}</strong></div>`:''}<div class="oi-chat-suggestions"><button type="button" data-prompt="Explique-moi simplement le rôle de la surveillance infirmière.">${icon('book')} Comprendre une notion ${icon('arrow')}</button><button type="button" data-prompt="Aide-moi à réviser les points clés de la surveillance des traitements.">${icon('quiz')} Préparer ma révision ${icon('arrow')}</button><button type="button" data-prompt="Comment relier les effets d’un médicament à sa surveillance infirmière ?">${icon('pulse')} Faire le lien avec les soins ${icon('arrow')}</button></div><div id="oi-answer" class="oi-conversation" aria-live="polite"></div><p class="oi-question-balance"><strong data-balance="IA">${Number(account.balances.IA)}</strong> question(s) IA disponible(s) · 1 crédit par réponse réussie</p><form id="oi-chat" class="oi-chat-composer"><label for="oi-question">Qu’est-ce que tu veux éclaircir ?</label><textarea id="oi-question" required maxlength="2000" rows="3" placeholder="Explique-moi cette notion simplement…"></textarea><div><span>Un assistant pour apprendre, à ton rythme.</span><button type="submit" ${!account.ai_available||Number(account.balances.IA)===0?'disabled':''}>Poser ma question ${icon('send')}</button></div></form><p id="oi-status" role="status"></p><p class="oi-ai-privacy">${icon('shield')} Assistant automatisé dédié aux révisions. Aucune donnée de patient. Les réponses sont à vérifier avec tes cours et les protocoles ; elles ne remplacent pas un avis professionnel.</p></section>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb"><button type="button" data-home>${icon('back')} Mes révisions</button><span>Ton espace pour comprendre</span></nav><section class="oi-chat-page"><div class="oi-chat-orb">${icon('spark')}</div><span class="oi-eyebrow">TON ASSISTANT PERSONNEL SOIGNANT</span><h1>Une question.<br><em>Un nouveau déclic.</em></h1>${!account.ai_available?'<p class="oi-chat-availability">L’assistant est en préparation. Découvre son espace ; les réponses seront disponibles prochainement.</p>':''}${Number(account.balances.IA)===0?`<p class="oi-credit-empty">${account.premium?'Tes crédits IA sont épuisés. Tes fiches et QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 questions supplémentaires.'}</p>`:''}<p class="oi-chat-intro">Reformuler une notion, relier deux idées, préparer une révision.<br>Tu n’as plus à rester bloqué devant ton cours.</p>${goalContext?`<div class="oi-chat-context">${icon('pulse')} Mon objectif : <strong>${esc(goalContext.title)}</strong></div>`:''}${context?`<div class="oi-chat-context">${icon('book')} On parle de : <strong>${esc(context.title)}</strong></div>`:''}<div class="oi-chat-suggestions"><button type="button" data-prompt="Explique-moi simplement le rôle de la surveillance infirmière.">${icon('book')} Comprendre une notion ${icon('arrow')}</button><button type="button" data-prompt="Aide-moi à réviser les points clés de la surveillance des traitements.">${icon('quiz')} Préparer ma révision ${icon('arrow')}</button><button type="button" data-prompt="Comment relier les effets d’un médicament à sa surveillance infirmière ?">${icon('pulse')} Faire le lien avec les soins ${icon('arrow')}</button></div><div id="oi-answer" class="oi-conversation" aria-live="polite"></div><p class="oi-question-balance"><strong data-balance="IA">${Number(account.balances.IA)}</strong> question(s) IA disponible(s) · 1 crédit par réponse réussie</p><button type="button" class="oi-recharge-entry" data-recharge-shortcut data-tab="recharge" ${canRecharge()?'':'hidden'}>${icon('spark')}Recharger mon assistant ${icon('arrow')}</button><form id="oi-chat" class="oi-chat-composer"><label for="oi-question">Qu’est-ce que tu veux éclaircir ?</label><textarea id="oi-question" required maxlength="2000" rows="3" placeholder="Explique-moi cette notion simplement…"></textarea><div><span>Un assistant pour apprendre, à ton rythme.</span><button type="submit" ${!account.ai_available||Number(account.balances.IA)===0?'disabled':''}>Poser ma question ${icon('send')}</button></div></form><p id="oi-status" role="status"></p><p class="oi-ai-privacy">${icon('shield')} Assistant automatisé dédié aux révisions. Aucune donnée de patient. Les réponses sont à vérifier avec tes cours et les protocoles ; elles ne remplacent pas un avis professionnel.</p></section>`;
     if(goalContext){document.querySelector('#oi-question').value=goalContext.assistant_prompt;document.querySelector('#oi-question').focus();}
     document.querySelector('#oi-chat').addEventListener('submit', async e=>{
       e.preventDefault();
@@ -339,7 +359,7 @@
       try {
         aiRequestId ||= crypto.randomUUID();
         const answer=await api('ai',{question,fiche_id:context?.id || 0,request_id:aiRequestId});
-        aiRequestId=null;account=await api('account');document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent=Number(account.balances.IA));
+        aiRequestId=null;account=await api('account');syncAccountNavigation();document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent=Number(account.balances.IA));
         if (sequence!==routeSequence) return;
         status();
         const output=document.querySelector('#oi-answer');
@@ -355,7 +375,7 @@
     const b=e.target.closest('button');
     if (!b || !b.closest('.oi-app')) return;
     try {
-      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='progress')await progression();else if(b.dataset.tab==='imports')await imports();else if(b.dataset.tab==='qcm-imports')await qcmImports();else await dashboard(b.dataset.tab);}
+      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='recharge')await recharge();else if(b.dataset.tab==='progress')await progression();else if(b.dataset.tab==='imports')await imports();else if(b.dataset.tab==='qcm-imports')await qcmImports();else await dashboard(b.dataset.tab);}
       if(b.hasAttribute('data-refresh-account'))await dashboard();
       if(b.hasAttribute('data-resend')){b.disabled=true;try{await api('verify/resend',{});status('Un nouveau lien a été envoyé. Vérifie ta boîte mail et les indésirables.');}finally{b.disabled=false;}}
       if(b.dataset.unlock){
@@ -406,6 +426,11 @@
           }
         } finally { b.disabled=false; }
       }
+      if(b.hasAttribute('data-buy-recharge')) {
+        b.disabled=true;
+        try {const checkout=await api('ai-recharge/checkout',{});const url=new URL(checkout.url);if(url.protocol!=='https:'||url.hostname!=='checkout.stripe.com')throw new Error('Adresse de paiement invalide.');window.location.assign(url.href);}
+        finally {b.disabled=false;}
+      }
       if (b.dataset.buy) {
         b.disabled=true;
         try {const checkout=await api('checkout',{pack_id:Number(b.dataset.buy)});const url=new URL(checkout.url);if(url.protocol!=='https:' || url.hostname!=='checkout.stripe.com') throw new Error('Adresse de paiement invalide.');window.location.assign(url.href);}
@@ -415,9 +440,22 @@
   });
   async function paymentReturn() {
     const state=new URLSearchParams(location.search).get('oi_payment');
-    if(!['received','cancelled'].includes(state))return;
+    if(!['received','cancelled','recharged'].includes(state))return;
     const banner=document.createElement('p');banner.className='oi-payment-notice';banner.setAttribute('role','status');view.prepend(banner);
     if(state==='cancelled'){banner.textContent='Paiement interrompu. Ton accès actuel et tes crédits sont conservés.';return;}
+    if(state==='recharged'){
+      const session=new URLSearchParams(location.search).get('session_id')||'';
+      banner.textContent='Nous attendons la confirmation sécurisée de ta recharge.';
+      for(let attempt=0;attempt<10;attempt++){
+        try{
+          const result=await api('ai-recharge/status?session_id='+encodeURIComponent(session));
+          if(result.status==='paid'){await chat(false);banner.textContent='Recharge confirmée : 100 crédits IA ont été ajoutés à ton compte.';return;}
+          if(['refunded','expired'].includes(result.status)){banner.textContent='Cette recharge n’est pas active. Tes autres crédits restent conservés.';return;}
+        }catch{banner.textContent='La recharge ne peut pas encore être confirmée. Actualise ton espace dans quelques instants.';return;}
+        await new Promise(resolve=>setTimeout(resolve,3000));
+      }
+      banner.textContent='La confirmation de la recharge prend un peu de temps. Actualise ton espace avant de tenter un nouvel achat.';return;
+    }
     banner.textContent='Nous attendons la confirmation sécurisée de ton paiement. Ton accès sera activé dès sa réception.';
     for(let attempt=0;attempt<10;attempt++){
       try{
@@ -428,6 +466,6 @@
     }
     banner.textContent='La confirmation du paiement prend un peu de temps. Actualise ton espace dans quelques instants avant de tenter un nouvel achat.';
   }
-  if (view && OI.loggedIn) (new URLSearchParams(location.search).get('view')==='premium'?premium():new URLSearchParams(location.search).get('view')==='imports'&&OI.admin?imports():new URLSearchParams(location.search).get('view')==='qcm-imports'&&OI.admin?qcmImports():new URLSearchParams(location.search).get('view')==='qcm'?dashboard('qcm'):new URLSearchParams(location.search).get('view')==='progress'?progression():dashboard()).then(paymentReturn).catch(error);
+  if (view && OI.loggedIn) (new URLSearchParams(location.search).get('view')==='recharge'?recharge():new URLSearchParams(location.search).get('view')==='ai'?chat(false):new URLSearchParams(location.search).get('view')==='premium'?premium():new URLSearchParams(location.search).get('view')==='imports'&&OI.admin?imports():new URLSearchParams(location.search).get('view')==='qcm-imports'&&OI.admin?qcmImports():new URLSearchParams(location.search).get('view')==='qcm'?dashboard('qcm'):new URLSearchParams(location.search).get('view')==='progress'?progression():dashboard()).then(paymentReturn).catch(error);
   else if(publicCatalog) showCatalog(publicCatalog).catch(error);
 })();

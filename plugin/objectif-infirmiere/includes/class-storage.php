@@ -15,6 +15,9 @@ final class OI_Storage {
             refund_status varchar(20) NOT NULL DEFAULT '',
             user_id bigint unsigned NOT NULL,
             pack_id bigint unsigned NOT NULL,
+            purchase_kind varchar(32) NOT NULL DEFAULT 'pack',
+            stripe_price_id varchar(191) NOT NULL DEFAULT '',
+            credit_quantity int unsigned NOT NULL DEFAULT 0,
             amount bigint unsigned NOT NULL DEFAULT 0,
             currency varchar(10) NOT NULL DEFAULT '',
             status varchar(20) NOT NULL DEFAULT 'paid',
@@ -54,11 +57,14 @@ final class OI_Storage {
             $engine=$wpdb->get_var($wpdb->prepare('SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=%s',$wpdb->prefix.$suffix));
             if(strtolower((string)$engine)!=='innodb')throw new RuntimeException('Migration incomplète ou moteur non transactionnel : '.$suffix);
         }
-        update_option('oi_schema_version', 5);
+        foreach(['purchase_kind','stripe_price_id','credit_quantity'] as $column){
+            if(!$wpdb->get_var($wpdb->prepare("SHOW COLUMNS FROM {$wpdb->prefix}oi_payments LIKE %s",$column)))throw new RuntimeException('Migration des recharges IA incomplète.');
+        }
+        update_option('oi_schema_version', 6);
     }
     public static function paid_packs(int $user): array {
         global $wpdb;
-        return array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT DISTINCT pack_id FROM {$wpdb->prefix}oi_payments WHERE user_id=%d AND status='paid'", $user)));
+        return array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT DISTINCT pack_id FROM {$wpdb->prefix}oi_payments WHERE user_id=%d AND status='paid' AND purchase_kind='pack'", $user)));
     }
     public static function reserve(int $user, int $quota): bool {
         global $wpdb;

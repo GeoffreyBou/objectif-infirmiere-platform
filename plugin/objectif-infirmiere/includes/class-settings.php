@@ -8,6 +8,7 @@ final class OI_Settings {
     }
     public static function register(): void {
         register_setting('oi_settings','oi_premium_pack',['type'=>'integer','sanitize_callback'=>function($v){$id=absint($v);return get_post_type($id)==='oi_pack'&&get_post_status($id)==='publish'?$id:0;}]);
+        register_setting('oi_settings','oi_ai_recharge_price',['type'=>'string','sanitize_callback'=>fn($v)=>is_string($v)&&preg_match('/^price_[A-Za-z0-9]+$/',$v)?$v:'']);
         register_setting('oi_settings','oi_ai_enabled',['type'=>'boolean','sanitize_callback'=>'rest_sanitize_boolean']);
         register_setting('oi_settings','oi_ai_retention_days',['type'=>'integer','sanitize_callback'=>fn($v)=>max(0,min(30,absint($v)))]);
         foreach(['oi_ai_model','oi_vector_store','oi_ai_prompt'] as $key) register_setting('oi_settings',$key,['type'=>'string','sanitize_callback'=>$key==='oi_ai_prompt'?'sanitize_textarea_field':'sanitize_text_field']);
@@ -22,6 +23,7 @@ final class OI_Settings {
         echo '</ul><form method="post" action="options.php">';settings_fields('oi_settings');
         echo '<p><label>Pack Premium à 59 € <select name="oi_premium_pack"><option value="0">À configurer</option>';
         foreach(get_posts(['post_type'=>'oi_pack','post_status'=>'publish','numberposts'=>-1]) as $pack)echo '<option value="'.(int)$pack->ID.'" '.selected(OI_Offer::pack(),$pack->ID,false).'>'.esc_html($pack->post_title).'</option>';echo '</select></label></p><input type="hidden" name="oi_ai_enabled" value="0"><p><label><input type="checkbox" name="oi_ai_enabled" value="1" '.checked((bool)get_option('oi_ai_enabled',false),true,false).'> Activer le conseiller IA après validation réelle de Responses et des sources</label></p><p>Quand cette case n’est pas cochée, le conseiller reste présenté en préparation et aucun crédit IA n’est consommé.</p>';
+        echo '<p><label>Recharge de 100 crédits IA — 10 € : Stripe Price ID TEST<br><input class="regular-text" name="oi_ai_recharge_price" value="'.esc_attr(get_option('oi_ai_recharge_price','')).'" placeholder="price_…"></label></p><p>Recharge ponctuelle réservée aux membres Premium sans crédit IA. La vente reste désactivée tant que le conseiller IA ou le paiement ne sont pas configurés.</p>';
         foreach(['oi_ai_retention_days'=>['Conservation des textes IA en jours (0 = aucune, maximum 30)',0],'oi_ai_model'=>['Modèle OpenAI','gpt-4.1-mini'],'oi_vector_store'=>['Vector Store ID',''],'oi_ai_quota'=>['Limite de sécurité quotidienne IA (UTC), distincte des crédits',20],'oi_ai_input_cost'=>['Prix entrée USD par million de tokens (renseigner tarif actuel)',0],'oi_ai_output_cost'=>['Prix sortie USD par million de tokens (renseigner tarif actuel)',0]] as $name=>[$label,$default]) {
             echo '<p><label>'.esc_html($label).'<br><input class="regular-text" name="'.esc_attr($name).'" value="'.esc_attr(get_option($name,$default)).'"></label></p>';
         }
@@ -33,7 +35,7 @@ final class OI_Settings {
         global $wpdb;$page=max(1,absint($_GET['paged']??1));$offset=($page-1)*50;
         $rows=$wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments ORDER BY id DESC LIMIT 50 OFFSET %d",$offset));
         echo '<div class="wrap"><h1>Paiements Stripe TEST</h1><table class="widefat"><thead><tr><th>Date UTC</th><th>Compte</th><th>Pack</th><th>Montant</th><th>Session</th><th>État / remboursement</th><th>Email accepté</th></tr></thead><tbody>';
-        foreach($rows as $row) echo '<tr><td>'.esc_html($row->created_at).'</td><td>'.(int)$row->user_id.'</td><td>'.esc_html(get_the_title($row->pack_id)).'</td><td>'.esc_html(number_format($row->amount/100,2).' '.strtoupper($row->currency)).'</td><td>'.esc_html($row->session_id).'</td><td>'.esc_html($row->status.' / '.$row->refund_status).'</td><td>'.($row->notified?'Oui':'Non — vérifier SMTP et rejouer le webhook').'</td></tr>';
+        foreach($rows as $row) echo '<tr><td>'.esc_html($row->created_at).'</td><td>'.(int)$row->user_id.'</td><td>'.esc_html($row->purchase_kind==='ai_topup'?'Recharge de 100 crédits IA':get_the_title($row->pack_id)).'</td><td>'.esc_html(number_format($row->amount/100,2).' '.strtoupper($row->currency)).'</td><td>'.esc_html($row->session_id).'</td><td>'.esc_html($row->status.' / '.$row->refund_status).'</td><td>'.($row->purchase_kind==='ai_topup'?'Sans notification email':($row->notified?'Oui':'Non — vérifier SMTP et rejouer le webhook')).'</td></tr>';
         echo '</tbody></table><p>Les emails acceptés par WordPress ne prouvent pas leur livraison. Configurez et testez votre SMTP sur OVH.</p><p><a href="'.esc_url(add_query_arg(['page'=>'oi-payments','paged'=>$page+1],admin_url('admin.php'))).'">Page suivante</a></p></div>';
     }
     public static function ai(): void {

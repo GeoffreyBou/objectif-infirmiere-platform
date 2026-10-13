@@ -157,6 +157,14 @@ final class OI_Credits {
         self::query($wpdb->prepare("UPDATE {$wpdb->prefix}oi_credit_grants SET remaining=0,expires_at=UTC_TIMESTAMP() WHERE id=%d",$grant->id));
         if((int)$grant->remaining>0)self::event($user,'revoke:premium:'.$grant->id,'IA',-(int)$grant->remaining,'Remboursement intégral du Premium','committed',[$grant->id=>(int)$grant->remaining]);
     }
+    /** Internal: caller holds the wallet lock; paid recharge refunds keep other grants intact. */
+    public static function revoke_ai_grant_locked(int $user,string $source,string $reason): void {
+        global $wpdb;
+        $grant=$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_credit_grants WHERE user_id=%d AND kind='IA' AND source_key=%s",$user,$source));
+        if(!$grant)return;
+        self::query($wpdb->prepare("UPDATE {$wpdb->prefix}oi_credit_grants SET remaining=0,expires_at=UTC_TIMESTAMP() WHERE id=%d",$grant->id));
+        if((int)$grant->remaining>0)self::event($user,'revoke:ai:'.$grant->id,'IA',-(int)$grant->remaining,$reason,'committed',[$grant->id=>(int)$grant->remaining]);
+    }
     public static function history(int $user,int $limit=50): array {
         global $wpdb;
         return $wpdb->get_results($wpdb->prepare("SELECT kind,delta,reason,state,allocations,created_at FROM {$wpdb->prefix}oi_credit_operations WHERE user_id=%d ORDER BY id DESC LIMIT %d",$user,min(200,max(1,$limit))),ARRAY_A);
