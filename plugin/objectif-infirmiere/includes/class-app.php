@@ -32,15 +32,17 @@ final class OI_App {
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals'], OI_VERSION, true);
+        $display_name = wp_get_current_user()->display_name;
+        preg_match('/^./us', $display_name ?: 'É', $initial);
         wp_localize_script('oi-app', 'OI', [
             'api' => esc_url_raw(rest_url('oi/v1/')), 'nonce' => wp_create_nonce('wp_rest'),
-            'admin'=>current_user_can('manage_options'), 'loggedIn' => true, 'name' => wp_get_current_user()->display_name,
+            'admin'=>current_user_can('manage_options'), 'loggedIn' => true, 'name' => $display_name,
             'homeUrl'=>self::url('home'), 'memberUrl'=>self::url('member'),
             'brandUrl'=>esc_url_raw(OI_URL . 'assets/brand/'),
             'logoutUrl'=>wp_logout_url(self::url('home')),
             'aiConfigured'=>(bool)(get_option('oi_vector_store') && OI_Stripe::secret('OI_OPENAI_API_KEY')),
         ]);
-        return '<main id="oi-app" class="oi-app"><header class="oi-top"><a href="' . esc_url(self::url('home')) . '" class="oi-brand" aria-label="Objectif Infirmière, accueil"><img class="oi-member-logo" src="' . esc_url(OI_URL . 'assets/brand/logo.png') . '" width="1300" height="436" alt="Objectif Infirmière — La référence de la révision en ligne"></a><a href="' . esc_url(wp_logout_url(self::url('home'))) . '">Déconnexion</a></header><div id="oi-view"><p role="status">Votre espace de révision se prépare…</p></div></main>';
+        return '<main id="oi-app" class="oi-app"><header class="oi-top"><a href="' . esc_url(self::url('home')) . '" class="oi-brand" aria-label="Objectif Infirmière, accueil"><img class="oi-member-logo" src="' . esc_url(OI_URL . 'assets/brand/logo.png') . '" width="1300" height="436" alt="Objectif Infirmière — La référence de la révision en ligne"></a><div class="oi-top-account"><div class="oi-student oi-header-student"><span class="oi-avatar" aria-hidden="true">' . esc_html($initial[0] ?? 'É') . '</span><span><strong title="' . esc_attr($display_name) . '">' . esc_html($display_name) . '</strong><small>Espace personnel</small></span></div><a class="oi-logout" href="' . esc_url(wp_logout_url(self::url('home'))) . '">Déconnexion</a></div></header><div id="oi-view"><p role="status">Votre espace de révision se prépare…</p></div></main>';
     }
     /** Explicit activation creates product pages while preserving existing content. */
     public static function install_pages(): void {

@@ -18,14 +18,16 @@ final class OI_Docx {
             if($self->zip->locateName('word/styles.xml')!==false){$styles=$self->xml('word/styles.xml');foreach($styles->getElementsByTagNameNS(self::W,'style') as $s){$name=$s->getElementsByTagNameNS(self::W,'name')->item(0);$self->styles[$s->getAttributeNS(self::W,'styleId')]=$name?->getAttributeNS(self::W,'val')??'';}}
             if($self->zip->locateName('word/numbering.xml')!==false){$numbering=$self->xml('word/numbering.xml');$formats=[];foreach($numbering->getElementsByTagNameNS(self::W,'abstractNum') as $n){$fmt=$n->getElementsByTagNameNS(self::W,'numFmt')->item(0);$formats[$n->getAttributeNS(self::W,'abstractNumId')]=$fmt?->getAttributeNS(self::W,'val')??'decimal';}foreach($numbering->getElementsByTagNameNS(self::W,'num') as $n){$abstract=$n->getElementsByTagNameNS(self::W,'abstractNumId')->item(0);$self->numbers[$n->getAttributeNS(self::W,'numId')]=$formats[$abstract?->getAttributeNS(self::W,'val')??'']??'decimal';}}
             $body=$xp->query('//w:body')->item(0);if(!$body)throw new RuntimeException('Corps du document introuvable.');
-            $html=$self->blocks($body);
+            $title=$self->title($body);$html=self::without_header_images($self->blocks($body),$title);
+            preg_match_all('/#oi-image-([a-f0-9]{64})/',$html,$references);
+            $self->images=array_intersect_key($self->images,array_fill_keys($references[1],true));
             if(!trim(wp_strip_all_tags($html))&&!$self->images)throw new RuntimeException('Le document ne contient aucun contenu importable.');
             if($xp->query('//w:ins|//w:del')->length)$self->warnings[]='Le document contient des modifications suivies : accepter ou refuser ces modifications dans Word avant publication.';
             if($xp->query('//w:footnoteReference|//w:endnoteReference')->length)$self->warnings[]='Notes de bas de page non importées : les reporter dans le corps du document.';
             if($xp->query('//w:object|//w:pict')->length)$self->warnings[]='Certains objets ou anciens dessins Word ne sont pas pris en charge.';
             if($xml->getElementsByTagNameNS('*','oMath')->length||$xml->getElementsByTagNameNS('*','chart')->length)$self->warnings[]='Équations ou graphiques Word non convertis : les remplacer par des images ou du texte avant publication.';
             if($xp->query('//w:vMerge')->length)$self->warnings[]='Vérifier les cellules fusionnées verticalement des tableaux.';
-            return ['title'=>$self->title($body),'html'=>self::source_links($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
+            return ['title'=>$title,'html'=>self::source_links($html),'images'=>$self->images,'warnings'=>array_values(array_unique($self->warnings))];
         }finally{$self->zip->close();}
     }
     private function title(DOMNode $body): string {
@@ -84,6 +86,39 @@ final class OI_Docx {
             }elseif(!in_array($c->localName,['pPr','rPr','del','instrText'],true))$out.=$this->inline($c);
         }return $out;
     }
+    public static function without_header_images(string $html,string $title=''): string {
+        // Generated Word covers can be ordinary body paragraphs, unlike genuine
+        // Word headers (which are never read). Only remove an image-only prefix
+        // when the following text is demonstrably the document title.
+        $text=static fn(string $value): string=>trim(preg_replace('/[\s\x{00a0}]+/u',' ',html_entity_decode(wp_strip_all_tags($value),ENT_QUOTES|ENT_HTML5,'UTF-8'))??'');
+        $offset=0;$remove=[];$recognized=false;
+        while(preg_match('/\G(\s*)(<(p|h[1-6])\b[^>]*>(.*?)<\/\3\s*>)/is',$html,$p,PREG_OFFSET_CAPTURE,$offset)){
+            $inside=$p[4][0];$plain=$text($inside);$tag=strtolower($p[3][0]);$offset=$p[0][1]+strlen($p[0][0]);
+            if($plain!==''){
+                if(!$remove)return $html;
+                $recognized=$title!==''&&$plain===$text($title);
+                if(!$recognized&&$tag==='p'&&mb_strlen($plain)<=200){
+                    // The existing Word template places its UE line immediately
+                    // after the title. Empty paragraphs are harmless here.
+                    while(preg_match('/\G\s*<p\b[^>]*>(.*?)<\/p\s*>/is',$html,$next,PREG_OFFSET_CAPTURE,$offset)){
+                        $nextText=$text($next[1][0]);$offset=$next[0][1]+strlen($next[0][0]);
+                        if($nextText!==''){$recognized=(bool)preg_match('/^UE\s+[A-E]\.?[1-9]\b/u',$nextText);break;}
+                        if(preg_match('/<img\b/i',$next[1][0]))break;
+                    }
+                }
+                break;
+            }
+            if($tag!=='p')return $html;
+            // Do not cross tables, media, comments or other ambiguous markup.
+            if(preg_match('/<(?!\/?(?:img|br|strong|em|u|sup|sub|span|a)\b)/i',$inside))return $html;
+            if(preg_match('/<img\b/i',$inside))$remove[]=[$p[2][1],strlen($p[2][0])];
+        }
+        if(!$recognized)return $html;
+        // Remove only those paragraphs; no DOM serialization or rewriting of
+        // the remaining course, links, whitespace or illustrations.
+        foreach(array_reverse($remove) as [$start,$length])$html=substr_replace($html,'',$start,$length);
+        return $html;
+    }
     public static function source_links(string $html): string {
         // Word often stores bibliographic URLs as plain text rather than hyperlinks.
         // make_clickable preserves existing anchors and handles trailing punctuation.
@@ -97,6 +132,13 @@ final class OI_Docx {
         return $tags->get_updated_html();
     }
     public static function content(string $html,int $id): string {
+        $title='';
+        if($id){
+            $title=(string)get_post_meta($id,'oi_word_title',true);
+            if($title===''){$source=get_post_meta($id,'oi_source',true);$title=is_array($source)?(string)($source['word_title']??''):'';}
+            if($title==='')$title=(string)get_post_field('post_title',$id);
+        }
+        $html=self::without_header_images($html,$title);
         return preg_replace_callback('/#oi-image-([a-f0-9]{64})/',fn($m)=>esc_url(admin_url('admin-post.php?action=oi_fiche_image&fiche='.$id.'&image='.$m[1])),self::source_links($html));
     }
     public static function image(): void {

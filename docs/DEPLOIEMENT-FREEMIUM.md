@@ -170,3 +170,13 @@ Contrôle navigateur final en PROD : fiche AVC chargée avec illustration neurol
 Archive rc.21 SHA-256 : `9cb0c953f191430710d3810872b9f9858b28136ad0f7ddf326332c7fe6d3b7d2`.
 
 Contrôle final PROD : cinq assets identiques à la livraison, pages publiques et membre accessibles, contenu AVC inchangé, navigation vers le thème réussie, PDF généré, aucun débordement desktop/mobile. Compte technique temporaire supprimé après vérification.
+
+## 13 octobre 2026 — rc.22, profil dans le bandeau et images d’ouverture Word
+
+[Règle et validation](ENTETES-WORD-ET-PROFIL.md) : profil déplacé avant Déconnexion, exclusion prudente des images placées avant un titre Word reconnu. Correction des anciens contenus à l’affichage, sans réimportation ni mutation des textes en base. Les nouvelles conversions ne stockent plus les images exclues qui ne sont pas utilisées dans le corps.
+
+Validation locale : 23 assertions ciblées, 50 assertions d’import existantes et quatre parcours navigateur de lecture réussis. Exemple réel de la fiche sur l’arrêt du tabac vérifié ; le reste de son HTML est conservé exactement. Archive rc.21 sauvegardée et vérifiée avant déploiement.
+
+Archive rc.22 SHA-256 : `6672ba5d535e393bdaf335885f7f44c21a01ba0b01d3a912a76189e960bd87d0`.
+
+Contrôle final PROD : logo d’ouverture exclu sur les fiches Sang, Premières interventions en santé mentale et Accompagnement de l’arrêt du tabac, avec comparaison exacte du reste du HTML, du titre et du classement. Fiche AVC et son illustration pédagogique inchangées. Profil et fiche tabac contrôlés dans Chromium à 1600/390/320 px, assets identiques et pages publiques accessibles. Compte technique temporaire supprimé.

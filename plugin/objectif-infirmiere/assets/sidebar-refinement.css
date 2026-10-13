@@ -161,10 +161,6 @@
   transform: rotate(-9deg);
 }
 
-.oi-sidebar-signature + .oi-student {
-  margin-top: 0;
-}
-
 @media (min-width: 761px) {
   .oi-sidebar {
     min-height: 0;
@@ -175,8 +171,7 @@
     scrollbar-color: #ccdff5 transparent;
   }
 
-  .oi-main-nav,
-  .oi-student {
+  .oi-main-nav {
     flex-shrink: 0;
   }
 }
@@ -216,14 +211,148 @@
     top: 61px;
   }
 
-  .oi-student {
-    padding-top: 16px;
-  }
 }
 
 @media (max-width: 760px) {
   .oi-app .oi-sidebar-unlock,
   .oi-sidebar-signature {
     display: none;
+  }
+}
+
+/* Account identity belongs to the shared header, beside the session action. */
+.oi-top-account {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 22px;
+  min-width: 0;
+}
+
+.oi-app .oi-header-student {
+  display: flex;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  gap: 11px;
+}
+
+.oi-header-student .oi-avatar {
+  text-transform: uppercase;
+}
+
+.oi-app .oi-header-student strong {
+  max-width: 180px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.oi-app .oi-header-student small {
+  line-height: 1.5;
+}
+
+.oi-app .oi-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--oi-line);
+  border-radius: 10px;
+  color: var(--oi-muted);
+  background: #fff;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.oi-app .oi-logout:hover {
+  border-color: #b8d0ee;
+  color: var(--oi-ink);
+  background: #f5f9ff;
+}
+
+.oi-app .oi-logout:focus-visible {
+  outline: 3px solid #527af1;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .oi-app .oi-top {
+    gap: 14px;
+  }
+
+  .oi-top .oi-member-logo {
+    max-width: 100%;
+  }
+
+  .oi-top-account {
+    gap: 13px;
+  }
+
+  .oi-app .oi-header-student {
+    gap: 8px;
+  }
+
+  .oi-app .oi-header-student strong {
+    max-width: 110px;
+    font-size: 12px;
+  }
+
+  .oi-header-student .oi-avatar {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .oi-app .oi-top {
+    padding-inline: 13px;
+    gap: 10px;
+  }
+
+  .oi-top-account {
+    gap: 9px;
+  }
+
+  .oi-app .oi-header-student {
+    gap: 6px;
+  }
+
+  .oi-header-student .oi-avatar {
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
+    font-size: 12px;
+  }
+
+  .oi-app .oi-header-student strong {
+    max-width: 78px;
+    font-size: 11px;
+  }
+
+  .oi-app .oi-header-student small {
+    font-size: 9px;
+  }
+
+  .oi-app .oi-logout {
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .oi-app .oi-header-student strong {
+    max-width: 64px;
+  }
+
+  .oi-app .oi-header-student small {
+    font-size: 8px;
+  }
+
+  .oi-app .oi-logout {
+    padding-inline: 7px;
   }
 }
