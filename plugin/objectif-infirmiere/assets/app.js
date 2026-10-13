@@ -36,6 +36,7 @@
   const folderNames = {unit:'',theme:''};
   let routeSequence = 0;
   let searchSequence = 0;
+  let tocObserver = null;
   const api = async (path, data) => {
     const [route, params=''] = path.split('?');
     const url = new URL(OI.api, window.location.href);
@@ -64,6 +65,8 @@
     view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium"><span class="oi-unlock-lock">${icon('lock')}</span><strong>Débloquer <span>tout le contenu</span></strong>${icon('arrow')}</button><div class="oi-student"><span class="oi-avatar">${esc((OI.name || 'É').slice(0,1).toUpperCase())}</span><span><strong>${esc(OI.name)}</strong><small>Espace personnel</small></span><span class="oi-online-dot" title="Connecté"></span></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
   }
   function setTab(tab) {
+    tocObserver?.disconnect();
+    tocObserver = null;
     currentTab = tab;
     document.querySelectorAll('.oi-sidebar [data-tab]').forEach(button=>{
       if (button.dataset.tab===tab) button.setAttribute('aria-current','page');
@@ -76,12 +79,52 @@
     const pharmacology = /pharmaco|médicament|furosémide|paracétamol|héparine|insuline|morphine/i.test(name+' '+item.title);
     return {name, icon:pharmacology?'pill':/cardio|vital|constante/i.test(name+' '+item.title)?'pulse':/soin|hygiène|sécurité/i.test(name+' '+item.title)?'shield':'book', color:pharmacology?'peach':/soin|hygiène/i.test(name+' '+item.title)?'blue':'mint'};
   }
+  function artFamily(item) {
+    const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/œ/g,'oe');
+    const themes = normalize(item.terms?.theme?.map(term=>term.name).join(' '));
+    const units = normalize(item.terms?.enseignement?.map(term=>term.name).join(' '));
+    // Theme labels survive Word updates and taxonomy IDs differ between environments.
+    // New themes inherit a family; uncategorised subjects retain the general visual.
+    if (/(?:^|\s)c\.?2\b/.test(units+' '+themes)) return 'environment';
+    const family = text => {
+      if (/nerveux|neuro|cerebr|encephal|cognition|cogniti/.test(text)) return 'neuro';
+      if (/cardio|vasculaire|coeur|cardiaque|circulation sanguine|hemodynam/.test(text)) return 'cardio';
+      if (/pharmaco|medicament|transfusion|therapeutique|antibio|furos[eé]mide|paracetamol|heparine|insuline|morphine/.test(text)) return 'pharma';
+      if (/environnement|ecologi|climat|pollution|one health|zoonose/.test(text)) return 'environment';
+      if (/soin|hygiene|securite|clinique|urgence|secours|prevention|sante mentale|relation|communication/.test(text)) return 'care';
+      if (/recherche|methodologie|statistique|epistemologie|donnees probantes/.test(text)) return 'research';
+      return '';
+    };
+    return family(themes) || family(normalize(item.title)) || family(units) || 'research';
+  }
+  function followReaderSections(headings) {
+    const toc = document.querySelector('#oi-toc');
+    if (!toc || !headings.length) return;
+    const links = [...toc.querySelectorAll('a')];
+    const activate = id => links.forEach(link=>{
+      if (link.getAttribute('href')==='#'+id) link.setAttribute('aria-current','location');
+      else link.removeAttribute('aria-current');
+    });
+    activate(headings[0].id);
+    // Native anchors keep their keyboard and browser navigation behaviour.
+    toc.addEventListener('click', event=>{
+      const link = event.target.closest('a');
+      if (link && toc.contains(link)) activate(link.getAttribute('href').slice(1));
+    });
+    if (!('IntersectionObserver' in window)) return;
+    tocObserver = new IntersectionObserver(()=>{
+      if (!toc.isConnected) return;
+      const passed = headings.filter(heading=>heading.getBoundingClientRect().top<=160);
+      activate((passed[passed.length-1] || headings[0]).id);
+    }, {rootMargin:'-110px 0px -45% 0px',threshold:0});
+    headings.forEach(heading=>tocObserver.observe(heading));
+  }
   function card(item, quizMode=false) {
     const topic = subject(item), kind=quizMode?'QCM':'FICHE';
     const accessible=!!item.access?.[kind], available=Number(account?.balances?.[kind]||0);
     const action=accessible?`data-${quizMode?'quiz-fiche':'fiche'}="${Number(item.id)}"`:`data-unlock="${Number(item.id)}" data-kind="${kind}"`;
     const label=accessible?(quizMode?'Commencer le QCM':item.state?.revised?'Révisée':'Ouvrir la fiche'):(available?`Débloquer ${quizMode?'cette série':'cette fiche'} — 1 crédit`:'Plus de crédits — voir le Premium');
-    return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" ${action}><span class="oi-card-top"><span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span><span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}${!accessible?`<br>${available} crédit(s) ${quizMode?'QCM':'Fiche'} restant(s)`:''}</span><span class="oi-card-bottom"><span>${label}</span>${icon(accessible?'arrow':'lock')}</span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
+    return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" data-art="${artFamily(item)}" ${action}><span class="oi-card-top"><span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span><span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}${!accessible?`<br>${available} crédit(s) ${quizMode?'QCM':'Fiche'} restant(s)`:''}</span><span class="oi-card-bottom"><span>${label}</span>${icon(accessible?'arrow':'lock')}</span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
   }
   function verification() {
     screen().innerHTML=`<section class="oi-verification"><span class="oi-eyebrow">UNE DERNIÈRE ÉTAPE</span><h1>Vérifie ton adresse e-mail.</h1><p>${account.verification_email_sent?'Ouvre le message Objectif Infirmière reçu dans ta boîte mail, puis confirme ton adresse. Pense aussi aux indésirables.':'L’e-mail de confirmation n’a pas pu être envoyé. Tu peux demander un nouvel envoi ci-dessous.'}</p><p>Tu recevras ensuite 5 crédits Fiche, 5 crédits QCM et 5 crédits IA, une seule fois.</p><button type="button" data-resend>Renvoyer le lien de vérification</button><button type="button" data-refresh-account>J’ai confirmé mon adresse</button><p id="oi-status" role="status"></p></section>`;
@@ -199,11 +242,22 @@
     activeFiche = data;
     setTab(quizOnly?'qcm':'fiches');
     const topic = subject(data);
-    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><header class="oi-reader-heading"><span class="oi-reader-symbol oi-tone-${topic.color}">${icon(quizOnly?'quiz':topic.icon)}</span><span class="oi-eyebrow">${quizOnly?'QCM · ':''}${esc(topic.name)}</span><h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button></div>`:''}<p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><div class="oi-reader-hero"><div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div><header class="oi-reader-heading"><span class="oi-reader-symbol oi-tone-${topic.color}">${icon(quizOnly?'quiz':topic.icon)}</span><span class="oi-eyebrow">${quizOnly?'QCM · ':''}${esc(topic.name)}</span><h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
     if (!quizOnly) {
       const headings = [...screen().querySelectorAll('.oi-content h2, .oi-content h3')];
       headings.forEach((h,i)=>{h.id=`oi-section-${i}`;});
       document.querySelector('#oi-toc').innerHTML = headings.length ? `<span class="oi-eyebrow">DANS CETTE FICHE</span>${headings.map((h,i)=>`<a href="#${h.id}"><span>${String(i+1).padStart(2,'0')}</span>${esc(h.textContent)}</a>`).join('')}` : '';
+      const content=screen().querySelector('.oi-content');
+      const firstParagraph=content.querySelector(':scope > p');
+      if(firstParagraph?.textContent.trim()===data.title.trim())firstParagraph.classList.add('oi-word-title');
+      content.querySelectorAll(':scope > p').forEach(paragraph=>{
+        if(/^UE\s+[A-E][. ]?\d/i.test(paragraph.textContent.trim()))paragraph.classList.add('oi-word-meta');
+        if(/^Objectifs?\s*:/i.test(paragraph.textContent.trim()))paragraph.classList.add('oi-word-objectives');
+      });
+      content.querySelectorAll(':scope > table').forEach(table=>{
+        if(table.rows.length===1&&table.rows[0].cells.length===1)table.classList.add('oi-word-callout');
+      });
+      followReaderSections(headings);
       if (data.watermark) {document.querySelector('#oi-watermark').textContent = data.watermark;document.querySelector('.oi-content').setAttribute('data-watermark',data.watermark);}
     }
     if (data.quiz?.length) await window.OITraining.start(document.querySelector('#oi-quiz'),{scope:'fiche',id:Number(id),count:20},id=>fiche(id));

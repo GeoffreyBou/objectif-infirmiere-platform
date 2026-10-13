@@ -148,3 +148,16 @@ Sauvegarde SQL préalable téléchargée et vérifiée : 237 465 473 octets, emp
 Tests PHP : imports 50 assertions, référentiel 242, migration/dossiers vides 11, audit 120. Navigateur : sélecteur C2 à 6 thèmes et parcours import/publication/restauration réussis (après nettoyage d’une préparation de test résiduelle). Assets de production identiques. Les anciennes prévisualisations ne permettent plus de publier dans un thème retiré. Compte technique temporaire supprimé.
 
 SHA-256 : `e81d8c917c24a2cbfa62a600da637eadbf474f147084d6e557836fb19568a087`.
+
+
+## 13 octobre 2026 — rc.20, proposition visuelle blanche et bleue
+
+Nouvelle présentation de l’espace membre et des fiches : bandeau bleu dégradé, six illustrations décoratives locales par famille de thèmes, sommaire actif, panneaux de lecture blancs, titres/encadrés Word mis en forme sans changer leur texte. Accueil, connexion et inscription harmonisés. Aucun changement de schéma, de droits ou de contenu pédagogique.
+
+Sauvegarde : archive complète rc.19 (`5bb6ddd`) et manifeste privé `.runtime/design-rollback-2026-10-13/`, cinq assets antérieurs comparés exactement à la production. Sauvegarde SQL préalable téléchargée et décompressée avec succès (254 244 877 octets compressés). Pour annuler uniquement le design, réinstaller rc.19 sans restaurer la base.
+
+Validation : 4 tests publics desktop/iPhone, 2 tests bibliothèque desktop/iPhone, fiche AVC réelle testée localement à 390/820/1280/1600 px sans débordement, comparaison exacte des textes visibles avant/après, sommaire et illustration contrôlés. Huit cas de correspondance de familles, dont des mots ambigus et un thème nouveau, vérifiés. Contrôle PROD : version rc.20, cinq assets identiques, pages publiques/membre accessibles, titre et HTML Word AVC inchangés.
+
+Illustrations : un atlas WebP local de 162 098 octets ; aucune génération ni requête IA à la consultation. [Fonctionnement et retour arrière](DESIGN-BLEU-2026.md). Archive SHA-256 : `51443c8b81479528f04ce1c9c3e91adcc792354e6a96dfa7600af5a08b9e8b99`.
+
+Contrôle navigateur final en PROD : fiche AVC chargée avec illustration neurologie et encadrés Word, sans erreur JavaScript ni débordement desktop/mobile. Chromium de l’environnement de test a nécessité une exception de confiance du certificat ; les vérifications HTTP Python ont conservé la validation TLS. Compte technique temporaire supprimé.
