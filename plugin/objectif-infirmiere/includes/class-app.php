@@ -26,6 +26,8 @@ final class OI_App {
         if (!is_user_logged_in()) { return OI_Auth::render('login'); }
         nocache_headers();
         wp_enqueue_style('oi-app', OI_URL . 'assets/app.css', ['oi-base'], OI_VERSION);
+        wp_enqueue_style('oi-reader-refinement',OI_URL.'assets/reader-refinement.css',['oi-app'],OI_VERSION);
+        wp_enqueue_style('oi-sidebar-refinement',OI_URL.'assets/sidebar-refinement.css',['oi-reader-refinement'],OI_VERSION);
         if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',[],OI_VERSION,true);}
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',[],OI_VERSION,true);

@@ -1,0 +1,229 @@
+/* Member navigation, premium invitation and handwritten brand signature. */
+@font-face {
+  font-family: 'OI Caveat';
+  src: url('fonts/caveat-latin.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+.oi-app .oi-main-nav button {
+  font-weight: 650;
+  color: #4c6283;
+}
+
+.oi-app .oi-main-nav button[aria-current='page'] {
+  font-weight: 800;
+  color: #254ae8;
+  background: linear-gradient(110deg, #e7f2ff, #edf6ff);
+}
+
+.oi-app .oi-main-nav button[aria-current='page']::after {
+  background: #4870f6;
+}
+
+.oi-app .oi-sidebar-unlock {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex: 0 0 auto;
+  gap: 12px;
+  width: 100%;
+  min-height: 0;
+  margin: 25px 0 12px;
+  padding: 19px 16px 16px;
+  border: 1px solid #e6effc;
+  border-radius: 18px;
+  background: linear-gradient(130deg, #f4f9ff, #ecf4ff);
+  color: #335378;
+  box-shadow: inset 0 1px 0 #fff;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.oi-app .oi-sidebar-unlock:hover,
+.oi-app .oi-sidebar-unlock[aria-current='page'] {
+  border-color: #cbdcff;
+  background: linear-gradient(130deg, #eef6ff, #e6efff);
+  box-shadow: 0 8px 22px #244ebb0a, inset 0 1px 0 #fff;
+}
+
+.oi-app .oi-sidebar-unlock:focus-visible {
+  outline: 3px solid #527af1;
+  outline-offset: 3px;
+}
+
+.oi-premium-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.oi-app .oi-premium-card-title strong {
+  color: #2850df;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.oi-app .oi-premium-card-title .oi-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  color: #f4ae20;
+  fill: #ffc443;
+  stroke-width: 1.6;
+  margin: 0;
+}
+
+.oi-premium-card-copy {
+  display: block;
+  color: #496584;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.oi-premium-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 41px;
+  padding: 10px 9px;
+  border: 1px solid #405ae7;
+  border-radius: 9px;
+  background: linear-gradient(105deg, #4a6eee, #304ad8);
+  box-shadow: 0 4px 9px #3b59dc20, inset 0 1px 0 #ffffff30;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.4;
+  transition: box-shadow .18s, background .18s;
+}
+
+.oi-app .oi-premium-card-cta .oi-icon {
+  width: 15px;
+  height: 15px;
+  flex-basis: 15px;
+}
+
+.oi-sidebar-unlock:hover .oi-premium-card-cta {
+  background: linear-gradient(105deg, #3a5de0, #263dcc);
+  box-shadow: 0 5px 12px #3b59dc30;
+}
+
+.oi-sidebar-signature {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 145px;
+  margin: auto -10px 18px;
+  padding: 23px 19px 19px 9px;
+  color: #4384e7;
+  text-align: center;
+}
+
+.oi-sidebar-signature::before {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 170'%3E%3Cpath fill='%23edf5ff' d='M119 155C58 116 5 88 20 45 30 15 76 10 101 41 109 11 150-1 173 20 206 51 174 96 119 155Z'/%3E%3Cpath fill='%23e7f2ff' d='M29 144C4 119-3 90 7 73 20 55 44 66 45 84 60 73 83 82 81 99 78 120 60 137 29 144Z'/%3E%3Cpath fill='%23bedfff' d='m55 25 1-17c1-7 7-7 8-1l-1 15 10-9c5-4 10 0 6 5L66 35l-4 10-14-5-3-11c-1-6 5-9 7-2Z'/%3E%3Ccircle fill='%23eef6ff' cx='188' cy='19' r='5'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.oi-sidebar-signature::after {
+  position: absolute;
+  content: '';
+  width: 30px;
+  height: 33px;
+  right: 5px;
+  top: 70px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 36'%3E%3Cpath fill='none' stroke='%234b80e4' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' d='M16 32C9 24 1 15 3 8 5 1 13 4 16 11 18 3 27 1 29 8 32 16 24 27 16 32Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: rotate(10deg);
+  pointer-events: none;
+}
+
+.oi-app .oi-sidebar-signature p {
+  margin: 5px 0 0;
+  font-family: 'OI Caveat', 'Segoe Print', cursive;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -.2px;
+  transform: rotate(-9deg);
+}
+
+.oi-sidebar-signature + .oi-student {
+  margin-top: 0;
+}
+
+@media (min-width: 761px) {
+  .oi-sidebar {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #ccdff5 transparent;
+  }
+
+  .oi-main-nav,
+  .oi-student {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 761px) and (max-height: 850px) {
+  .oi-sidebar {
+    padding-top: 20px;
+    padding-bottom: 18px;
+  }
+
+  .oi-main-nav {
+    gap: 5px;
+  }
+
+  .oi-app .oi-main-nav button {
+    min-height: 46px;
+    padding-block: 11px;
+  }
+
+  .oi-main-nav button[data-tab='imports'] {
+    margin-top: 13px;
+    padding-top: 18px;
+  }
+
+  .oi-app .oi-sidebar-unlock {
+    margin-top: 21px;
+    gap: 10px;
+    padding-top: 16px;
+  }
+
+  .oi-sidebar-signature {
+    min-height: 127px;
+    margin-block: 5px 9px;
+  }
+
+  .oi-sidebar-signature::after {
+    top: 61px;
+  }
+
+  .oi-student {
+    padding-top: 16px;
+  }
+}
+
+@media (max-width: 760px) {
+  .oi-app .oi-sidebar-unlock,
+  .oi-sidebar-signature {
+    display: none;
+  }
+}

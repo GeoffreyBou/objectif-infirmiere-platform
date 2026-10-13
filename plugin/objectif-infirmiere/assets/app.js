@@ -5,6 +5,10 @@
   const view = document.querySelector('#oi-view');
   const publicCatalog = document.querySelector('#oi-catalog');
   const paths = {
+    crown: '<path d="m3 6 4 4 5-7 5 7 4-4-2 13H5Z"/><path d="M5 16h14"/>',
+    print: '<path d="M7 8V3h10v5M7 17H4V8h16v9h-3"/><path d="M7 14h10v7H7Z"/><path d="M16 11h1"/>',
+    target: '<circle cx="11" cy="13" r="8"/><circle cx="11" cy="13" r="4"/><path d="m11 13 9-10m-1 0h3v3"/>',
+    bolt: '<path d="m13 2-9 12h7l-1 8 10-13h-7z"/>',
     folder: '<path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
     book: '<path d="M4 5.5c3-1 5-.7 8 1 3-1.7 5-2 8-1v14c-3-1-5-.7-8 1-3-1.7-5-2-8-1z"/><path d="M12 6.5v14"/>',
     quiz: '<rect x="5" y="3" width="14" height="18" rx="3"/><path d="m8 8 1 1 2-2m2 1h3M8 13h8m-8 4h5"/>',
@@ -62,7 +66,7 @@
   function shell() {
     if (document.querySelector('#oi-screen')) return;
     view.removeAttribute('aria-live');
-    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium"><span class="oi-unlock-lock">${icon('lock')}</span><strong>Débloquer <span>tout le contenu</span></strong>${icon('arrow')}</button><div class="oi-student"><span class="oi-avatar">${esc((OI.name || 'É').slice(0,1).toUpperCase())}</span><span><strong>${esc(OI.name)}</strong><small>Espace personnel</small></span><span class="oi-online-dot" title="Connecté"></span></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
+    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium"><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div><div class="oi-student"><span class="oi-avatar">${esc((OI.name || 'É').slice(0,1).toUpperCase())}</span><span><strong>${esc(OI.name)}</strong><small>Espace personnel</small></span><span class="oi-online-dot" title="Connecté"></span></div></aside><div id="oi-screen" class="oi-screen"><p id="oi-status" role="status">On prépare ton espace…</p></div></div>`;
   }
   function setTab(tab) {
     tocObserver?.disconnect();
@@ -234,6 +238,26 @@
       status(data.total || !query ? '' : 'Aucun résultat pour cette recherche.');
     } finally { if(sequence===searchSequence){results?.removeAttribute('aria-busy');results?.querySelectorAll('button').forEach(button=>button.disabled=false);} }
   }
+  function readerPath(data) {
+    const units=data.terms?.enseignement||[], themes=data.terms?.theme||[];
+    return `<nav class="oi-reader-path" aria-label="Classement de la fiche">${units.map(t=>`<button type="button" data-reader-unit="${Number(t.id)}" title="${esc(t.name)}">UE ${esc(t.name.match(/^[A-E]\.?[1-9]/i)?.[0]||t.name)}</button>`).join('')}${themes.map(t=>`<button type="button" data-reader-theme="${Number(t.id)}">${esc(t.name)}</button>`).join('')}</nav>`;
+  }
+  function readerHeadingLabels(headings) {
+    let section=0,subsection=0;
+    return headings.map((heading,i)=>{
+      heading.id=`oi-section-${i}`;
+      const raw=heading.textContent.trim(), prefix=raw.match(/^(\d+(?:\.\d+)*)(?:[.)]\s+|\s*[–—-]\s+)/);
+      if(heading.tagName==='H2'){section++;subsection=0;}else subsection++;
+      const number=prefix?prefix[1]:(heading.tagName==='H2'?String(section):`${section||1}.${subsection}`);
+      const title=prefix?raw.slice(prefix[0].length):raw;
+      // Remove only an existing numbering prefix; preserve inline links and emphasis.
+      if(prefix){const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);let remaining=heading.textContent.length-heading.textContent.trimStart().length+prefix[0].length,node;while(remaining&&(node=walker.nextNode())){const removed=Math.min(remaining,node.textContent.length);node.textContent=node.textContent.slice(removed);remaining-=removed;}}
+      const titleNode=document.createElement('span');titleNode.className='oi-section-title-text';titleNode.append(...heading.childNodes);
+      const badge=document.createElement('span');badge.className='oi-section-number';badge.textContent=number.padStart(2,'0');
+      heading.classList.add('oi-numbered-heading');heading.append(badge,titleNode);
+      return {id:heading.id,title,number:badge.textContent,sub:heading.tagName==='H3'};
+    });
+  }
   async function fiche(id, quizOnly=false) {
     const sequence = ++routeSequence;
     status('Ouverture de la fiche…');
@@ -242,20 +266,24 @@
     activeFiche = data;
     setTab(quizOnly?'qcm':'fiches');
     const topic = subject(data);
-    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><div class="oi-reader-hero"><div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div><header class="oi-reader-heading"><span class="oi-reader-symbol oi-tone-${topic.color}">${icon(quizOnly?'quiz':topic.icon)}</span><span class="oi-eyebrow">${quizOnly?'QCM · ':''}${esc(topic.name)}</span><h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><div class="oi-reader-hero"><div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div><header class="oi-reader-heading">${readerPath(data)}<h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button><button type="button" data-print-fiche>${icon('print')}Imprimer</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
     if (!quizOnly) {
       const headings = [...screen().querySelectorAll('.oi-content h2, .oi-content h3')];
-      headings.forEach((h,i)=>{h.id=`oi-section-${i}`;});
-      document.querySelector('#oi-toc').innerHTML = headings.length ? `<span class="oi-eyebrow">DANS CETTE FICHE</span>${headings.map((h,i)=>`<a href="#${h.id}"><span>${String(i+1).padStart(2,'0')}</span>${esc(h.textContent)}</a>`).join('')}` : '';
+      const labels=readerHeadingLabels(headings);
+      document.querySelector('#oi-toc').innerHTML = labels.length ? `<span class="oi-eyebrow">Dans cette fiche</span>${labels.map(h=>`<a href="#${h.id}" ${h.sub?'class="oi-toc-subsection"':''}><span>${esc(h.number)}</span><span class="oi-toc-title">${esc(h.title)}</span></a>`).join('')}` : '';
       const content=screen().querySelector('.oi-content');
       const firstParagraph=content.querySelector(':scope > p');
       if(firstParagraph?.textContent.trim()===data.title.trim())firstParagraph.classList.add('oi-word-title');
       content.querySelectorAll(':scope > p').forEach(paragraph=>{
         if(/^UE\s+[A-E][. ]?\d/i.test(paragraph.textContent.trim()))paragraph.classList.add('oi-word-meta');
-        if(/^Objectifs?\s*:/i.test(paragraph.textContent.trim()))paragraph.classList.add('oi-word-objectives');
+        if(/^Objectifs?\s*:/i.test(paragraph.textContent.trim())){paragraph.classList.add('oi-word-objectives');paragraph.insertAdjacentHTML('afterbegin',icon('target','oi-callout-icon'));}
       });
       content.querySelectorAll(':scope > table').forEach(table=>{
-        if(table.rows.length===1&&table.rows[0].cells.length===1)table.classList.add('oi-word-callout');
+        if(table.rows.length===1&&table.rows[0].cells.length===1){
+          table.classList.add('oi-word-callout');const essential=/essentiel.{0,20}30\s+secondes/i.test(table.textContent);
+          if(essential)table.classList.add('oi-word-essential');
+          table.rows[0].cells[0].insertAdjacentHTML('afterbegin',icon(essential?'bolt':'spark','oi-callout-icon'));
+        }
       });
       followReaderSections(headings);
       if (data.watermark) {document.querySelector('#oi-watermark').textContent = data.watermark;document.querySelector('.oi-content').setAttribute('data-watermark',data.watermark);}
@@ -334,6 +362,12 @@
         if(!await loadAccount())return;
         b.disabled=true;
         try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();status('Tes crédits sont épuisés. Tes contenus déjà débloqués restent accessibles.');}else throw e;}finally{b.disabled=false;}
+      }
+      if(b.hasAttribute('data-print-fiche')&&activeFiche&&document.querySelector('.oi-reader .oi-content'))window.print();
+      if((b.hasAttribute('data-reader-unit')||b.hasAttribute('data-reader-theme'))&&activeFiche){
+        const opened=activeFiche, chosenTheme=(opened.terms?.theme||[]).find(t=>t.id===Number(b.dataset.readerTheme));
+        const chosenUnit=(opened.terms?.enseignement||[]).find(t=>t.id===Number(b.dataset.readerUnit))||(opened.terms?.enseignement||[])[0];
+        if(chosenUnit){unit=Number(chosenUnit.id);theme=chosenTheme?Number(chosenTheme.id):null;folderNames.unit=chosenUnit.name;folderNames.theme=chosenTheme?.name||'';query='';semester='';page=1;await dashboard('fiches',false);document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
       }
       if (b.hasAttribute('data-home')) await dashboard();
       if (b.dataset.return) await dashboard(b.dataset.return,false);

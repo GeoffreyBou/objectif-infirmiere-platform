@@ -161,3 +161,12 @@ Validation : 4 tests publics desktop/iPhone, 2 tests bibliothèque desktop/iPhon
 Illustrations : un atlas WebP local de 162 098 octets ; aucune génération ni requête IA à la consultation. [Fonctionnement et retour arrière](DESIGN-BLEU-2026.md). Archive SHA-256 : `51443c8b81479528f04ce1c9c3e91adcc792354e6a96dfa7600af5a08b9e8b99`.
 
 Contrôle navigateur final en PROD : fiche AVC chargée avec illustration neurologie et encadrés Word, sans erreur JavaScript ni débordement desktop/mobile. Chromium de l’environnement de test a nécessité une exception de confiance du certificat ; les vérifications HTTP Python ont conservé la validation TLS. Compte technique temporaire supprimé.
+
+
+## 13 octobre 2026 — rc.21, menu et lecture affinés, impression
+
+[Changements et validation](LECTURE-NAVIGATION-IMPRESSION.md) : carte Premium et signature, pastilles de navigation UE/thème, encarts Word distincts, sommaire et numérotation, impression native du cours accessible avec filigrane. Aucun changement du HTML en base ni des droits. Quatre tests desktop/iPhone réussis ; vérifications visuelles multi-écrans et PDF A4. Archive rc.20 conservée et comparée avant déploiement ; aucune restauration SQL nécessaire pour un retour visuel.
+
+Archive rc.21 SHA-256 : `9cb0c953f191430710d3810872b9f9858b28136ad0f7ddf326332c7fe6d3b7d2`.
+
+Contrôle final PROD : cinq assets identiques à la livraison, pages publiques et membre accessibles, contenu AVC inchangé, navigation vers le thème réussie, PDF généré, aucun débordement desktop/mobile. Compte technique temporaire supprimé après vérification.
