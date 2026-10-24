@@ -28,7 +28,7 @@ final class OI_App {
         wp_enqueue_style('oi-app', OI_URL . 'assets/app.css', ['oi-base'], OI_VERSION);
         wp_enqueue_style('oi-reader-refinement',OI_URL.'assets/reader-refinement.css',['oi-app'],OI_VERSION);
         wp_enqueue_style('oi-sidebar-refinement',OI_URL.'assets/sidebar-refinement.css',['oi-reader-refinement'],OI_VERSION);
-        if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',[],OI_VERSION,true);}
+        if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-image-imports',OI_URL.'assets/image-imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',['oi-image-imports'],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',[],OI_VERSION,true);}
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals'], OI_VERSION, true);

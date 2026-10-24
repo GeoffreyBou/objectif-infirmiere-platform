@@ -69,6 +69,14 @@ final class OI_Drive {
         $r=wp_remote_get('https://www.googleapis.com/drive/v3/'.$path.'?'.http_build_query($query),['headers'=>['Authorization'=>'Bearer '.self::access()],'timeout'=>30,'redirection'=>0,'limit_response_size'=>13*1024*1024]);
         if(is_wp_error($r)||wp_remote_retrieve_response_code($r)!==200)throw new RuntimeException('Lecture Drive impossible. Vérifie l’accès au dossier et la connexion Google.');return $r;
     }
+    /** Internal read-only helpers; public REST callers must first authorize and bind IDs to a scan. */
+    public static function image_root(): string { return self::ROOT; }
+    public static function image_list(string $folder,string $token=''): array {
+        return json_decode(wp_remote_retrieve_body(self::request('files',['q'=>"'".$folder."' in parents and trashed = false",'fields'=>'nextPageToken,files(id,name,mimeType,modifiedTime,size,md5Checksum)','pageSize'=>100,'pageToken'=>$token,'supportsAllDrives'=>'true','includeItemsFromAllDrives'=>'true'])),true)?:[];
+    }
+    public static function image_bytes(string $id): string {
+        return wp_remote_retrieve_body(self::request('files/'.rawurlencode($id),['alt'=>'media','supportsAllDrives'=>'true']));
+    }
     public static function scan(WP_REST_Request $r): array|WP_Error {
         try{
             $qcm=$r['kind']==='qcm';$key='oi_drive_scan_'.get_current_user_id().($qcm?'_qcm':'');$job=get_transient($key);

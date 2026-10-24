@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.3.0-rc.24
+ * Version: 0.3.0-rc.27
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.3.0-rc.24');
+define('OI_VERSION', '0.3.0-rc.27');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -112,3 +112,9 @@ add_action('rest_api_init', [OI_QCM::class, 'routes']);
 
 require_once OI_DIR . 'includes/class-goals.php';
 add_action('rest_api_init', [OI_Goals::class, 'routes']);
+
+require_once OI_DIR . 'includes/class-fiche-art.php';
+add_action('init', [OI_Fiche_Art::class, 'types']);
+add_action('rest_api_init', [OI_Fiche_Art::class, 'routes']);
+add_action('admin_post_oi_fiche_cover', [OI_Fiche_Art::class, 'image']);
+add_action('admin_post_nopriv_oi_fiche_cover', [OI_Fiche_Art::class, 'image']);

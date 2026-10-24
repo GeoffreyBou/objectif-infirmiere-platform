@@ -17,7 +17,7 @@ final class OI_Imports {
         return hash('sha256',wp_json_encode([$p->post_title,$p->post_content,$p->post_status,wp_get_object_terms($id,'oi_enseignement',['fields'=>'ids']),wp_get_object_terms($id,'oi_theme',['fields'=>'ids']),get_post_meta($id,'oi_docx_images',true)]));
     }
     public static function code(string $name): string {
-        return preg_match('/^([A-E][1-9]-[A-Z][A-Z0-9]*-\d{3,})(?=[_ .-]|$)/i',$name,$m)?strtoupper($m[1]):'';
+        return preg_match('/^((?:[A-E][1-9]-[A-Z][A-Z0-9]*|PAR-IFSI)-\d{3,})(?=[_ .-]|$)/i',$name,$m)?strtoupper($m[1]):'';
     }
     public static function source_target(array $source): int {
         $ids=[];

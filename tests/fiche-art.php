@@ -1,0 +1,38 @@
+<?php
+// Run only against the disposable local WordPress.
+function art_check($ok,$message){if(!$ok)throw new RuntimeException($message);echo "OK $message\n";}
+function art_req($path,$body=null){$r=new WP_REST_Request($body===null?'GET':'POST','/oi/v1/'.$path);if($body!==null)$r->set_body_params($body);return rest_do_request($r);}
+$admin=get_users(['role'=>'administrator','number'=>1])[0]->ID;
+$student=wp_insert_user(['user_login'=>'art_'.wp_generate_password(8,false),'user_pass'=>wp_generate_password(),'role'=>'oi_etudiant']);
+$fiche=0;$asset=0;$duplicate=0;$transport=null;$oldToken=get_transient('oi_drive_access');$oldpack=get_post_meta(OI_Offer::pack(),'oi_fiches',true);
+try {
+ wp_set_current_user(0);art_check(art_req('imports/images/scan',[])->get_status()===401,'Anonymous cannot scan');
+ wp_set_current_user($student);art_check(art_req('imports/images/apply',['ids'=>['x']])->get_status()===403,'Student cannot import');art_check(art_req('imports/images/history')->get_status()===403,'Student cannot read image history');
+ wp_set_current_user($admin);
+ $fiche=wp_insert_post(['post_type'=>'oi_fiche','post_status'=>'publish','post_title'=>'Titre personnalisé','post_content'=>'<h2>Contenu conservé</h2>']);update_post_meta($fiche,'oi_source_code','C2-ART-987654');
+ update_post_meta(OI_Offer::pack(),'oi_fiches',array_merge((array)$oldpack,[$fiche]));
+ $canvas=imagecreatetruecolor(1280,800);imagealphablending($canvas,false);imagesavealpha($canvas,true);imagefill($canvas,0,0,imagecolorallocatealpha($canvas,0,0,0,127));imagefilledellipse($canvas,640,400,400,400,imagecolorallocatealpha($canvas,45,100,220,0));ob_start();imagepng($canvas);$png=ob_get_clean();imagedestroy($canvas);
+ $image=OI_Fiche_Art::optimize($png);$thumb=OI_Fiche_Art::optimize($png,256);art_check($thumb['width']===256&&$thumb['height']===160,'Lightweight thumbnails fit 256');$decoded=base64_decode($image['data']);$info=getimagesizefromstring($decoded);art_check($info['mime']==='image/webp'&&$info[0]===1024&&$info[1]===640,'Optimized WebP fits 1024');$gd=imagecreatefromstring($decoded);art_check(((imagecolorat($gd,0,0)>>24)&127)===127,'Transparency preserved');imagedestroy($gd);
+ $file=['id'=>'mock_image_123','name'=>'C2-ART-987654_Nouveau-titre_v0.2.png','code'=>'C2-ART-987654','path'=>['C2','v0.2'],'modifiedTime'=>'2026-10-24T10:00:00Z','md5Checksum'=>md5($png),'size'=>strlen($png)];
+ $candidate=OI_Fiche_Art::candidates([$file])[0];art_check($candidate['targets'][0]['id']===$fiche&&$candidate['state']==='new','Permanent code matches renamed fiche');
+ $saved=OI_Fiche_Art::store($candidate,$image);$asset=$saved['asset_id'];art_check(!$saved['unchanged']&&get_post_status($asset)==='private','New asset is private');art_check(OI_Fiche_Art::candidates([$file])[0]['state']==='unchanged','Second import skips unchanged source');
+ art_check(OI_Fiche_Art::store($candidate,$image)['unchanged'],'Idempotent storage');art_check(str_contains(OI_Fiche_Art::url($fiche),'oi_fiche_cover'),'Reader URL uses private route');
+ art_check(OI_Fiche_Art::can_view($student,$fiche)&&!OI_Fiche_Art::can_view(0,$fiche),'Catalogue illustration available to signed-in member only');update_user_meta($student,'oi_email_pending',1);art_check(!OI_Fiche_Art::can_view($student,$fiche),'Unverified member denied');delete_user_meta($student,'oi_email_pending');
+ $duplicate=wp_insert_post(['post_type'=>'oi_fiche','post_status'=>'publish','post_title'=>'Même code']);update_post_meta($duplicate,'oi_source_code',$file['code']);art_check(OI_Fiche_Art::candidates([$file])[0]['state']==='blocked','Duplicate published codes blocked');wp_delete_post($duplicate,true);$duplicate=0;
+ $f2=$file;$f2['id']='different';$c=OI_Fiche_Art::candidates([$file,$f2]);art_check(count($c)===1&&$c[0]['identical_copies']===2,'Byte-identical Drive copies deduplicated');$f2['md5Checksum']=str_repeat('0',32);$c=OI_Fiche_Art::candidates([$file,$f2]);art_check(count($c)===2&&$c[0]['state']==='blocked','Different duplicate Drive images blocked');
+ $f2['name']='C2-ART-987654_Autre_v0.10.webp';$f2['path']=['C2'];$c=OI_Fiche_Art::candidates([$file,$f2]);art_check(count($c)===1&&$c[0]['version']==='0.10','Latest numeric version selected');
+ $bad=$file;$bad['name']='Titre personnalisé.png';art_check(OI_Fiche_Art::candidates([$bad])[0]['state']==='blocked','No fuzzy title association');
+ $r=new WP_REST_Request('POST');$r->set_body_params(['id'=>$asset,'hash'=>'stale']);art_check(is_wp_error(OI_Fiche_Art::restore($r)),'Rollback rejects stale hash');$r->set_body_params(['id'=>$asset,'hash'=>$image['hash']]);art_check(OI_Fiche_Art::restore($r)['ok']&&OI_Fiche_Art::url($fiche)==='','First import can be rolled back');$r->set_body_params(['id'=>$asset,'hash'=>'']);art_check(OI_Fiche_Art::restore($r)['ok']&&OI_Fiche_Art::url($fiche)!=='','Rollback can be reversed');
+ $key='oi_art_scan_'.$admin;set_transient($key,['done'=>true,'files'=>[$file]],600);$result=art_req('imports/images/apply',['ids'=>['mock_image_123']])->get_data();art_check($result[0]['ok']&&$result[0]['unchanged'],'Apply skips already imported bytes');art_check(art_req('imports/images/apply',['ids'=>[['bad']]])->get_status()===400,'Malformed IDs rejected');art_check(!art_req('imports/images/apply',['ids'=>['not_in_scan']])->get_data()[0]['ok'],'Arbitrary Drive IDs rejected');delete_transient($key);
+ art_check(get_post_field('post_content',$fiche)==='<h2>Contenu conservé</h2>','Fiche content untouched');
+ $blocked=false;try{OI_Fiche_Art::optimize('<svg><script>bad</script></svg>');}catch(Throwable $e){$blocked=true;}art_check($blocked,'Active/invalid image formats rejected');
+ art_check(OI_Imports::code('PAR-IFSI-009_Parcours_v0.3.png')==='PAR-IFSI-009','Parcours IFSI permanent code recognized');
+ // Exercise resumable Drive traversal, pagination and media download using a sealed dummy token.
+ $seal=new ReflectionMethod(OI_Drive::class,'seal');$seal->setAccessible(true);set_transient('oi_drive_access',$seal->invoke(null,['token'=>'local-art-test']),600);
+ $pages=0;$transport=function($pre,$args,$url)use(&$pages,$file,$png){if(!str_starts_with($url,'https://www.googleapis.com/drive/v3/files'))return $pre;parse_str(wp_parse_url($url,PHP_URL_QUERY),$q);if(($q['alt']??'')==='media')return ['headers'=>[],'response'=>['code'=>200],'body'=>$png];$pages++;$data=$pages<4?['nextPageToken'=>'page'.$pages,'files'=>[]]:['files'=>[$file+['mimeType'=>'image/png']]];return ['headers'=>[],'response'=>['code'=>200],'body'=>wp_json_encode($data)];};add_filter('pre_http_request',$transport,10,3);
+ $scan=art_req('imports/images/scan',['restart'=>true])->get_data();art_check(!$scan['done']&&$pages===3,'Drive scan yields after three pages');$scan=art_req('imports/images/scan',[])->get_data();art_check($scan['done']&&count($scan['files'])===1,'Drive scan resumes and keeps image');
+ $r->set_body_params(['id'=>$asset,'hash'=>$image['hash']]);OI_Fiche_Art::restore($r);
+ $applied=art_req('imports/images/apply',['ids'=>[$file['id']]])->get_data();art_check($applied[0]['ok']&&!$applied[0]['unchanged'],'Downloads, optimizes and activates a selected image');
+ remove_filter('pre_http_request',$transport,10);$transport=null;delete_transient($key);
+ echo "FICHE ART TESTS PASSED\n";
+}finally{if($transport)remove_filter('pre_http_request',$transport,10);delete_transient('oi_drive_access');if($oldToken)set_transient('oi_drive_access',$oldToken,600);delete_transient('oi_art_scan_'.$admin);wp_set_current_user($admin);foreach([$asset,$fiche,$duplicate] as $id)if($id)wp_delete_post($id,true);update_post_meta(OI_Offer::pack(),'oi_fiches',$oldpack);require_once ABSPATH.'wp-admin/includes/user.php';wp_delete_user($student);}

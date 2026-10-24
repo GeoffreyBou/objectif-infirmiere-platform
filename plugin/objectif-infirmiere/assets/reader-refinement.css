@@ -53,3 +53,11 @@
   .oi-content .oi-word-objectives,.oi-content .oi-word-callout td{padding:14px 14px 14px 46px}.oi-content .oi-callout-icon{left:13px;top:13px;width:21px;height:21px}
   .oi-app #oi-watermark{display:block!important;border-top:1px solid #c5d2e0;margin-top:16px;padding-top:10px;color:#586d86;font-size:8pt;letter-spacing:0}
 }
+
+/* Illustrations supplied in Drive: keep their transparency and original aspect ratio. */
+.oi-reader-hero .oi-theme-art.oi-fiche-cover{background:none;object-fit:contain;object-position:center;opacity:1;mix-blend-mode:normal;mask-image:none;-webkit-mask-image:none;width:30%;height:100%;max-height:320px;top:0;right:1%;border-radius:0;pointer-events:none;transform:none}
+@media screen and (min-width:1001px){.oi-reader-hero:has(.oi-fiche-cover) .oi-reader-heading{max-width:68%}}
+.oi-card-top .oi-card-cover{width:88px;height:88px;object-fit:contain;flex-shrink:0}
+.oi-fiche-card:has(.oi-card-cover) .oi-card-top{min-height:88px;align-items:center}
+@media(max-width:760px){.oi-reader-hero:has(.oi-fiche-cover){padding-top:125px}.oi-reader-hero .oi-theme-art.oi-fiche-cover{width:130px;height:120px;top:6px;right:18px}.oi-card-top .oi-card-cover{width:72px;height:72px}}
+@media print{.oi-reader-hero .oi-fiche-cover{display:none!important}.oi-reader-hero:has(.oi-fiche-cover){padding-top:0!important}}
