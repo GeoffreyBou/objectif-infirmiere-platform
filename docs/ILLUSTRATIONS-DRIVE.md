@@ -27,3 +27,11 @@ npx playwright test tests/browser/fiche-art.spec.js --project=desktop --project=
 ```
 
 Les tests vérifient notamment la transparence, le redimensionnement, les correspondances malgré changement de titre, les doublons, les versions, l’idempotence, les restaurations, les autorisations, le parcours Drive paginé et l’import des octets. Les tests navigateur vérifient la lecture des images privées et leur cache conditionnel, le mobile, l’impression et l’import de 101 images avec erreur partielle.
+
+## Livraison du 24 octobre 2026
+
+La version 0.3.0-rc.27 a été installée sur `https://app-dev.objectif-infirmiere.fr/` après sauvegarde de la base et conservation du plugin rc.24. L’analyse de 2 770 éléments Drive a trouvé 806 fichiers image ; deux paires identiques ont été regroupées. Les 804 illustrations distinctes ont été importées sans erreur : 499 fiches publiées sont illustrées, et 305 images sont prêtes pour les fiches à publier. Les [12 fiches B3 sans image correspondante](ILLUSTRATIONS-MANQUANTES-2026-10-24.md) conservent leur visuel générique.
+
+Contrôles effectués sur le domaine réel : 804 images actives et reconnues comme inchangées, 511 fiches toujours publiées, titres/UE/thèmes identiques avant et après import, images privées refusées aux visiteurs anonymes, fiche AVC et vignette présentes, aucun débordement mobile ni rognage du bandeau. La vignette AVC pèse 16 618 octets contre 222 476 pour l’illustration complète. Les contrôles locaux Word/Drive existants (50 assertions), la suite des illustrations et quatre scénarios navigateur ordinateur/mobile passent.
+
+Les sauvegardes et rapports détaillés restent dans `.runtime/images-backup-20261024` et `.runtime/images-final-report.json`, en stockage privé, jamais dans Git. Une restauration du plugin rc.24 masque cette fonctionnalité sans effacer les illustrations enregistrées. Privilégier la restauration d’une illustration depuis l’interface pour corriger une image ; ne pas restaurer toute la base sur un site qui a reçu de nouvelles données.
