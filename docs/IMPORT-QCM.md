@@ -1,4 +1,4 @@
-# QCM par fiche, thème et UE — rc.28
+# QCM par fiche, thème et UE — rc.29
 
 ## Préparer un Excel
 
@@ -49,7 +49,7 @@ Sessions limitées à 24 heures et aux 50 dernières par compte ; nombre cumulé
 
 Tests serveur dédiés : parseur XLSX, erreurs de ligne, formules/XML malveillants, authentification, preview/publication, doublons, changements concurrents, historique/restauration, archivage, conservation des questions absentes, transport Google simulé pour Excel et indépendance du scan Word, droits étudiants, tirages aux trois niveaux, confidentialité des réponses, stabilité après modification, absence de débit, correction idempotente.
 
-Tests navigateur ordinateur/iPhone : import multipart Excel, revue et publication, entraînements aux trois niveaux, correction et retour au cours. Le classeur réel fourni par le propriétaire reste à qualifier ; les tests utilisent des fixtures techniques, jamais publiées en production.
+Tests navigateur ordinateur/iPhone : import multipart Excel, revue et publication, entraînements aux trois niveaux, correction et retour au cours. Les tests automatisés utilisent des fixtures techniques, jamais publiées en production. La qualification des classeurs réels figure dans le compte rendu du 3 novembre ci-dessous.
 
 
 Validation du 8 octobre 2026 : 39 assertions QCM dédiées, 50 imports Word, 13 révision et 18 administration réussies. Deux parcours QCM navigateur (ordinateur/iPhone), quatre parcours existants ordinateur réussis. Modèle relu avec openpyxl indépendamment du parseur serveur.
@@ -61,6 +61,8 @@ Production rc.9 : atelier/API et assets disponibles, téléchargement XLSX véri
 
 Le retour apparent au point de départ provenait de deux causes : l’import cherchait uniquement un code de fiche dans le nom des Excel, alors que les 84 classeurs du Drive sont nommés par thème ; l’interface reconstruisait ensuite la page et supprimait la liste détectée, y compris en cas d’échec.
 
-La version rc.28 accepte les classeurs thématiques en regroupant les lignes par code permanent de question. La limite globale du classeur passe à 2 000 questions, avec la limite existante de 200 par fiche conservée. Le rattachement reste strict : aucune comparaison approximative des titres et aucune publication automatique. Les erreurs de téléchargement et les fichiers absents d’une analyse produisent un résultat explicite. Le suivi indique l’avancement par Excel et conserve les résultats sous les fichiers.
+La version rc.29 accepte les classeurs thématiques en regroupant les lignes par code permanent de question. La limite globale du classeur passe à 2 000 questions, avec la limite existante de 200 par fiche conservée. Le rattachement reste strict : aucune comparaison approximative des titres et aucune publication automatique. Les erreurs de téléchargement et les fichiers absents d’une analyse produisent un résultat explicite. Le suivi indique l’avancement par Excel et conserve les résultats sous les fichiers.
 
 Quatre classeurs réels ont été lus et validés localement : système nerveux (160 questions / 8 fiches), médicaments et examens (440 / 22), vocabulaire clinique (120 / 6), parcours IFSI (200 / 10). Cette vérification de structure ne valide pas pédagogiquement les questions et ne remplace pas la publication préalable des fiches correspondantes.
+
+Validation : 41 assertions QCM et 14 assertions dédiées aux classeurs thématiques réussies ; six parcours navigateur ordinateur/iPhone, puis quatre vérifications ciblées du suivi et des reprises après erreur réussis. En production, l’analyse réelle retrouve 84 Excel ; la préparation de « B1-03_Systeme-nerveux_QCM.xlsx » crée 8 séries distinctes / 160 questions. L’aperçu AVC contient 20 questions et permet la publication. Les huit préparations sont conservées pour revue ; aucune question n’a été publiée. Sauvegarde de la base téléchargée et intégrité gzip vérifiée ; archive de retour rc.27 conservée hors Git.
