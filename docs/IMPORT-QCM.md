@@ -1,4 +1,4 @@
-# QCM par fiche, thème et UE — rc.29
+# QCM par fiche, thème et UE — rc.30
 
 ## Préparer un Excel
 
@@ -66,3 +66,9 @@ La version rc.29 accepte les classeurs thématiques en regroupant les lignes par
 Quatre classeurs réels ont été lus et validés localement : système nerveux (160 questions / 8 fiches), médicaments et examens (440 / 22), vocabulaire clinique (120 / 6), parcours IFSI (200 / 10). Cette vérification de structure ne valide pas pédagogiquement les questions et ne remplace pas la publication préalable des fiches correspondantes.
 
 Validation : 41 assertions QCM et 14 assertions dédiées aux classeurs thématiques réussies ; six parcours navigateur ordinateur/iPhone, puis quatre vérifications ciblées du suivi et des reprises après erreur réussis. En production, l’analyse réelle retrouve 84 Excel ; la préparation de « B1-03_Systeme-nerveux_QCM.xlsx » crée 8 séries distinctes / 160 questions. L’aperçu AVC contient 20 questions et permet la publication. Les huit préparations sont conservées pour revue ; aucune question n’a été publiée. Sauvegarde de la base téléchargée et intégrité gzip vérifiée ; archive de retour rc.27 conservée hors Git.
+
+### Affichage des difficultés — rc.30
+
+Les préfixes `[Facile]`, `[Moyen]`, `[Difficile]` et `[Très difficile]` sont masqués à l’affichage des questions : titres et champs de revue, aperçus avant/après, QCM par fiche et entraînements par thème/UE. Le masquage fonctionne aussi pour les préparations et banques existantes, sans réimport ni migration. Les identifiants, réponses, corrigés et autres notations entre crochets restent inchangés. Les Excel sources restent intacts.
+
+Validation : parcours import, aperçu, publication et entraînement sur ordinateur/iPhone réussis avec des difficultés dans les nouvelles questions et dans une banque déjà enregistrée. Les notations cliniques `[Na+]` et `[K+]` sont conservées.
