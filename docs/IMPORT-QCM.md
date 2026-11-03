@@ -1,4 +1,4 @@
-# QCM par fiche, thème et UE — rc.30
+# QCM par fiche, thème et UE — rc.31
 
 ## Préparer un Excel
 
@@ -25,15 +25,15 @@ Limites : `.xlsx` uniquement, 5 Mo, 2 000 questions et 100 fiches maximum par cl
 
 1. Analyser les QCM du Drive, sélectionner les Excel (ou « Tout sélectionner »), puis préparer. Le site traite un Excel à la fois avec un suivi visible. Le téléversement depuis l’ordinateur accepte jusqu’à dix fichiers par envoi.
 2. Corriger si besoin énoncés, propositions, réponses, explications et statuts dans la préparation.
-3. Prévisualiser les changements avant/après. La prévisualisation porte sur les corrections comprises.
-4. Publier une série ou jusqu’à vingt séries prévisualisées. Chaque résultat est explicite.
+3. Prévisualiser les changements avant/après si souhaité. La prévisualisation comprend les corrections saisies.
+4. Cocher « Tout sélectionner » dans les séries préparées, puis « Tout valider et publier », ou choisir quelques séries et « Valider et publier la sélection ». La sélection globale inclut aussi les séries au-delà des 100 affichées. Le site contrôle et publie une série à la fois avec une progression visible ; il n’est pas nécessaire d’ouvrir chaque aperçu.
 5. Consulter les versions précédentes et restaurer si la banque n’a pas été modifiée entre-temps.
 
 Les dossiers de versions sont comparés numériquement et la dernière version par code est retenue. Les doublons de même version sont bloqués. Le scan Word et le scan Excel ont des états distincts. Une préparation ne publie rien. Les questions inchangées déjà publiées sont ignorées fiche par fiche ; une préparation identique en attente est réutilisée. Modifier une seule fiche dans un classeur thématique ne remet pas les autres en revue. La liste Drive et les sélections en erreur restent affichées après traitement. Les fiches absentes ou non publiées sont signalées par leur code ; les séries valides du même fichier sont conservées. Les erreurs de format globales (code question illisible, formule, XML invalide) bloquent le classeur avant toute préparation.
 
 Les questions sont mises à jour par code. Les questions absentes du nouvel Excel sont **conservées** ; utiliser `archive` pour les retirer des entraînements. Les anciennes questions sans code sont conservées sous un identifiant technique stable. Leurs résultats historiques ne sont pas réécrits.
 
-La prévisualisation est liée au compte administrateur et à l’état de la banque ; une modification concurrente invalide sa publication. Publication/restauration sont sérialisées et sauvegardent la banque précédente. L’éditeur JSON WordPress est désactivé pour les banques importées, pour éviter une troncature ou la perte des identifiants.
+À la publication, une vérification serveur est effectuée automatiquement pour chaque série sélectionnée. Son jeton est lié au compte administrateur et à l’état de la banque ; une modification concurrente entre cette vérification et la publication invalide cette dernière. Publication/restauration sont sérialisées et sauvegardent la banque précédente. L’éditeur JSON WordPress est désactivé pour les banques importées, pour éviter une troncature ou la perte des identifiants.
 
 ## Entraînements
 
@@ -72,3 +72,11 @@ Validation : 41 assertions QCM et 14 assertions dédiées aux classeurs thémati
 Les préfixes `[Facile]`, `[Moyen]`, `[Difficile]` et `[Très difficile]` sont masqués à l’affichage des questions : titres et champs de revue, aperçus avant/après, QCM par fiche et entraînements par thème/UE. Le masquage fonctionne aussi pour les préparations et banques existantes, sans réimport ni migration. Les identifiants, réponses, corrigés et autres notations entre crochets restent inchangés. Les Excel sources restent intacts.
 
 Validation : parcours import, aperçu, publication et entraînement sur ordinateur/iPhone réussis avec des difficultés dans les nouvelles questions et dans une banque déjà enregistrée. Les notations cliniques `[Na+]` et `[K+]` sont conservées.
+
+### Publication en masse — rc.31
+
+La sélection globale repose sur la liste complète des identifiants en attente, distincte des 100 éditeurs chargés. Chaque série passe par les contrôles existants avant publication, sans demande HTTP géante et sans supprimer les limites serveur de sécurité. Les erreurs de contenu sont détaillées par série et n’empêchent pas les autres de passer. Une interruption réseau arrête le traitement ; les séries déjà publiées sortent de la sélection après actualisation. Les échecs et les séries restantes restent sélectionnés pour reprise, et les corrections saisies sont conservées pendant la session de l’atelier.
+
+Validation : 43 assertions serveur réussies, dont la sélection de 105 brouillons au-delà des 100 éditeurs. Parcours navigateur ordinateur/iPhone vérifiés : sélection globale, case intermédiaire, publication sans aperçu manuel, échec de validation isolé, reprise des erreurs, lot de 105 séries interrompu puis repris sans doublon, prévisualisation groupée, publication individuelle et entraînements. Les publications de test sont exclusivement locales.
+
+Production : sélection globale et désélection vérifiées sur les 7 séries actuellement en attente ; bouton « Tout valider et publier » disponible, aucune publication déclenchée pendant cette vérification. Version précédente rc.30 conservée pour retour arrière.

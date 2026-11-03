@@ -52,7 +52,9 @@ final class OI_QCM_Imports {
         return ['ok'=>!$errors,'id'=>count($series)===1?$series[0]['id']:0,'series'=>$series,'prepared'=>$prepared,'unchanged_count'=>$unchanged,'unchanged'=>!$errors&&$prepared===0,'errors'=>$errors,'message'=>implode("\n",array_map(fn($e)=>$e['code'].' : '.$e['message'],$errors))];
     }
     public static function listing(): array {
-        return ['total_stages'=>(int)(wp_count_posts('oi_qcm_import')->draft??0),'drive'=>OI_Drive::status(),'template'=>OI_URL.'assets/modele-qcm.xlsx','stages'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>get_the_title($p->post_parent),'target'=>$p->post_parent,'source'=>get_post_meta($p->ID,'oi_source',true),'rows'=>get_post_meta($p->ID,'oi_qcm_rows',true),'count'=>count((array)get_post_meta($p->ID,'oi_questions',true))],get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>100]))];
+        // Keep the complete selection lightweight; full editors are limited to the first 100 drafts.
+        $pending=array_map(fn($p)=>['id'=>$p->ID,'title'=>$p->post_title],get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>-1,'orderby'=>['date'=>'DESC','ID'=>'DESC'],'update_post_meta_cache'=>false,'update_post_term_cache'=>false]));
+        return ['pending'=>$pending,'total_stages'=>count($pending),'drive'=>OI_Drive::status(),'template'=>OI_URL.'assets/modele-qcm.xlsx','stages'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>get_the_title($p->post_parent),'target'=>$p->post_parent,'source'=>get_post_meta($p->ID,'oi_source',true),'rows'=>get_post_meta($p->ID,'oi_qcm_rows',true),'count'=>count((array)get_post_meta($p->ID,'oi_questions',true))],get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>100,'orderby'=>['date'=>'DESC','ID'=>'DESC']]))];
     }
     public static function upload(WP_REST_Request $r): array|WP_Error {
         $f=$r->get_file_params()['file']??null;if(!$f||$f['error']!==UPLOAD_ERR_OK||!is_uploaded_file($f['tmp_name']))return new WP_Error('oi_xlsx','Choisis un Excel valide.',['status'=>400]);
