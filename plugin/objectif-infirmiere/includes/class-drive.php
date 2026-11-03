@@ -119,12 +119,16 @@ final class OI_Drive {
         $result=[];foreach($groups as $group)foreach($group as $file){$file['conflict']=count($group)>1;$result[]=$file;}return $result;
     }
     public static function prepare_qcm(WP_REST_Request $r): array|WP_Error {
-        $job=get_transient('oi_drive_scan_'.get_current_user_id().'_qcm');$ids=$r['ids'];if(!$job||empty($job['done'])||!is_array($ids)||!$ids||count($ids)>10)return new WP_Error('oi_scan','Analyse le Drive puis sélectionne de 1 à 10 Excel.',['status'=>400]);
-        $result=[];foreach(self::candidates($job['files']) as $file){if(!in_array($file['id'],$ids,true))continue;$tmp='';
-            try{if($file['conflict'])throw new RuntimeException('Deux Excel portent le même code et la même version. Corrige le doublon.');if((int)($file['size']??0)>5*1024*1024)throw new RuntimeException('Excel de plus de 5 Mo.');
+        $key='oi_drive_scan_'.get_current_user_id().'_qcm';$job=get_transient($key);$ids=$r['ids'];if(!$job||empty($job['done'])||!is_array($ids)||!$ids||count($ids)>10)return new WP_Error('oi_scan','Analyse le Drive puis sélectionne de 1 à 10 Excel par lot.',['status'=>400]);
+        foreach($ids as $id)if(!is_string($id)||!preg_match('/^[A-Za-z0-9_-]{1,200}$/',$id))return new WP_Error('oi_ids','Identifiant Excel invalide.',['status'=>400]);
+        set_transient($key,$job,HOUR_IN_SECONDS);$files=array_column(self::candidates($job['files']),null,'id');$result=[];
+        foreach(array_unique($ids) as $driveId){$file=$files[$driveId]??null;$tmp='';
+            try{
+                if(!$file)throw new RuntimeException('Ce fichier ne fait plus partie de l’analyse. Relance l’analyse du Drive.');
+                if($file['conflict'])throw new RuntimeException('Deux Excel portent le même code et la même version. Corrige le doublon.');if((int)($file['size']??0)>5*1024*1024)throw new RuntimeException('Excel de plus de 5 Mo.');
                 $body=wp_remote_retrieve_body(self::request('files/'.rawurlencode($file['id']),['alt'=>'media','supportsAllDrives'=>'true']));require_once ABSPATH.'wp-admin/includes/file.php';$tmp=wp_tempnam('oi-qcm');if(!$tmp||file_put_contents($tmp,$body)!==strlen($body))throw new RuntimeException('Fichier temporaire impossible.');
-                $id=OI_QCM_Imports::stage($tmp,$file['name'],['file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label']]);$result[]=['file'=>$file['name'],'id'=>$id,'ok'=>true,'unchanged'=>$id===0];
-            }catch(Throwable $e){$result[]=['file'=>$file['name'],'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
+                $result[]=['file'=>$file['name'],'drive_id'=>$driveId]+OI_QCM_Imports::stage_workbook($tmp,$file['name'],['file_id'=>$file['id'],'version'=>$file['version'],'modified'=>$file['modifiedTime'],'path'=>$file['path_label']]);
+            }catch(Throwable $e){$result[]=['file'=>$file['name']??$driveId,'drive_id'=>$driveId,'ok'=>false,'message'=>$e->getMessage()];}finally{if($tmp&&is_file($tmp))unlink($tmp);}
         }return $result;
     }
     public static function archived(array $path): bool {

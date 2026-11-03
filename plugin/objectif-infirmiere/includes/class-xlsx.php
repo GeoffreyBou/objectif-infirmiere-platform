@@ -26,7 +26,7 @@ final class OI_Xlsx {
                     if(mb_strlen($value)>10000)throw new RuntimeException('Cellule trop longue.');$values[$col-1]=trim($value);
                 }
                 if(array_filter($values,fn($v)=>$v!==''))$rows[]=['line'=>(int)$row->getAttribute('r'),'values'=>$values];
-                if(count($rows)>201)throw new RuntimeException('200 questions maximum par fiche et par classeur.');
+                if(count($rows)>2001)throw new RuntimeException('2 000 questions maximum par classeur ; 200 par fiche.');
             }
             if(count($rows)<2)throw new RuntimeException('Le classeur ne contient aucune question.');
             $header=array_shift($rows)['values'];$headers=[];foreach($header as $index=>$name){$name=strtolower(remove_accents(trim($name)));$name=preg_replace('/[ -]+/','_',$name);if(in_array($name,$headers,true))throw new RuntimeException('Colonne répétée : '.$name);$headers[$index]=$name;}

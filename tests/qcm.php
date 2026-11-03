@@ -42,6 +42,8 @@ try{
  $scan=qc_req('imports/drive/scan',['kind'=>'qcm','restart'=>true])->get_data();qc_check($scan['done']&&count($scan['files'])===1&&$scan['files'][0]['id']==='excel-fixture','Drive QCM scan selects Excel only');
  $wordScan=qc_req('imports/drive/scan',['restart'=>true])->get_data();qc_check(count($wordScan['files'])===1&&$wordScan['files'][0]['id']==='word-fixture','Word scan remains independent');
  $prepared=qc_req('imports/drive/prepare-qcm',['ids'=>['excel-fixture']])->get_data();qc_check($prepared[0]['ok']&&$prepared[0]['id']===$more,'Drive Excel download and preparation reuse verified');
+ $unknown=qc_req('imports/drive/prepare-qcm',['ids'=>['missing-fixture']])->get_data();qc_check(count($unknown)===1&&!$unknown[0]['ok']&&str_contains($unknown[0]['message'],'Relance'),'Missing selected Drive file returns explicit error');
+ qc_check(qc_req('imports/drive/prepare-qcm',['ids'=>[['bad']]])->get_status()===400,'Malformed Drive selection rejected');
  echo 'QCM Excel et entraînements : '.$GLOBALS['qcm_checks']." assertions réussies\n";
 }finally{
  if($transport)remove_filter('pre_http_request',$transport,10);delete_transient('oi_drive_access');if($oldToken)set_transient('oi_drive_access',$oldToken,60);delete_transient('oi_drive_scan_'.$admin);delete_transient('oi_drive_scan_'.$admin.'_qcm');

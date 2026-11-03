@@ -15,21 +15,48 @@ final class OI_QCM_Imports {
         foreach($questions as $q)$bank[$q['code']]=$q;
         if(count($bank)>200)throw new RuntimeException('La banque de cette fiche dépasserait 200 questions.');return array_values($bank);
     }
-    public static function stage(string $file,string $name,array $source=[]): int {
-        if(!preg_match('/_qcm(?:[_ -]v\d+(?:\.\d+)*)?\.xlsx$/i',$name))throw new RuntimeException('Nom attendu : code-fiche_titre_qcm.xlsx.');
-        $code=OI_Imports::code($name);$target=self::target($code);$rows=OI_Xlsx::read($file);$questions=OI_Xlsx::questions($rows,$code);self::merge($target,$questions);
-        $source+=['name'=>$name,'code'=>$code];$source['hash']=hash_file('sha256',$file);
-        $old=get_post_meta($target,'oi_qcm_source',true);if(is_array($old)&&($old['hash']??'')===$source['hash'])return 0;
-        foreach(get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>-1,'post_parent'=>$target]) as $p)if((get_post_meta($p->ID,'oi_source',true)['hash']??'')===$source['hash'])return $p->ID;
+    private static function stage_rows(array $rows,string $code,string $name,array $source): int {
+        $target=self::target($code);
+        if(count($rows)>200)throw new RuntimeException('200 questions maximum pour la fiche '.$code.'.');
+        $questions=OI_Xlsx::questions($rows,$code);self::merge($target,$questions);
+        $source+=['name'=>$name,'code'=>$code];
+        // Identity is per fiche: changing a different section of a theme workbook must not restage it.
+        $source['hash']=hash('sha256',wp_json_encode($questions));$source['hash_format']='questions-v1';
+        $same=static fn($old)=>is_array($old)&&(($old['hash']??'')===$source['hash']||(!isset($old['hash_format'])&&!empty($source['workbook_hash'])&&($old['hash']??'')===$source['workbook_hash']));
+        if($same(get_post_meta($target,'oi_qcm_source',true)))return 0;
+        foreach(get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>-1,'post_parent'=>$target]) as $p)if($same(get_post_meta($p->ID,'oi_source',true)))return $p->ID;
         $id=wp_insert_post(['post_type'=>'oi_qcm_import','post_status'=>'draft','post_parent'=>$target,'post_title'=>get_the_title($target),'post_author'=>get_current_user_id()],true);if(is_wp_error($id))throw new RuntimeException('Préparation impossible.');
         update_post_meta($id,'oi_source',$source);update_post_meta($id,'oi_qcm_rows',$rows);update_post_meta($id,'oi_questions',$questions);return $id;
     }
+    public static function stage(string $file,string $name,array $source=[]): int {
+        if(!preg_match('/_qcm(?:[_ -]v\d+(?:\.\d+)*)?\.xlsx$/i',$name))throw new RuntimeException('Nom attendu : code-fiche_titre_qcm.xlsx ou UE-theme_QCM.xlsx.');
+        return self::stage_rows(OI_Xlsx::read($file),OI_Imports::code($name),$name,$source+['workbook_hash'=>hash_file('sha256',$file)]);
+    }
+    /** Accept one fiche or a theme workbook; question codes remain the sole association key. */
+    public static function stage_workbook(string $file,string $name,array $source=[]): array {
+        if(!preg_match('/_qcm(?:[_ -]v\d+(?:\.\d+)*)?\.xlsx$/i',$name))throw new RuntimeException('Nom attendu : code-fiche_titre_qcm.xlsx ou UE-theme_QCM.xlsx.');
+        $fileCode=OI_Imports::code($name);$groups=[];
+        foreach(OI_Xlsx::read($file) as $row){
+            $question=strtoupper(trim($row['code_question']??''));
+            if(!preg_match('/^(.+)-Q\d{3,}$/',$question,$match)||OI_Imports::code($match[1])!==$match[1])throw new RuntimeException('Ligne '.$row['line'].' : code_question attendu, par exemple B1-NEU-001-Q001.');
+            $code=$match[1];
+            if($fileCode&&$fileCode!==$code)throw new RuntimeException('Ligne '.$row['line'].' : la question '.$question.' ne correspond pas au code '.$fileCode.' du fichier. Pour plusieurs fiches, utilise un nom de thème comme B1-03_Systeme-nerveux_QCM.xlsx.');
+            $groups[$code][]=$row;
+        }
+        if(count($groups)>100)throw new RuntimeException('100 fiches maximum par classeur.');
+        $source['workbook_hash']=hash_file('sha256',$file);$series=[];$errors=[];$prepared=0;$unchanged=0;
+        foreach($groups as $code=>$rows){
+            try{$id=self::stage_rows($rows,$code,$name,$source);$series[]=['code'=>$code,'id'=>$id,'count'=>count($rows),'unchanged'=>$id===0];if($id)$prepared++;else $unchanged++;}
+            catch(Throwable $e){$errors[]=['code'=>$code,'message'=>$e->getMessage()];}
+        }
+        return ['ok'=>!$errors,'id'=>count($series)===1?$series[0]['id']:0,'series'=>$series,'prepared'=>$prepared,'unchanged_count'=>$unchanged,'unchanged'=>!$errors&&$prepared===0,'errors'=>$errors,'message'=>implode("\n",array_map(fn($e)=>$e['code'].' : '.$e['message'],$errors))];
+    }
     public static function listing(): array {
-        return ['drive'=>OI_Drive::status(),'template'=>OI_URL.'assets/modele-qcm.xlsx','stages'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>get_the_title($p->post_parent),'target'=>$p->post_parent,'source'=>get_post_meta($p->ID,'oi_source',true),'rows'=>get_post_meta($p->ID,'oi_qcm_rows',true),'count'=>count((array)get_post_meta($p->ID,'oi_questions',true))],get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>100]))];
+        return ['total_stages'=>(int)(wp_count_posts('oi_qcm_import')->draft??0),'drive'=>OI_Drive::status(),'template'=>OI_URL.'assets/modele-qcm.xlsx','stages'=>array_map(fn($p)=>['id'=>$p->ID,'title'=>get_the_title($p->post_parent),'target'=>$p->post_parent,'source'=>get_post_meta($p->ID,'oi_source',true),'rows'=>get_post_meta($p->ID,'oi_qcm_rows',true),'count'=>count((array)get_post_meta($p->ID,'oi_questions',true))],get_posts(['post_type'=>'oi_qcm_import','post_status'=>'draft','numberposts'=>100]))];
     }
     public static function upload(WP_REST_Request $r): array|WP_Error {
         $f=$r->get_file_params()['file']??null;if(!$f||$f['error']!==UPLOAD_ERR_OK||!is_uploaded_file($f['tmp_name']))return new WP_Error('oi_xlsx','Choisis un Excel valide.',['status'=>400]);
-        try{return ['id'=>self::stage($f['tmp_name'],sanitize_text_field(wp_basename($f['name'])))];}catch(Throwable $e){return new WP_Error('oi_xlsx',$e->getMessage(),['status'=>400]);}
+        try{return self::stage_workbook($f['tmp_name'],sanitize_text_field(wp_basename($f['name'])));}catch(Throwable $e){return new WP_Error('oi_xlsx',$e->getMessage(),['status'=>400]);}
     }
     public static function preview(WP_REST_Request $r): array|WP_Error {
         try{

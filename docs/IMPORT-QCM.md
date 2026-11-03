@@ -1,10 +1,10 @@
-# QCM par fiche, thème et UE — rc.9
+# QCM par fiche, thème et UE — rc.28
 
 ## Préparer un Excel
 
 Dans l’espace administrateur, **Gérer les QCM → Télécharger le modèle Excel**. Le modèle possède un onglet `Questions` et un mode d’emploi. Remplacer sa ligne d’exemple ; aucun contenu pédagogique n’est généré automatiquement.
 
-Un classeur par fiche, par exemple `B1-UGR-002_Sante-sexuelle_qcm.xlsx`, à côté de son Word dans Drive. Le préfixe `B1-UGR-002` lie la banque à la fiche publiée, quelle que soit la suite du nom. La connexion Google existante suffit ; seul l’accès en lecture est utilisé.
+Un classeur peut regrouper une fiche (`B1-UGR-002_Sante-sexuelle_qcm.xlsx`) ou un thème (`B1-03_Systeme-nerveux_QCM.xlsx`). Le code permanent de chaque question, par exemple `B1-NEU-001-Q001`, détermine sa fiche. Un classeur thématique crée une préparation indépendante par fiche ; il n’est pas nécessaire de découper les Excel. Si le nom du fichier contient le code d’une fiche précise, toutes ses questions doivent correspondre à cette fiche. La connexion Google existante suffit ; seul l’accès en lecture est utilisé.
 
 Colonnes :
 
@@ -17,19 +17,19 @@ Colonnes :
 | explication | Corrigé expliqué, obligatoire |
 | statut | actif (par défaut) ou archive |
 
-`code_fiche` est optionnel et doit correspondre au fichier s’il est fourni. Le classement UE/thème provient de la fiche, sans recopie dans Excel. Une seule bonne réponse donne un QCU ; plusieurs donnent un QCM ; Vrai/Faux s’exprime avec deux propositions.
+`code_fiche` est optionnel et doit correspondre au préfixe du code question s’il est fourni. Le classement UE/thème provient de la fiche, sans recopie dans Excel. Une seule bonne réponse donne un QCU ; plusieurs donnent un QCM ; Vrai/Faux s’exprime avec deux propositions.
 
-Limites : `.xlsx` uniquement, 5 Mo, 200 questions stockées par fiche (archives comprises), huit propositions maximum (1 000 caractères chacune), énoncé de 2 000 caractères et explication de 6 000 caractères maximum. Les colonnes manquantes, codes répétés, bonnes réponses incohérentes et cellules avec formules sont signalés. Aucun calcul, macro ou lien externe de classeur n’est exécuté. Les Google Sheets natifs et `.xls` ne sont pas importés dans cette version.
+Limites : `.xlsx` uniquement, 5 Mo, 2 000 questions et 100 fiches maximum par classeur, 200 questions stockées par fiche (archives comprises), huit propositions maximum (1 000 caractères chacune), énoncé de 2 000 caractères et explication de 6 000 caractères maximum. Les colonnes manquantes, codes répétés, bonnes réponses incohérentes et cellules avec formules sont signalés. Aucun calcul, macro ou lien externe de classeur n’est exécuté. Les Google Sheets natifs et `.xls` ne sont pas importés dans cette version.
 
 ## Revue et publication
 
-1. Analyser les QCM du Drive, sélectionner jusqu’à dix Excel et préparer, ou téléverser directement les fichiers.
+1. Analyser les QCM du Drive, sélectionner les Excel (ou « Tout sélectionner »), puis préparer. Le site traite un Excel à la fois avec un suivi visible. Le téléversement depuis l’ordinateur accepte jusqu’à dix fichiers par envoi.
 2. Corriger si besoin énoncés, propositions, réponses, explications et statuts dans la préparation.
 3. Prévisualiser les changements avant/après. La prévisualisation porte sur les corrections comprises.
 4. Publier une série ou jusqu’à vingt séries prévisualisées. Chaque résultat est explicite.
 5. Consulter les versions précédentes et restaurer si la banque n’a pas été modifiée entre-temps.
 
-Les dossiers de versions sont comparés numériquement et la dernière version par code est retenue. Les doublons de même version sont bloqués. Le scan Word et le scan Excel ont des états distincts. Une préparation ne publie rien. Un Excel identique déjà publié est ignoré ; un fichier déjà préparé est réutilisé.
+Les dossiers de versions sont comparés numériquement et la dernière version par code est retenue. Les doublons de même version sont bloqués. Le scan Word et le scan Excel ont des états distincts. Une préparation ne publie rien. Les questions inchangées déjà publiées sont ignorées fiche par fiche ; une préparation identique en attente est réutilisée. Modifier une seule fiche dans un classeur thématique ne remet pas les autres en revue. La liste Drive et les sélections en erreur restent affichées après traitement. Les fiches absentes ou non publiées sont signalées par leur code ; les séries valides du même fichier sont conservées. Les erreurs de format globales (code question illisible, formule, XML invalide) bloquent le classeur avant toute préparation.
 
 Les questions sont mises à jour par code. Les questions absentes du nouvel Excel sont **conservées** ; utiliser `archive` pour les retirer des entraînements. Les anciennes questions sans code sont conservées sous un identifiant technique stable. Leurs résultats historiques ne sont pas réécrits.
 
@@ -55,3 +55,12 @@ Tests navigateur ordinateur/iPhone : import multipart Excel, revue et publicatio
 Validation du 8 octobre 2026 : 39 assertions QCM dédiées, 50 imports Word, 13 révision et 18 administration réussies. Deux parcours QCM navigateur (ordinateur/iPhone), quatre parcours existants ordinateur réussis. Modèle relu avec openpyxl indépendamment du parseur serveur.
 
 Production rc.9 : atelier/API et assets disponibles, téléchargement XLSX vérifié, connexion Google conservée, sélecteurs de périmètre disponibles. Analyse réelle du Drive : aucun `_qcm.xlsx` présent à cette date ; aucune préparation/publication de questions techniques. Le classeur réel du propriétaire reste à tester lorsqu’il sera déposé.
+
+
+## Correction du 3 novembre 2026
+
+Le retour apparent au point de départ provenait de deux causes : l’import cherchait uniquement un code de fiche dans le nom des Excel, alors que les 84 classeurs du Drive sont nommés par thème ; l’interface reconstruisait ensuite la page et supprimait la liste détectée, y compris en cas d’échec.
+
+La version rc.28 accepte les classeurs thématiques en regroupant les lignes par code permanent de question. La limite globale du classeur passe à 2 000 questions, avec la limite existante de 200 par fiche conservée. Le rattachement reste strict : aucune comparaison approximative des titres et aucune publication automatique. Les erreurs de téléchargement et les fichiers absents d’une analyse produisent un résultat explicite. Le suivi indique l’avancement par Excel et conserve les résultats sous les fichiers.
+
+Quatre classeurs réels ont été lus et validés localement : système nerveux (160 questions / 8 fiches), médicaments et examens (440 / 22), vocabulaire clinique (120 / 6), parcours IFSI (200 / 10). Cette vérification de structure ne valide pas pédagogiquement les questions et ne remplace pas la publication préalable des fiches correspondantes.
