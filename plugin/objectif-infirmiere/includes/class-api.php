@@ -53,13 +53,9 @@ final class OI_API {
         $semesters = get_terms(['taxonomy' => 'oi_semestre', 'object_ids' => $allowed ?: [0], 'hide_empty' => true]);
         return ['items' => array_map([self::class, 'summary'], $query->posts), 'total' => $query->found_posts, 'pages' => $query->max_num_pages, 'account' => OI_Offer::account(), 'progress' => OI_Revision::progress(get_current_user_id()), 'packs' => array_values(array_map(fn($id) => ['id' => $id, 'title' => get_the_title($id)], array_filter(OI_Model::packs(get_current_user_id()), fn($id) => get_post_status($id) === 'publish'))), 'semesters' => is_wp_error($semesters) ? [] : array_map(fn($t) => ['id' => $t->term_id, 'name' => $t->name], $semesters)];
     }
-    /** Goal selection order first, then the next courses in the same theme / UE. Metadata only. */
+    /** Continue within the current theme, independently of personal goals. Metadata only. */
     public static function related(int $id): array {
         $user=get_current_user_id();
-        $goal=OI_Goals::active($user);
-        $done=$goal['done']??[];
-        $remaining=array_values(array_diff($goal['selected']??[],array_map('intval',array_keys($done))));
-        $priority=array_flip($remaining);
         $state=OI_Revision::all($user);
         $posts=get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','post__in'=>OI_Library::catalogue()?:[0],'numberposts'=>-1]);
         // Cache ordering keys once. Word's permanent codes survive title changes.
@@ -71,16 +67,12 @@ final class OI_API {
         $themes=$terms($id,'oi_theme');$units=$terms($id,'oi_enseignement');
         $ranked=[];
         foreach($posts as $index=>$post){
-            $fid=$post->ID;if($fid===$id||isset($done[$fid]))continue;
+            $fid=$post->ID;if($fid===$id)continue;
             $sameUnit=(bool)array_intersect($units,$terms($fid,'oi_enseignement'));
             $sameTheme=(bool)array_intersect($themes,$terms($fid,'oi_theme'))&&(!$units||$sameUnit);
-            if(isset($priority[$fid]))$rank=[0,$priority[$fid],0];
-            elseif($sameTheme||$sameUnit){
-                // A new objective has its own progress; old global revision flags never hide its pending courses.
-                if($goal&&!empty($state[$fid]['revised']))continue;
-                $distance=$position===false?$index:($index-$position+$count)%$count;
-                $rank=[$sameTheme?1:2,!empty($state[$fid]['revised'])?1:0,$distance];
-            }else continue;
+            if($themes?!$sameTheme:!$sameUnit)continue;
+            $distance=$position===false?$index:($index-$position+$count)%$count;
+            $rank=[!empty($state[$fid]['revised'])?1:0,$distance];
             $ranked[]=['post'=>$post,'rank'=>$rank];
         }
         usort($ranked,fn($a,$b)=>$a['rank']<=>$b['rank']);

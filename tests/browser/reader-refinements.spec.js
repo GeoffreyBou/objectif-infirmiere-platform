@@ -137,6 +137,7 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
 
   await expect(page.locator('#oi-watermark')).toBeHidden();
+  await expect(page.locator('.oi-content > .oi-reader-complete')).toHaveCount(1);
   const bottom=page.locator('.oi-reader-complete [data-state="revised"]'),top=page.locator('.oi-actions [data-state="revised"]');
   const before=await bottom.getAttribute('aria-pressed');
   await bottom.click();await expect(top).toHaveAttribute('aria-pressed',String(before!=='true'));await expect(bottom).toHaveAttribute('aria-pressed',String(before!=='true'));
