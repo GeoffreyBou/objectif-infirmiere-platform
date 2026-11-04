@@ -718,3 +718,34 @@
 .oi-ai-banner button .oi-icon{width:20px;height:20px;flex:0 0 20px}
 @media(max-width:1100px){.oi-ai-banner{grid-template-columns:80px minmax(0,1fr);gap:18px;padding:25px}.oi-ai-banner-mascot{width:80px;height:80px}.oi-app .oi-ai-banner button{grid-column:2;justify-self:start}}
 @media(max-width:600px){.oi-ai-banner{grid-template-columns:64px minmax(0,1fr);padding:22px 20px;gap:16px}.oi-ai-banner-mascot{width:64px;height:64px}.oi-ai-banner h2{font-size:19px}.oi-ai-banner p{font-size:15px}.oi-app .oi-ai-banner button{grid-column:1/-1;width:100%;min-height:54px}}
+
+/* Keep the active objective and its progress together, before the checklist. */
+.oi-goal-overview{padding:22px 24px;margin:0 0 22px;border:1px solid #dce9fc;border-radius:16px;background:linear-gradient(115deg,#eff6ff,#f8fbff)}
+.oi-goal-overview-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px}
+.oi-goal-overview .oi-goal-name{margin:0;color:#193b65;line-height:1.35}.oi-goal-overview-heading p{margin:8px 0 0;font-size:13px;color:#567293}
+.oi-goal-overview .oi-goal-percent{flex-direction:column;align-items:flex-end;gap:3px}.oi-goal-overview .oi-goal-percent strong{line-height:1.1}.oi-goal-overview .oi-goal-percent span{font-size:13px;color:#365d8b}
+.oi-goal-overview .oi-goal-progress-note{margin:0;font-size:13px;color:#567293}.oi-goal-overview progress{margin:18px 0 12px}
+@media(max-width:600px){.oi-goal-overview{padding:18px}.oi-goal-overview-heading{grid-template-columns:1fr;gap:16px}.oi-goal-overview .oi-goal-name{font-size:22px}.oi-goal-overview .oi-goal-percent{flex-direction:row;align-items:center}.oi-goal-overview .oi-goal-percent strong{font-size:38px}}
+
+/* Monthly study calendar with a selected-day agenda. */
+.oi-goal-calendar{display:block;margin:24px 0}
+.oi-calendar-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
+.oi-calendar-month{min-width:0}.oi-calendar-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}
+.oi-calendar-toolbar h3{margin:0;font-size:21px;color:#193b65;text-transform:capitalize}
+.oi-app .oi-calendar-toolbar button{display:grid;place-items:center;width:40px;min-height:40px;padding:0;font-size:27px;line-height:1;background:#f1f6ff;color:#315eab;border:1px solid #dce8fb;border-radius:12px}
+.oi-calendar-weekdays,.oi-calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.oi-calendar-weekdays{margin-bottom:9px}.oi-calendar-weekdays span{text-align:center;font-size:11px;font-weight:650;color:#70849e}
+.oi-app .oi-calendar-days button{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:8px;min-width:0;min-height:82px;padding:10px 8px;border:1px solid #e8eef8;border-radius:12px;background:#fff;color:#71839a;box-shadow:none;text-align:left}
+.oi-calendar-day-number{font-size:14px;font-weight:650;line-height:1.2}.oi-calendar-load{font-size:10px;font-weight:650;white-space:nowrap;line-height:1.4}.oi-calendar-rest{font-size:14px;color:#ccd8e7;line-height:1}
+.oi-app .oi-calendar-days button.has-session{background:linear-gradient(145deg,#edf6ff,#e4efff);border-color:#c9defb;color:#2058b4}
+.oi-app .oi-calendar-days button[aria-pressed=true]{background:#245bd6;border-color:#245bd6;color:#fff;box-shadow:0 5px 12px #245bd62b}
+.oi-app .oi-calendar-days button[aria-current=date]:after{content:'';position:absolute;right:8px;top:9px;width:5px;height:5px;border-radius:50%;background:#245bd6}
+.oi-app .oi-calendar-days button[aria-current=date][aria-pressed=true]:after{background:white}
+.oi-app .oi-calendar-days button:hover{border-color:#6292e5}.oi-app .oi-calendar-days button:focus-visible,.oi-app .oi-calendar-toolbar button:focus-visible{outline:3px solid #9dc5ff;outline-offset:2px}
+.oi-calendar-legend{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:14px 0 0;font-size:11px;color:#6680a0}.oi-calendar-legend i{width:10px;height:10px;border-radius:3px;background:#dcecff;border:1px solid #b3cff8}.oi-calendar-legend>span{margin-left:auto}
+.oi-calendar-agenda{padding:22px;background:linear-gradient(155deg,#eff6ff,#f8fbff);border:1px solid #dce8fb;border-radius:18px;min-width:0}
+.oi-calendar-date{display:flex;align-items:center;gap:13px;margin-bottom:20px;color:#245bd6}.oi-calendar-date strong{font-size:40px;line-height:1;font-weight:750;letter-spacing:-1px}.oi-calendar-date span{font-size:12px;max-width:95px;line-height:1.6;text-transform:capitalize}
+.oi-calendar-agenda h3{font-size:18px;margin:0 0 6px;color:#193b65}.oi-calendar-agenda>p{font-size:12px;line-height:1.7;color:#587599;margin:0 0 16px}.oi-calendar-agenda ul{list-style:none;padding:0;margin:0;max-height:350px;overflow:auto}.oi-calendar-agenda li+li{margin-top:9px}
+.oi-app .oi-calendar-agenda button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;white-space:normal;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#fff;color:#28538a;font-size:12px;line-height:1.6}.oi-calendar-agenda button span:first-child{min-width:0;overflow-wrap:anywhere}.oi-calendar-agenda button span:last-child{flex:none;color:#245bd6}
+@media(max-width:1100px){.oi-calendar-layout{grid-template-columns:1fr}.oi-calendar-agenda ul{max-height:260px}}
+@media(max-width:600px){.oi-calendar-weekdays,.oi-calendar-days{gap:3px}.oi-calendar-toolbar{margin-bottom:18px}.oi-calendar-toolbar h3{font-size:19px}.oi-calendar-weekdays span{font-size:10px}.oi-app .oi-calendar-days button{min-height:64px;padding:8px 4px;border-radius:8px}.oi-calendar-day-number{font-size:12px}.oi-calendar-load{font-size:8px}.oi-app .oi-calendar-days button[aria-current=date]:after{top:6px;right:5px;width:4px;height:4px}.oi-calendar-agenda{padding:18px}.oi-calendar-legend{font-size:10px}}
