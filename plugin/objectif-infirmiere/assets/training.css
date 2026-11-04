@@ -38,3 +38,5 @@
 
 .oi-run-answer summary::after{content:"";flex:0 0 6px;width:6px;height:6px;border-right:1.5px solid #7690b0;border-bottom:1.5px solid #7690b0;transform:rotate(45deg);margin:0 3px 3px}.oi-run-answer[open] summary::after{transform:rotate(225deg);margin-top:6px}
 @media(max-width:760px){.oi-run-track>span{width:calc((100% - 76px)/20);max-width:17px;height:auto;aspect-ratio:1;font-size:9px}.oi-run-verdict{width:auto;flex:1}.oi-run-answer summary::after{align-self:center}}
+
+@media(max-width:760px){.oi-run-review:has(.oi-run-review-links>button:only-child){grid-template-rows:auto repeat(2,minmax(88px,1fr));align-items:stretch}}
