@@ -690,3 +690,19 @@
 
 /* Keep the existing assistant balance as the only wallet counter. */
 .oi-app .oi-recharge-entry{display:inline-flex;align-items:center;justify-content:center;gap:10px;margin:0 0 22px;padding:13px 20px;border-radius:12px;background:#245bd6;color:#fff;border:1px solid #245bd6;font-weight:650}.oi-app .oi-recharge-entry[hidden]{display:none}.oi-app .oi-recharge-entry:focus-visible{outline:3px solid #82afff;outline-offset:3px}
+
+/* First arrival: the existing mascot remains visible until the content is ready. */
+.oi-app #oi-status.oi-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:clamp(360px,65svh,650px);padding:32px 16px 56px;text-align:center}
+.oi-loading-art{position:relative;isolation:isolate;display:grid;place-items:center;width:clamp(210px,24vw,280px);aspect-ratio:1;margin-bottom:26px}
+.oi-loading-halo{position:absolute;inset:-12%;z-index:-1;border-radius:50%;background:radial-gradient(circle,#c1e0ff 0%,#deedff 40%,#edf5ff80 60%,#edf5ff00 72%);animation:oi-loading-glow 3.6s ease-in-out infinite}
+.oi-loading-art::after{content:"";position:absolute;inset:6%;border:1px solid #b6d5ff70;border-radius:50%;z-index:-1}
+.oi-loading-art img{display:block;width:82%;height:auto;object-fit:contain;filter:drop-shadow(0 14px 16px #255b9b18);animation:oi-loading-float 3.6s ease-in-out infinite}
+.oi-app .oi-loading-title{margin:0;color:#17365e;font-size:clamp(21px,2.2vw,28px);font-weight:750;line-height:1.4;letter-spacing:-.6px}
+.oi-loading-dots{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;height:12px}
+.oi-loading-dots i{display:block;width:7px;height:7px;border-radius:50%;background:#3779e0;animation:oi-loading-dot 1.5s ease-in-out infinite}
+.oi-loading-dots i:nth-child(2){animation-delay:.18s}.oi-loading-dots i:nth-child(3){animation-delay:.36s}
+@keyframes oi-loading-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes oi-loading-glow{0%,100%{opacity:.65;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes oi-loading-dot{0%,70%,100%{opacity:.35;transform:translateY(0)}35%{opacity:1;transform:translateY(-4px)}}
+@media(max-width:600px){.oi-app #oi-status.oi-loading{min-height:clamp(330px,60svh,490px);padding:20px 8px 44px}.oi-loading-art{width:210px;margin-bottom:20px}}
+@media(prefers-reduced-motion:reduce){.oi-loading-art img,.oi-loading-halo,.oi-loading-dots i{animation:none}.oi-loading-halo{opacity:.85}.oi-loading-dots i{opacity:.7}}
