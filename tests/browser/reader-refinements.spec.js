@@ -136,6 +136,13 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   await expect(page).toHaveURL(/#oi-section-1$/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
 
+  await expect(page.locator('#oi-watermark')).toBeHidden();
+  const bottom=page.locator('.oi-reader-complete [data-state="revised"]'),top=page.locator('.oi-actions [data-state="revised"]');
+  const before=await bottom.getAttribute('aria-pressed');
+  await bottom.click();await expect(top).toHaveAttribute('aria-pressed',String(before!=='true'));await expect(bottom).toHaveAttribute('aria-pressed',String(before!=='true'));
+  await page.reload();await expect(bottom).toHaveAttribute('aria-pressed',String(before!=='true'));
+  await top.click();await expect(top).toHaveAttribute('aria-pressed',before);await expect(bottom).toHaveAttribute('aria-pressed',before);
+  expect(await bottom.evaluate(el=>{const parent=el.parentElement.getBoundingClientRect(),button=el.getBoundingClientRect();return Math.abs(parent.x+parent.width/2-button.x-button.width/2)<1;})).toBeTruthy();
   const print = page.locator('.oi-actions [data-print-fiche]');
   await expect(print).toHaveText('Imprimer');
   await print.click();
@@ -144,7 +151,7 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   await expect(page.locator('.oi-content')).toBeVisible();
   await expect(page.locator('#oi-watermark')).toBeVisible();
   await expect(page.locator('#oi-watermark')).toHaveText('Objectif Infirmière — Compte de test');
-  for (const selector of ['.oi-sidebar', '.oi-actions', '#oi-toc', '.oi-ai-banner', '.oi-related', '.oi-quiz-section']) {
+  for (const selector of ['.oi-sidebar', '.oi-actions', '.oi-reader-complete', '#oi-toc', '.oi-ai-banner', '.oi-related', '.oi-quiz-section']) {
     await expect(page.locator(selector)).toBeHidden();
   }
   expect(await page.locator('body').evaluate(node => getComputedStyle(node, ':after').display)).toBe('none');

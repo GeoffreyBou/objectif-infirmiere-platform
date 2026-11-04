@@ -286,6 +286,11 @@
       return {id:heading.id,title,number:badge.textContent,sub:heading.tagName==='H3'};
     });
   }
+  function revisionButton(data) {
+    const goal=data.goal, revised=goal?goal.done:!!data.state?.revised;
+    const label=goal?(revised?'Révisée pour mon objectif':'Valider pour mon objectif'):(revised?'Révisée':'Marquer comme révisée');
+    return `<button type="button" ${goal?'data-reader-goal':'data-state="revised"'} aria-pressed="${revised}">${icon('check')}${label}</button>`;
+  }
   function associatedFiche(data) {
     const accessible=!!data.access?.FICHE, credits=Number(account?.balances?.FICHE||0);
     const action=accessible?`data-fiche="${Number(data.id)}"`:credits?`data-unlock="${Number(data.id)}" data-kind="FICHE"`:'data-tab="premium"';
@@ -300,7 +305,7 @@
     activeFiche = data;
     setTab(quizOnly?'qcm':'fiches',Number(id));
     const topic = subject(data);
-    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button></nav><article class="oi-reader"><div class="oi-reader-hero">${data.cover?`<img class="oi-theme-art oi-fiche-cover" src="${esc(data.cover)}" alt="" width="320" height="320" fetchpriority="high">`:`<div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div>`}<header class="oi-reader-heading">${readerPath(data)}<h1>${esc(data.title)}</h1><p class="oi-muted" ${quizOnly?'data-quiz-intro':''}>${quizOnly?'Préparation de tes questions…':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button><button type="button" data-print-fiche>${icon('print')}Imprimer</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${quizOnly?associatedFiche(data):''}${!quizOnly?`${aiBanner()}<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>`:''}</article>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button></nav><article class="oi-reader"><div class="oi-reader-hero">${data.cover?`<img class="oi-theme-art oi-fiche-cover" src="${esc(data.cover)}" alt="" width="320" height="320" fetchpriority="high">`:`<div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div>`}<header class="oi-reader-heading">${readerPath(data)}<h1>${esc(data.title)}</h1><p class="oi-muted" ${quizOnly?'data-quiz-intro':''}>${quizOnly?'Préparation de tes questions…':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${revisionButton(data)}${data.goal?'<button type="button" data-tab="progress">Mon objectif</button>':''}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button><button type="button" data-print-fiche>${icon('print')}Imprimer</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div class="oi-reader-complete">'+revisionButton(data)+'</div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${quizOnly?associatedFiche(data):''}${!quizOnly?`${aiBanner()}<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>`:''}</article>`;
     if (!quizOnly) {
       const headings = [...screen().querySelectorAll('.oi-content h2, .oi-content h3')];
       const labels=readerHeadingLabels(headings);
@@ -426,22 +431,22 @@
       if (b.dataset.prompt) {document.querySelector('#oi-question').value=b.dataset.prompt;document.querySelector('#oi-question').focus();}
       if (b.hasAttribute('data-clear-search')) {document.querySelector('#oi-query').value='';document.querySelector('#oi-semester').value='';page=1;await search();}
       if(b.hasAttribute('data-reader-goal')&&activeFiche?.goal){
-        b.disabled=true;const opened=activeFiche;try{const r=await api(`goals/${opened.goal.id}/complete`,{fiche:opened.id,done:!opened.goal.done,version:opened.goal.version});if(activeFiche===opened){const g=r.goals.find(g=>g.id===opened.goal.id);opened.goal={...opened.goal,done:!opened.goal.done,version:g.version};b.setAttribute('aria-pressed',String(opened.goal.done));b.innerHTML=icon('check')+(opened.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif');status('Ton objectif est mis à jour.');}}finally{b.disabled=false;}
+        const controls=[...screen().querySelectorAll('[data-reader-goal]')];controls.forEach(control=>control.disabled=true);const opened=activeFiche;try{const r=await api(`goals/${opened.goal.id}/complete`,{fiche:opened.id,done:!opened.goal.done,version:opened.goal.version});if(activeFiche===opened){const g=r.goals.find(g=>g.id===opened.goal.id);opened.goal={...opened.goal,done:!opened.goal.done,version:g.version};controls.forEach(control=>{control.setAttribute('aria-pressed',String(opened.goal.done));control.innerHTML=icon('check')+(opened.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif');});status('Ton objectif est mis à jour.');}}finally{controls.forEach(control=>control.disabled=false);}
       }
       if (b.dataset.state && activeFiche) {
-        b.disabled=true;
         const field=b.dataset.state;
+        const controls=[...screen().querySelectorAll(`[data-state="${field}"]`)];
+        controls.forEach(control=>control.disabled=true);
         const ficheId=activeFiche.id;
         const value=!activeFiche.state?.[field];
         try {
           await api(`fiches/${ficheId}/state`,{field,value});
           if(activeFiche?.id===ficheId) {
             activeFiche.state={...activeFiche.state,[field]:value};
-            b.setAttribute('aria-pressed',String(value));
-            b.innerHTML=icon(field==='favorite'?'heart':'check')+(field==='favorite'?(value?'Favori':'Ajouter aux favoris'):(value?'Révisée':'Marquer comme révisée'));
+            controls.forEach(control=>{control.setAttribute('aria-pressed',String(value));control.innerHTML=icon(field==='favorite'?'heart':'check')+(field==='favorite'?(value?'Favori':'Ajouter aux favoris'):(value?'Révisée':'Marquer comme révisée'));});
             status(field==='favorite'?(value?'Fiche ajoutée à tes favoris.':'Fiche retirée de tes favoris.'):(value?'Ta progression est enregistrée.':'Fiche marquée comme à réviser.'));
           }
-        } finally { b.disabled=false; }
+        } finally { controls.forEach(control=>control.disabled=false); }
       }
       if(b.hasAttribute('data-buy-recharge')) {
         b.disabled=true;

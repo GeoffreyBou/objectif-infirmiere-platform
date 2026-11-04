@@ -75,3 +75,12 @@
 .oi-content .oi-word-callout.oi-word-callout--plain td{padding:20px 24px}
 @media(max-width:760px){.oi-content ol.oi-flow{margin:20px 0 26px}.oi-content .oi-flow-card{padding:13px 14px;gap:12px;border-radius:12px}.oi-content .oi-flow-number{flex-basis:30px;width:30px;height:30px;border-radius:8px;font-size:11px}.oi-content .oi-flow-copy{font-size:14px}.oi-content .oi-word-callout.oi-word-callout--plain td{padding:17px 16px}}
 @media print{.oi-content ol.oi-flow{max-width:none;margin:15px 0}.oi-content .oi-flow-card{box-shadow:none;padding:10px 14px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.oi-content .oi-flow-copy{font-size:10pt}.oi-content .oi-flow-step{break-inside:avoid;page-break-inside:avoid}.oi-content .oi-flow-number{width:27px;height:27px;flex-basis:27px;font-size:9pt}.oi-content .oi-word-callout.oi-word-callout--plain td{padding:14px}}
+
+/* Repeat the existing revision action after the course; keep account attribution for print only. */
+.oi-reader-complete{display:flex;justify-content:center;margin:28px 0 32px}
+.oi-app .oi-reader-complete button{display:flex;align-items:center;justify-content:center;gap:12px;min-height:52px;max-width:100%;padding:14px 26px;border-radius:13px;border:1px solid #c7dcfb;background:#fff;color:#2355b6;font-size:14px;font-weight:650;line-height:1.5;box-shadow:0 6px 18px #2256a00a}
+.oi-app .oi-reader-complete button:hover{background:#edf5ff;border-color:#8fb7f0}
+.oi-app .oi-reader-complete button[aria-pressed=true]{background:#0967d8;border-color:#0967d8;color:#fff}
+.oi-app .oi-reader-complete button:focus-visible{outline:3px solid #76adff;outline-offset:4px}
+@media screen{.oi-app #oi-watermark{display:none}}
+@media print{.oi-app .oi-reader-complete{display:none!important}}

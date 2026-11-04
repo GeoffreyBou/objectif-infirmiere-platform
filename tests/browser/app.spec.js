@@ -44,9 +44,10 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   }
   await favorite.click();
   await expect(favorite).toHaveAttribute('aria-pressed','true');
-  const revised=page.locator('[data-state="revised"]');
+  const revised=page.locator('.oi-reader-complete [data-state="revised"]');
   if (await revised.getAttribute('aria-pressed')!=='true') await revised.click();
   await expect(revised).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('.oi-actions [data-state="revised"]')).toHaveAttribute('aria-pressed','true');
 
   await page.locator('#oi-quiz-form input[value="0"]').check();
   await page.getByRole('button',{name:'Valider ma réponse'}).click();await page.getByRole('button',{name:'Voir mon bilan'}).click();

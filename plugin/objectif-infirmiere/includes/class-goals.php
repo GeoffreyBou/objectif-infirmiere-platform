@@ -68,6 +68,7 @@ final class OI_Goals {
         $items=[];foreach($sessions as $date=>$ids)$items[]=['date'=>$date,'fiches'=>$ids,'minutes'=>count($ids)*$s['estimate']];
         return ['enabled'=>true,'expired'=>$end<$now,'remaining'=>count($remaining),'available_days'=>$slots,'capacity'=>$capacity,'estimated_minutes'=>count($remaining)*$s['estimate'],'unplanned'=>array_slice($remaining,$placed),'sessions'=>$items,'today'=>$now->format('Y-m-d')];
     }
+    public static function active(int $user): ?array {$s=self::store($user);return $s['goals'][$s['active']]??null;}
     public static function for_fiche(int $user,int $fiche): ?array {$s=self::store($user);$g=$s['goals'][$s['active']]??null;return $g&&in_array($fiche,$g['selected'],true)?['id'=>$g['id'],'title'=>$g['title'],'version'=>$g['version'],'done'=>isset($g['done'][$fiche])]:null;}
     public static function listing(): array {
         $s=self::store(get_current_user_id());$goal=$s['goals'][$s['active']]??null;$goals=array_values($s['goals']);usort($goals,fn($a,$b)=>$b['created']<=>$a['created']);
