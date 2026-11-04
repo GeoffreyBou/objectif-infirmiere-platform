@@ -134,3 +134,11 @@ Aucun dossier de thème détecté pour le moment. Aucun thème artificiel créé
 - E3 - 01 Entrée dans la formation et méthodes
 - E3 - 02 Progression et coopération
 - E3 - 03 Autonomie, insertion et engagement
+
+
+## Espaces complémentaires — novembre 2026
+
+- **E3 - 04 Consolidation locale - optionnel** : complément éditorial identifié dans le document de référence.
+- **Parcours IFSI → Validation du diplôme** : fiches transversales, hors des 15 UE nationales.
+
+Ces ajouts ne changent pas les regroupements nationaux ci-dessus. Le dossier exact du programme est prioritaire sur le titre Word lors du classement.

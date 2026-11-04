@@ -114,3 +114,14 @@ Une analyse Drive complète découvre aussi les dossiers vides et ajoute les nou
 Le rapprochement exige le bon libellé, pas uniquement le numéro. Les préparations utilisant une ancienne catégorie sont rapprochées par leur dossier. Pour les fiches publiées, seuls les anciens thèmes retirés peuvent être remplacés automatiquement lorsqu’une identité Drive unique et un dossier précis sont retrouvés. Les identifiants, contenus et droits restent inchangés ; le classement précédent est enregistré. Les choix déjà valides ne sont pas écrasés. Une ancienne prévisualisation ne permet plus de publier dans un thème retiré.
 
 [Liste complète](THEMES-PROGRAMME-2026.md) · [CSV](THEMES-PROGRAMME-2026.csv).
+
+
+## Alignement sur le programme (rc.35, 4 novembre 2026)
+
+Les dossiers A1, A2 et D1 ont été regroupés selon les thèmes du document de référence ; les autres libellés divergents ont été alignés. Le classement par dossier exact prime désormais sur la correspondance du titre Word avec une notion. Les titres destinés aux étudiants restent libres. Les quatre exceptions B4, C2, D2 et E2 continuent de suivre Drive.
+
+Deux espaces complémentaires existent : E3/04 « Consolidation locale - optionnel » et « Parcours IFSI / Validation du diplôme », distinct des 15 UE nationales. Les Word de charte et de programme à la racine, ainsi que le dossier « Documents éditoriaux », sont exclus des candidats étudiants.
+
+La maintenance ponctuelle de novembre a utilisé un accès Drive Éditeur autorisé par le propriétaire, un inventaire complet et un journal de chaque déplacement. L’application normale conserve exclusivement le scope `drive.readonly`. Les anciens dossiers fusionnés, devenus vides, sont conservés dans des sous-dossiers « Archives ». Les fichiers conservent leur identifiant, leur nom et leurs octets.
+
+Le rattachement des fiches publiées et des préparations a été recalculé par identifiant Drive/code permanent et chemin constaté. Les contenus ne sont ni reconvertis ni republiés. Un journal permet de restaurer les classements précédents. Les doublons de contenu à code et version identiques restent à arbitrer ; un classement certain ne justifie pas de choisir un contenu automatiquement.

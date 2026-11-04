@@ -112,7 +112,7 @@ final class OI_Drive {
         }catch(Throwable $e){return new WP_Error('oi_drive',$e->getMessage(),['status'=>400]);}
     }
     public static function candidates(array $files): array {
-        $groups=[];foreach($files as $f){if(self::archived($f['path']))continue;$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)(?:\s*[-–—]\s*.*)?$/iu',trim($part),$m))$version=$m[1];else $path[]=$part;}
+        $groups=[];foreach($files as $f){if(self::archived($f['path'])||self::editorial($f['name'],$f['path']))continue;$version='0';$path=[];foreach($f['path'] as $part){if(preg_match('/^(?:version\s*|v\s*)?(\d+(?:\.\d+)+)(?:\s*[-–—]\s*.*)?$/iu',trim($part),$m))$version=$m[1];else $path[]=$part;}
             $stem=preg_replace('/_qcm$/i','',pathinfo($f['name'],PATHINFO_FILENAME));if($version==='0'&&preg_match('/[_ -]v(\d+(?:\.\d+)+)$/i',$stem,$m))$version=$m[1];$stem=preg_replace('/[_ -]v\d+(?:\.\d+)+$/i','',$stem);$f['code']=OI_Imports::code($f['name']);$key=$f['code']?'code:'.$f['code']:hash('sha256',mb_strtolower(implode('/',$path).'/'.$stem));$f['key']=$key;$f['version']=$version;$f['path_label']=implode(' / ',$f['path']);
             if(!isset($groups[$key])||version_compare($version,$groups[$key][0]['version'],'>'))$groups[$key]=[$f];elseif(version_compare($version,$groups[$key][0]['version'],'='))$groups[$key][]=$f;
         }
@@ -135,13 +135,22 @@ final class OI_Drive {
         foreach($path as $part)if(preg_match('/^archives?(?:$|[\s_\-–—])/iu',trim($part)))return true;
         return false;
     }
+    /** Editorial instructions are not revision fiches, even when stored beside the catalogue. */
+    public static function editorial(string $name,array $path): bool {
+        if(!$path&&preg_match('/^(?:charte(?:[_ -]|$)|programme[_ -]ifsi(?:[_ -]|$))/iu',$name))return true;
+        foreach($path as $part)if(sanitize_title($part)==='documents-editoriaux')return true;
+        return false;
+    }
     public static function classification(array $path,string $title=''): array {
         $unit=0;$code='';
         foreach($path as $part)if(preg_match('/^([A-E])\.?([1-9])(?=$|[\s_\-–—])/iu',trim($part),$m)){
             $candidate=strtoupper($m[1].$m[2]);$term=get_term_by('slug','programme-2026-'.strtolower($candidate),'oi_enseignement');
             if($term){if($unit&&$unit!==(int)$term->term_id)return [0,0];$unit=(int)$term->term_id;$code=$candidate;}
         }
-        if(!$unit)return [0,0];
+        if(!$unit){
+            if(!empty($path[0])&&preg_match('/^PARCOURS IFSI\s*[-–—]\s*Validation du dipl[oô]me$/iu',trim($path[0]))){$u=get_term_by('slug','parcours-ifsi','oi_enseignement');$t=get_term_by('slug','parcours-ifsi-validation','oi_theme');if($u&&$t)return [(int)$u->term_id,(int)$t->term_id];}
+            return [0,0];
+        }
         $themes=get_terms(['taxonomy'=>'oi_theme','hide_empty'=>false,'meta_key'=>'oi_programme_unit','meta_value'=>$unit]);if(is_wp_error($themes))return [$unit,0];
         $normalize=static fn($s)=>sanitize_title(html_entity_decode($s,ENT_QUOTES|ENT_HTML5,'UTF-8'));
         $matches=[];$titleMatches=[];
@@ -156,7 +165,8 @@ final class OI_Drive {
                 if($label!==''&&$normalize($label)===$normalize($name))$matches[$t->term_id]=true;
             }
         }
-        // The reference title or notion is authoritative; a folder number alone is not.
+        // A precise programme folder takes priority; a reformulated Word title cannot redirect it.
+        if(count($matches)===1)return [$unit,(int)array_key_first($matches)];
         if(count($titleMatches)===1)return [$unit,(int)array_key_first($titleMatches)];
         return [$unit,count($matches)===1?(int)array_key_first($matches):0];
     }

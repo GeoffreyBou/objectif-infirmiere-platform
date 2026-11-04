@@ -1,0 +1,85 @@
+ue,dossier,statut,correspondance,cible,action
+A1,01 - Profession identite et systemes de sante,Écart,,A1 - 01 Profession et sciences infirmières,Regrouper 01+02 vers 01 ; 03+04 vers 02
+A1,02 - Sciences infirmieres epistemologie et theories,Écart,,A1 - 01 Profession et sciences infirmières,Regrouper 01+02 vers 01 ; 03+04 vers 02
+A1,03 - Raisonnement pensee critique et donnees probantes,Écart,,A1 - 02 Raisonnement et jugement cliniques,Regrouper 01+02 vers 01 ; 03+04 vers 02
+A1,04 - Recueil diagnostic et projet de soins,Écart,,A1 - 02 Raisonnement et jugement cliniques,Regrouper 01+02 vers 01 ; 03+04 vers 02
+A2,01 - Droit exercice professionnel et droits des usagers,Écart,,A2 - 01 Droit et exercice professionnel,Renommer le dossier selon le libellé du référentiel
+A2,02 - Situations juridiques particulieres,OK,A2 - 02 Situations juridiques particulières,A2 - 02 Situations juridiques particulières,Conserver
+A2,03 - Ethique bioethique et decision,Écart,,A2 - 03 Éthique et bioéthique,Regrouper 03+04 vers 03
+A2,04 - Recherche corps humain et numerique,Écart,,A2 - 03 Éthique et bioéthique,Regrouper 03+04 vers 03
+B1,01 - Fondements biologiques et developpement humain,OK,B1 - 01 Fondements biologiques et développement humain,B1 - 01 Fondements biologiques et développement humain,Conserver
+B1,02 - Cardiovasculaire respiratoire et sang,Écart,,"B1 - 02 Système cardiovasculaire, respiratoire et sang",Renommer le dossier selon le libellé du référentiel
+B1,03 - Systeme nerveux,OK,B1 - 03 Système nerveux,B1 - 03 Système nerveux,Conserver
+B1,04 - Systeme locomoteur,OK,B1 - 04 Système locomoteur,B1 - 04 Système locomoteur,Conserver
+B1,05 - Systeme urinaire,OK,B1 - 05 Système urinaire,B1 - 05 Système urinaire,Conserver
+B1,06 - Systeme digestif,OK,B1 - 06 Système digestif,B1 - 06 Système digestif,Conserver
+B1,07 - Systeme endocrinien,OK,B1 - 07 Système endocrinien,B1 - 07 Système endocrinien,Conserver
+B1,08 - Systemes urogenital et reproducteur,OK,B1 - 08 Systèmes urogénital et reproducteur,B1 - 08 Systèmes urogénital et reproducteur,Conserver
+B1,09 - Systeme tegumentaire,OK,B1 - 09 Système tégumentaire,B1 - 09 Système tégumentaire,Conserver
+B1,10 - Immunite infections et inflammation,OK,"B1 - 10 Immunité, infections et inflammation","B1 - 10 Immunité, infections et inflammation",Conserver
+B1,11 - ORL et ophtalmologie,OK,B1 - 11 ORL et ophtalmologie,B1 - 11 ORL et ophtalmologie,Conserver
+B1,12 - Cancerologie et hemopathies,OK,B1 - 12 Cancérologie et hémopathies,B1 - 12 Cancérologie et hémopathies,Conserver
+B1,13 - Enfant adolescent et pathologies infantiles,Écart,,"B1 - 13 Développement de l’enfant et de l’adolescent, pathologies infantiles",Renommer le dossier selon le libellé du référentiel
+B1,14 - Psychiatrie adulte enfant adolescent,Écart,,"B1 - 14 Psychiatrie de l’adulte, de l’enfant et de l’adolescent",Renommer le dossier selon le libellé du référentiel
+B1,15 - Situations critiques et urgences,OK,B1 - 15 Situations critiques et urgences,B1 - 15 Situations critiques et urgences,Conserver
+B1,16 - Vieillissement et geriatrie,OK,B1 - 16 Vieillissement et gériatrie,B1 - 16 Vieillissement et gériatrie,Conserver
+B1,17 - Soins palliatifs et medecine sociale,OK,B1 - 17 Soins palliatifs et médecine sociale,B1 - 17 Soins palliatifs et médecine sociale,Conserver
+B2,01 - Fondements et psychologie,OK,B2 - 01 Fondements et psychologie,B2 - 01 Fondements et psychologie,Conserver
+B2,02 - Sociologie,OK,B2 - 02 Sociologie,B2 - 02 Sociologie,Conserver
+B2,03 - Ethnologie et anthropologie,OK,B2 - 03 Ethnologie et anthropologie,B2 - 03 Ethnologie et anthropologie,Conserver
+B2,"04 - Violences, addictions et vulnerabilites",OK,"B2 - 04 Violences, addictions et vulnérabilités","B2 - 04 Violences, addictions et vulnérabilités",Conserver
+B3,01 - Formations et sante mentale initiale,Écart,,B3 - 01 Formations et repérages initiaux,Renommer le dossier selon le libellé du référentiel
+B3,02 - Hygiene et prevention des infections,OK,B3 - 02 Hygiène et prévention des infections,B3 - 02 Hygiène et prévention des infections,Conserver
+B3,03 - Douleur et demarche clinique,Écart,,B3 - 03 Douleur et démarche clinique appliquée,Renommer le dossier selon le libellé du référentiel
+B3,04 - Consultation infirmiere,OK,B3 - 04 Consultation infirmière,B3 - 04 Consultation infirmière,Conserver
+B3,05 - Soins courants,Écart,,B3 - 05 Soins courants à tous les âges,Renommer le dossier selon le libellé du référentiel
+B3,06 - Pediatrie,OK,B3 - 06 Pédiatrie,B3 - 06 Pédiatrie,Conserver
+B3,07 - Psychiatrie,OK,B3 - 07 Psychiatrie,B3 - 07 Psychiatrie,Conserver
+B3,08 - Soins critiques et crises collectives,Écart,,"B3 - 08 Soins critiques, urgences et crises collectives",Renommer le dossier selon le libellé du référentiel
+B3,09 - Geriatrie,OK,B3 - 09 Gériatrie,B3 - 09 Gériatrie,Conserver
+B3,10 - Plaies et pansements,OK,B3 - 10 Plaies et pansements,B3 - 10 Plaies et pansements,Conserver
+B3,11 - Vaccination addictions et fin de vie,OK,"B3 - 11 Vaccination, addictions et fin de vie","B3 - 11 Vaccination, addictions et fin de vie",Conserver
+B3,12 - Medicaments dispositifs transfusion et examens,Écart,,"B3 - 12 Médicaments, dispositifs et examens",Renommer le dossier selon le libellé du référentiel
+B4,01 - Fondements et pilotage de la qualite,OK,B4 - 01 Fondements et pilotage de la qualite,B4 - 01 Fondements et pilotage de la qualite,Conserver
+B4,02 - Experience usager tracabilite et evaluation des pratiques,OK,B4 - 02 Experience usager tracabilite et evaluation des pratiques,B4 - 02 Experience usager tracabilite et evaluation des pratiques,Conserver
+B4,03 - Gestion des risques methodes et vigilances,OK,B4 - 03 Gestion des risques methodes et vigilances,B4 - 03 Gestion des risques methodes et vigilances,Conserver
+B4,04 - Facteurs humains et culture de securite,OK,B4 - 04 Facteurs humains et culture de securite,B4 - 04 Facteurs humains et culture de securite,Conserver
+B4,05 - Ressources et amelioration continue,OK,B4 - 05 Ressources et amelioration continue,B4 - 05 Ressources et amelioration continue,Conserver
+C1,01 - Concepts et comportements de sante,OK,C1 - 01 Concepts et comportements de santé,C1 - 01 Concepts et comportements de santé,Conserver
+C1,02 - Thematiques de prevention,OK,C1 - 02 Thématiques de prévention,C1 - 02 Thématiques de prévention,Conserver
+C1,03 - Methodologie et service sanitaire,OK,C1 - 03 Méthodologie et service sanitaire,C1 - 03 Méthodologie et service sanitaire,Conserver
+C1,04 - Systeme de sante et politiques publiques,OK,C1 - 04 Système de santé et politiques publiques,C1 - 04 Système de santé et politiques publiques,Conserver
+C1,05 - Prevention individuelle et ETP,OK,C1 - 05 Prévention individuelle et ETP,C1 - 05 Prévention individuelle et ETP,Conserver
+C1,06 - Risques professionnels des soignants,OK,C1 - 06 Risques professionnels des soignants,C1 - 06 Risques professionnels des soignants,Conserver
+C2,01 - Fondements politiques et acteurs,OK,C2 - 01 Fondements politiques et acteurs,C2 - 01 Fondements politiques et acteurs,Conserver
+C2,02 - Expositions pollutions et risques sanitaires,OK,C2 - 02 Expositions pollutions et risques sanitaires,C2 - 02 Expositions pollutions et risques sanitaires,Conserver
+C2,03 - Climat vulnerabilites et crises,OK,C2 - 03 Climat vulnerabilites et crises,C2 - 03 Climat vulnerabilites et crises,Conserver
+C2,04 - Systeme de sante ecoresponsable,OK,C2 - 04 Systeme de sante ecoresponsable,C2 - 04 Systeme de sante ecoresponsable,Conserver
+C2,05 - One Health zoonoses et antibioresistance,OK,C2 - 05 One Health zoonoses et antibioresistance,C2 - 05 One Health zoonoses et antibioresistance,Conserver
+C2,06 - Promotion cobenefices et education,OK,C2 - 06 Promotion cobenefices et education,C2 - 06 Promotion cobenefices et education,Conserver
+D1,01 - Posture et fondamentaux de communication,Écart,,D1 - 01 Posture et communication,Regrouper 01+02 vers 01 ; renuméroter 03 vers 02 et 04 vers 03
+D1,02 - Entretiens familles et communication en equipe,Écart,,D1 - 01 Posture et communication,Regrouper 01+02 vers 01 ; renuméroter 03 vers 02 et 04 vers 03
+D1,03 - Collaboration et competences psychosociales,OK,D1 - 02 Collaboration et compétences psychosociales,D1 - 02 Collaboration et compétences psychosociales,Regrouper 01+02 vers 01 ; renuméroter 03 vers 02 et 04 vers 03
+D1,04 - Leadership violences et dynamique de groupe,Écart,,"D1 - 03 Leadership, violences et gestion de groupe",Regrouper 01+02 vers 01 ; renuméroter 03 vers 02 et 04 vers 03
+D2,01 - Organisation administrative et ressources,OK,D2 - 01 Organisation administrative et ressources,D2 - 01 Organisation administrative et ressources,Conserver
+D2,02 - Logistique environnement et activite professionnelle,OK,D2 - 02 Logistique environnement et activite professionnelle,D2 - 02 Logistique environnement et activite professionnelle,Conserver
+D2,03 - Coordination partenariats innovation et numerique,OK,D2 - 03 Coordination partenariats innovation et numerique,D2 - 03 Coordination partenariats innovation et numerique,Conserver
+D3,01 - Pedagogie et conception de formation,OK,D3 - 01 Pédagogie et conception de formation,D3 - 01 Pédagogie et conception de formation,Conserver
+D3,02 - Accompagnement et evaluation,OK,D3 - 02 Accompagnement et évaluation,D3 - 02 Accompagnement et évaluation,Conserver
+D3,03 - Analyse des pratiques professionnelles,Écart,,D3 - 03 Analyse des pratiques,Renommer le dossier selon le libellé du référentiel
+D4,01 - Donnees de sante,OK,D4 - 01 Données de santé,D4 - 01 Données de santé,Conserver
+D4,02 - Cybersecurite,OK,D4 - 02 Cybersécurité,D4 - 02 Cybersécurité,Conserver
+D4,03 - Communication et outils numeriques,Écart,,D4 - 03 Communication et outils,Renommer le dossier selon le libellé du référentiel
+D4,04 - IA et telesante,OK,D4 - 04 IA et télésanté,D4 - 04 IA et télésanté,Conserver
+E1,01 - Organisation et demarche scientifiques,OK,E1 - 01 Organisation et démarche scientifiques,E1 - 01 Organisation et démarche scientifiques,Conserver
+E1,02 - Recherche documentaire et lecture critique,OK,E1 - 02 Recherche documentaire et lecture critique,E1 - 02 Recherche documentaire et lecture critique,Conserver
+E1,03 - Methodes qualitatives et quantitatives,OK,E1 - 03 Méthodes qualitatives et quantitatives,E1 - 03 Méthodes qualitatives et quantitatives,Conserver
+E1,04 - Synthese et restitution,OK,E1 - 04 Synthèse et restitution,E1 - 04 Synthèse et restitution,Conserver
+E2,01 - Vocabulaire clinique et soins,OK,E2 - 01 Vocabulaire clinique et soins,E2 - 01 Vocabulaire clinique et soins,Conserver
+E2,02 - Communication avec le patient,OK,E2 - 02 Communication avec le patient,E2 - 02 Communication avec le patient,Conserver
+E2,03 - Ecrit professionnel et equipe,OK,E2 - 03 Ecrit professionnel et equipe,E2 - 03 Ecrit professionnel et equipe,Conserver
+E2,04 - Communication interculturelle,OK,E2 - 04 Communication interculturelle,E2 - 04 Communication interculturelle,Conserver
+E3,01 - Entree dans la formation et methodes,OK,E3 - 01 Entrée dans la formation et méthodes,E3 - 01 Entrée dans la formation et méthodes,Conserver
+E3,02 - Progression et cooperation,OK,E3 - 02 Progression et coopération,E3 - 02 Progression et coopération,Conserver
+E3,03 - Autonomie insertion et engagement,OK,"E3 - 03 Autonomie, insertion et engagement","E3 - 03 Autonomie, insertion et engagement",Conserver
+E3,04 - Consolidation locale - optionnel,Écart,,Extension éditoriale à définir,Prévoir une catégorie distincte pour la consolidation locale ; ne pas forcer dans un thème national

@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 final class OI_Curriculum {
-    public const VERSION = 4;
+    public const VERSION = 5;
     public static function install(): void {
         $installedVersion=(int)get_option('oi_curriculum_version');if($installedVersion>=self::VERSION)return;
         // A short lease avoids duplicate term creation on simultaneous first requests.
@@ -34,6 +34,11 @@ final class OI_Curriculum {
                     update_term_meta($theme,'oi_programme_unit',$id);update_term_meta($theme,'oi_programme_code',$code.'-'.$number);$index[$code]['themes'][(int)$number]=$theme;
                 }
             }
+            // Complementary editorial spaces, distinct from the national theme groups.
+            $e3=get_term_by('slug','programme-2026-e3','oi_enseignement');
+            if($e3){$extra=self::term('oi_theme','complement-e3-consolidation','E3 - 04 Consolidation locale - optionnel');update_term_meta($extra,'oi_programme_unit',(int)$e3->term_id);update_term_meta($extra,'oi_programme_code','E3-04');update_term_meta($extra,'oi_editorial_extension',1);}
+            $par=self::term('oi_enseignement','parcours-ifsi','Parcours IFSI');update_term_meta($par,'oi_programme_code','PAR-IFSI');update_term_meta($par,'oi_editorial_extension',1);
+            $theme=self::term('oi_theme','parcours-ifsi-validation','Validation du diplôme');update_term_meta($theme,'oi_programme_unit',$par);update_term_meta($theme,'oi_editorial_extension',1);
             // Initial catalogue only. Never overwrite an existing UE classification.
             $mapping=[
                 'Hypokaliémie'=>['B1',1], 'Hyperkaliémie'=>['B1',1], 'Ionogramme sanguin'=>['B1',1],
