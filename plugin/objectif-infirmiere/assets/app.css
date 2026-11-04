@@ -719,13 +719,13 @@
 @media(max-width:1100px){.oi-ai-banner{grid-template-columns:80px minmax(0,1fr);gap:18px;padding:25px}.oi-ai-banner-mascot{width:80px;height:80px}.oi-app .oi-ai-banner button{grid-column:2;justify-self:start}}
 @media(max-width:600px){.oi-ai-banner{grid-template-columns:64px minmax(0,1fr);padding:22px 20px;gap:16px}.oi-ai-banner-mascot{width:64px;height:64px}.oi-ai-banner h2{font-size:19px}.oi-ai-banner p{font-size:15px}.oi-app .oi-ai-banner button{grid-column:1/-1;width:100%;min-height:54px}}
 
-/* Keep the active objective and its progress together, before the checklist. */
-.oi-goal-overview{padding:22px 24px;margin:0 0 22px;border:1px solid #dce9fc;border-radius:16px;background:linear-gradient(115deg,#eff6ff,#f8fbff)}
-.oi-goal-overview-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px}
-.oi-goal-overview .oi-goal-name{margin:0;color:#193b65;line-height:1.35}.oi-goal-overview-heading p{margin:8px 0 0;font-size:13px;color:#567293}
-.oi-goal-overview .oi-goal-percent{flex-direction:column;align-items:flex-end;gap:3px}.oi-goal-overview .oi-goal-percent strong{line-height:1.1}.oi-goal-overview .oi-goal-percent span{font-size:13px;color:#365d8b}
-.oi-goal-overview .oi-goal-progress-note{margin:0;font-size:13px;color:#567293}.oi-goal-overview progress{margin:18px 0 12px}
-@media(max-width:600px){.oi-goal-overview{padding:18px}.oi-goal-overview-heading{grid-template-columns:1fr;gap:16px}.oi-goal-overview .oi-goal-name{font-size:22px}.oi-goal-overview .oi-goal-percent{flex-direction:row;align-items:center}.oi-goal-overview .oi-goal-percent strong{font-size:38px}}
+/* Compact progress summary below the objective selector. */
+.oi-goal-overview{padding:16px 18px;margin:0 0 18px;border:1px solid #e1ebf8;border-radius:12px;background:#f7faff}
+.oi-goal-overview-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px}
+.oi-goal-overview .oi-goal-name{margin:0;color:#193b65;font-size:16px;line-height:1.4;overflow-wrap:anywhere}.oi-goal-overview-heading p{margin:4px 0 0;font-size:12px;color:#567293}
+.oi-goal-overview .oi-goal-percent{flex-direction:row;align-items:center;justify-content:flex-end;gap:10px}.oi-goal-overview .oi-goal-percent strong{font-size:24px;letter-spacing:-.6px;line-height:1.2}.oi-goal-overview .oi-goal-percent span{font-size:12px;color:#365d8b}
+.oi-goal-overview .oi-goal-progress-note{margin:10px 0 0;font-size:12px;color:#567293}.oi-goal-overview progress{height:6px;margin:12px 0 0}
+@media(max-width:600px){.oi-goal-overview{padding:14px}.oi-goal-overview-heading{grid-template-columns:1fr;gap:10px}.oi-goal-overview .oi-goal-percent{justify-content:flex-start}.oi-goal-overview .oi-goal-percent strong{font-size:22px}}
 
 /* Monthly study calendar with a selected-day agenda. */
 .oi-goal-calendar{display:block;margin:24px 0}
