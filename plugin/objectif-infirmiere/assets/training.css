@@ -48,3 +48,5 @@
 .oi-app .oi-qcm-associated>button{display:flex;align-items:center;justify-content:center;gap:12px;min-height:48px;max-width:280px;padding:13px 20px;border-radius:12px;background:#285be0;color:#fff;font-size:13px;line-height:1.5}.oi-app .oi-qcm-associated>button:hover{background:#204ac0}
 @media(max-width:1000px){.oi-qcm-associated{grid-template-columns:80px minmax(0,1fr);gap:18px}.oi-qcm-associated-art{width:80px;height:80px}.oi-app .oi-qcm-associated>button{grid-column:2;justify-self:start}}
 @media(max-width:600px){.oi-qcm-associated{grid-template-columns:64px minmax(0,1fr);padding:20px;gap:16px;border-radius:18px}.oi-qcm-associated-art{width:64px;height:64px;border-radius:15px}.oi-app .oi-qcm-associated h2{font-size:17px}.oi-app .oi-qcm-associated>button{grid-column:1/-1;width:100%;max-width:none}.oi-qcm-associated-copy>p:last-child{font-size:12px}}
+
+@media(max-width:760px){.oi-app:has(.oi-main-nav [data-tab=imports]) .oi-qcm-associated{margin-bottom:90px}}
