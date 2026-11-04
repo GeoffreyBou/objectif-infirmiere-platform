@@ -717,4 +717,4 @@
 .oi-app .oi-ai-banner button:focus-visible{outline:3px solid #76adff;outline-offset:4px}
 .oi-ai-banner button .oi-icon{width:20px;height:20px;flex:0 0 20px}
 @media(max-width:1100px){.oi-ai-banner{grid-template-columns:80px minmax(0,1fr);gap:18px;padding:25px}.oi-ai-banner-mascot{width:80px;height:80px}.oi-app .oi-ai-banner button{grid-column:2;justify-self:start}}
-@media(max-width:600px){.oi-ai-banner{grid-template-columns:64px minmax(0,1fr);padding:22px 20px;gap:16px}.oi-ai-banner-mascot{width:64px;height:64px}.oi-ai-banner h2{font-size:19px}.oi-ai-banner p{font-size:15px}.oi-app .oi-ai-banner button{grid-column:1/-1;width:100%;min-height:54px}.oi-app:has(.oi-main-nav [data-tab=imports]) .oi-reader>.oi-ai-banner{margin-bottom:90px}}
+@media(max-width:600px){.oi-ai-banner{grid-template-columns:64px minmax(0,1fr);padding:22px 20px;gap:16px}.oi-ai-banner-mascot{width:64px;height:64px}.oi-ai-banner h2{font-size:19px}.oi-ai-banner p{font-size:15px}.oi-app .oi-ai-banner button{grid-column:1/-1;width:100%;min-height:54px}}
