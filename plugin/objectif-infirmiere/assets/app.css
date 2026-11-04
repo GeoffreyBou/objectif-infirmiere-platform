@@ -749,3 +749,9 @@
 .oi-app .oi-calendar-agenda button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;text-align:left;white-space:normal;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#fff;color:#28538a;font-size:12px;line-height:1.6}.oi-calendar-agenda button span:first-child{min-width:0;overflow-wrap:anywhere}.oi-calendar-agenda button span:last-child{flex:none;color:#245bd6}
 @media(max-width:1100px){.oi-calendar-layout{grid-template-columns:1fr}.oi-calendar-agenda ul{max-height:260px}}
 @media(max-width:600px){.oi-calendar-weekdays,.oi-calendar-days{gap:3px}.oi-calendar-toolbar{margin-bottom:18px}.oi-calendar-toolbar h3{font-size:19px}.oi-calendar-weekdays span{font-size:10px}.oi-app .oi-calendar-days button{min-height:64px;padding:8px 4px;border-radius:8px}.oi-calendar-day-number{font-size:12px}.oi-calendar-load{font-size:8px}.oi-app .oi-calendar-days button[aria-current=date]:after{top:6px;right:5px;width:4px;height:4px}.oi-calendar-agenda{padding:18px}.oi-calendar-legend{font-size:10px}}
+
+/* Objective actions: readable hover and a softer edit action. */
+.oi-app .oi-goals-page [data-new-goal]:hover,.oi-app .oi-goals-page [data-new-goal]:focus-visible{background:#245bd6;border-color:#245bd6;color:#fff}
+.oi-app .oi-goals-page .oi-goal-edit{background:#f3f7fe;border:1px solid #d3e1f7;color:#245bd6}
+.oi-app .oi-goals-page .oi-goal-edit:hover,.oi-app .oi-goals-page .oi-goal-edit:focus-visible{background:#e5efff;border-color:#a9c6f4;color:#1749b4}
+.oi-app .oi-goals-page [data-new-goal]:focus-visible,.oi-app .oi-goals-page .oi-goal-edit:focus-visible{outline:3px solid #9dc5ff;outline-offset:3px}
