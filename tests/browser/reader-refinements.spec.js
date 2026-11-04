@@ -107,6 +107,7 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   await (await search(page, 'Hypokaliémie')).click();
   await expect(page.locator('.oi-content')).toBeVisible();
   await expect(page.locator('.oi-word-objectives .oi-callout-icon')).toHaveCount(1);
+  expect(await page.locator('.oi-protected').evaluate(el=>getComputedStyle(el,'::before').content)).toBe('none');
   await expect(page.locator('.oi-word-essential .oi-callout-icon')).toHaveCount(1);
   await expect(page.locator('.oi-word-essential')).toContainText(essential);
   await expect(page.locator('.oi-flow')).toHaveCount(1);

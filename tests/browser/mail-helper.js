@@ -11,7 +11,7 @@ async function confirmEmail(page,email){
  await page.goto(url.href);
  const state=await page.request.get('/?rest_route=/oi/v1/account',{headers:{'X-WP-Nonce':nonce}});
  expect((await state.json()).verified).toBe(false);
- await page.getByRole('button',{name:'Confirmer mon adresse',exact:true}).click();await expect(page).toHaveURL(/\/espace-revision\/$/);
+ await page.getByRole('button',{name:'Confirmer mon adresse',exact:true}).click();await expect(page).toHaveURL(/\/espace-revision\/(?:\?view=fiches)?$/);
  return url.href;
 }
 module.exports={confirmEmail};

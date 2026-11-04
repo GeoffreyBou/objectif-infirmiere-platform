@@ -1,4 +1,4 @@
-# QCM par fiche, thème et UE — rc.31
+# QCM par fiche, thème et UE — rc.34
 
 ## Préparer un Excel
 
@@ -41,7 +41,7 @@ Les questions sont mises à jour par code. Les questions absentes du nouvel Exce
 
 Seules les séries auxquelles l’étudiant a déjà accès participent au tirage. Un entraînement transversal ne débite aucun crédit supplémentaire ; les déblocages QCM existants restent le point d’entrée. Les administrateurs peuvent tester l’ensemble. Un renvoi vers une fiche n’octroie pas gratuitement son accès si elle est verrouillée.
 
-Les questions/corrigés sont figés côté serveur au début de la session. Le navigateur reçoit les propositions, sans réponses exactes ni explications, jusqu’à la soumission. Les réponses sont corrigées côté serveur ; une seconde soumission renvoie le même résultat et ne recompte pas la progression. Les corrections indiquent les réponses attendues et renvoient à la fiche source. Le score porte sur le tirage, sans prétendre certifier toute l’UE.
+Les questions/corrigés sont figés côté serveur au début de la session. Le navigateur reçoit les propositions, sans réponses exactes ni explications. Chaque question est validée séparément côté serveur, dans l’ordre du tirage ; sa correction est alors affichée. Une nouvelle tentative après coupure réseau renvoie la réponse déjà enregistrée, même si les choix envoyés ont changé. La dernière réponse produit le bilan et compte la session une seule fois dans la progression. Les corrections indiquent les réponses attendues et renvoient à la fiche source. Le score porte sur le tirage, sans prétendre certifier toute l’UE.
 
 Sessions limitées à 24 heures et aux 50 dernières par compte ; nombre cumulé de sessions corrigées conservé pour la progression. Les résultats antérieurs ne sont pas recalculés lorsqu’un Excel change. Une révocation d’accès empêche la correction d’une session devenue inaccessible.
 
@@ -80,3 +80,13 @@ La sélection globale repose sur la liste complète des identifiants en attente,
 Validation : 43 assertions serveur réussies, dont la sélection de 105 brouillons au-delà des 100 éditeurs. Parcours navigateur ordinateur/iPhone vérifiés : sélection globale, case intermédiaire, publication sans aperçu manuel, échec de validation isolé, reprise des erreurs, lot de 105 séries interrompu puis repris sans doublon, prévisualisation groupée, publication individuelle et entraînements. Les publications de test sont exclusivement locales.
 
 Production : sélection globale et désélection vérifiées sur les 7 séries actuellement en attente ; bouton « Tout valider et publier » disponible, aucune publication déclenchée pendant cette vérification. Version précédente rc.30 conservée pour retour arrière.
+
+### Parcours question par question — rc.34
+
+Une question visible à la fois, tirée sans répétition dans la session aléatoire. « Valider ma réponse » affiche les réponses attendues et l’explication, puis « Question suivante » avance. Après la dernière correction, « Voir mon bilan » présente le score, les réponses justes, les erreurs, le détail des choix et les fiches à revoir. Le même parcours sert aux séries par fiche et aux tirages par thème/UE. Les animations respectent la préférence de réduction des mouvements.
+
+Le titre de fiche n’est plus répété dans le questionnaire. Le sous-titre de l’en-tête indique le nombre réel de questions (20 au maximum pour une fiche), puis « Prends le temps de réfléchir. À toi de jouer ! ». La ligne grise personnelle en haut du contenu des fiches n’est plus affichée ; le repère en pied de document imprimé reste en place.
+
+Le démarrage passe `stepwise: true`. La route `POST /qcm-sessions/{id}/answer` reçoit un indice de question et les choix. Elle contrôle le compte, l’accès actuel aux fiches, l’expiration, l’ordre des questions et la validité des choix. Les corrections futures ne sont pas divulguées. La réponse et le bilan sont enregistrés sous le verrou utilisateur existant ; le compteur de sessions n’est incrémenté qu’à la fin. Les anciennes sessions globales et leur route `/submit` restent compatibles, mais ne peuvent pas contourner le parcours séquentiel d’une nouvelle session.
+
+Validation : 22 assertions serveur dédiées et 43 assertions QCM existantes réussies. Parcours de 20 questions sur ordinateur/iPhone, correction immédiate, une erreur puis 19 réponses justes, perte simulée de la dernière réponse HTTP et reprise sans double comptage, bilan, lien vers le cours et échec/reprise du lancement. Revue des fiches, impression et navigation par URL conservées. La vérification visuelle en production utilise un transport simulé des réponses pour ne pas modifier la progression réelle.

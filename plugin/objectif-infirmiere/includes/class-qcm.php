@@ -2,7 +2,7 @@
 defined('ABSPATH') || exit;
 final class OI_QCM {
     public static function routes(): void {
-        foreach(['/qcm-scopes'=>['GET','scopes'],'/qcm-sessions'=>['POST','start'],'/qcm-sessions/(?P<id>\d+)/submit'=>['POST','submit']] as $path=>[$method,$methodName])register_rest_route('oi/v1',$path,['methods'=>$method,'permission_callback'=>[OI_API::class,'auth'],'callback'=>[self::class,$methodName]]);
+        foreach(['/qcm-scopes'=>['GET','scopes'],'/qcm-sessions'=>['POST','start'],'/qcm-sessions/(?P<id>\d+)/submit'=>['POST','submit'],'/qcm-sessions/(?P<id>\d+)/answer'=>['POST','answer']] as $path=>[$method,$methodName])register_rest_route('oi/v1',$path,['methods'=>$method,'permission_callback'=>[OI_API::class,'auth'],'callback'=>[self::class,$methodName]]);
     }
     private static function eligible(): array {
         $ids=[];foreach(get_posts(['post_type'=>'oi_fiche','post_status'=>'publish','numberposts'=>-1]) as $p)if(OI_Offer::can_access(get_current_user_id(),'QCM',$p->ID)&&OI_Revision::quiz($p->ID))$ids[]=$p->ID;return $ids;
@@ -26,9 +26,42 @@ final class OI_QCM {
             $existing=get_posts(['post_type'=>'oi_quiz_session','post_status'=>'private','author'=>$user,'numberposts'=>-1,'orderby'=>'ID','order'=>'DESC']);
             foreach($existing as $i=>$p)if($i>=49)wp_delete_post($p->ID,true);
             $session=wp_insert_post(['post_type'=>'oi_quiz_session','post_status'=>'private','post_author'=>$user,'post_title'=>$label?:'Entraînement'],true);if(is_wp_error($session))throw new RuntimeException('Session impossible.');
-            update_post_meta($session,'oi_session',['scope'=>$scope,'scope_id'=>$id,'created'=>time(),'questions'=>$questions]);
+            update_post_meta($session,'oi_session',['scope'=>$scope,'scope_id'=>$id,'created'=>time(),'questions'=>$questions,'stepwise'=>$r['stepwise']===true]);
             return ['id'=>$session,'title'=>$label,'requested'=>$count,'available'=>$available,'quiz'=>array_map(function($q){unset($q['correct'],$q['explanation']);return $q;},$questions)];
         }catch(Throwable $e){return new WP_Error('oi_session',$e->getMessage(),['status'=>500]);}finally{$wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)',$lock));}
+    }
+    /** Corrections are revealed only after that question has been answered, in order. */
+    public static function answer(WP_REST_Request $r): array|WP_Error {
+        $id=absint($r['id']);$user=get_current_user_id();$p=get_post($id);
+        if(!$p||$p->post_type!=='oi_quiz_session'||(int)$p->post_author!==$user)return new WP_Error('oi_session','Session introuvable.',['status'=>404]);
+        global $wpdb;$lock='oi_qcm_user_'.md5(DB_NAME.$wpdb->prefix.$user);
+        if((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s,3)',$lock))!==1)return new WP_Error('oi_busy','Réessaie dans un instant.',['status'=>409]);
+        try{
+            wp_cache_delete($id,'post_meta');$session=get_post_meta($id,'oi_session',true);
+            if(!$session||empty($session['stepwise']))throw new RuntimeException('Lance un nouvel entraînement question par question.');
+            if(time()-$session['created']>DAY_IN_SECONDS)throw new RuntimeException('Session expirée. Lance un nouvel entraînement.');
+            foreach($session['questions'] as $q)if(!OI_Offer::can_access($user,'QCM',$q['fiche_id']))throw new RuntimeException('Ton accès à cette série a changé. Relance un entraînement.');
+            $index=$r['index'];$total=count($session['questions']);$steps=get_post_meta($id,'oi_step_answers',true)?:[];
+            if(!is_int($index)||$index<0||$index>=$total||$index>count($steps))throw new RuntimeException('Réponds à la question en cours avant de continuer.');
+            // A retry after a network interruption returns the recorded answer, never a new score.
+            if(!isset($steps[$index])){
+                $q=$session['questions'][$index];$selected=$r['answers'];
+                if(!is_array($selected)||!$selected||count($selected)>count($q['options']))throw new RuntimeException('Choisis au moins une réponse.');
+                foreach($selected as $choice)if(!is_int($choice)||$choice<0||$choice>=count($q['options']))throw new RuntimeException('Choix invalide.');
+                $selected=array_values(array_unique($selected));sort($selected);
+                if(!$q['multiple']&&count($selected)!==1)throw new RuntimeException('Une seule réponse est attendue.');
+                $steps[]=['correct'=>$selected===$q['correct'],'selected'=>$selected,'answers'=>$q['correct'],'explanation'=>$q['explanation'],'fiche_id'=>$q['fiche_id'],'fiche_title'=>$q['fiche_title']];
+                $wpdb->query('START TRANSACTION');update_post_meta($id,'oi_step_answers',$steps);
+                if(count($steps)===$total){
+                    $result=['score'=>count(array_filter($steps,fn($step)=>$step['correct'])),'total'=>$total,'corrections'=>$steps];
+                    update_post_meta($id,'oi_result',$result);wp_cache_delete($user,'user_meta');update_user_meta($user,'oi_qcm_completed',(int)get_user_meta($user,'oi_qcm_completed',true)+1);
+                }
+                $wpdb->query('COMMIT');
+            }
+            $result=get_post_meta($id,'oi_result',true);
+            return ['index'=>$index,'correction'=>$steps[$index],'answered'=>count($steps),'total'=>$total,'completed'=>(bool)$result,'result'=>$result?:null];
+        }catch(Throwable $e){$wpdb->query('ROLLBACK');wp_cache_delete($id,'post_meta');wp_cache_delete($user,'user_meta');return new WP_Error('oi_answers',$e->getMessage(),['status'=>400]);}
+        finally{$wpdb->get_var($wpdb->prepare('SELECT RELEASE_LOCK(%s)',$lock));}
     }
     public static function submit(WP_REST_Request $r): array|WP_Error {
         $id=absint($r['id']);$user=get_current_user_id();$p=get_post($id);if(!$p||$p->post_type!=='oi_quiz_session'||(int)$p->post_author!==$user)return new WP_Error('oi_session','Session introuvable.',['status'=>404]);
@@ -37,6 +70,7 @@ final class OI_QCM {
             wp_cache_delete($id,'post_meta');$session=get_post_meta($id,'oi_session',true);if(!$session||time()-$session['created']>DAY_IN_SECONDS)throw new RuntimeException('Session expirée. Lance un nouvel entraînement.');
             foreach($session['questions'] as $q)if(!OI_Offer::can_access($user,'QCM',$q['fiche_id']))throw new RuntimeException('Ton accès à cette série a changé. Relance un entraînement.');
             $result=get_post_meta($id,'oi_result',true);if($result)return $result;
+            if(!empty($session['stepwise']))throw new RuntimeException('Valide chaque question pour terminer cet entraînement.');
             $answers=$r['answers'];if(!is_array($answers)||count($answers)!==count($session['questions']))throw new RuntimeException('Réponds à toutes les questions avant de corriger.');$score=0;$corrections=[];
             foreach($session['questions'] as $i=>$q){$answer=$answers[$i]??null;if(!is_array($answer)||!$answer||count($answer)>count($q['options']))throw new RuntimeException('Réponse manquante ou invalide à la question '.($i+1).'.');foreach($answer as $a)if(!is_int($a)||$a<0||$a>=count($q['options']))throw new RuntimeException('Choix invalide.');$answer=array_values(array_unique($answer));sort($answer);$correct=$answer===$q['correct'];if($correct)$score++;$corrections[]=['correct'=>$correct,'answers'=>$q['correct'],'explanation'=>$q['explanation'],'fiche_id'=>$q['fiche_id'],'fiche_title'=>$q['fiche_title']];}
             $result=['score'=>$score,'total'=>count($corrections),'corrections'=>$corrections];$wpdb->query('START TRANSACTION');update_post_meta($id,'oi_result',$result);wp_cache_delete($user,'user_meta');update_user_meta($user,'oi_qcm_completed',(int)get_user_meta($user,'oi_qcm_completed',true)+1);$wpdb->query('COMMIT');return $result;

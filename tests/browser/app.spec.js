@@ -9,7 +9,7 @@ async function login(page) {
   await page.locator('#user_login').fill(account.login);
   await page.locator('#user_pass').fill(account.password);
   await page.locator('#wp-submit').click();
-  await expect(page).toHaveURL(/\/espace-revision\/$/);
+  await expect(page).toHaveURL(/\/espace-revision\/(?:\?view=fiches)?$/);
   await expect(page.getByRole('heading',{name:'Bonjour Étudiante Démo.',exact:true})).toBeVisible();
   await expect(page.locator('#oi-results .oi-folder-card').first()).toBeVisible();
 }
@@ -49,7 +49,7 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   await expect(revised).toHaveAttribute('aria-pressed','true');
 
   await page.locator('#oi-quiz-form input[value="0"]').check();
-  await page.getByRole('button',{name:'Voir ma correction'}).click();
+  await page.getByRole('button',{name:'Valider ma réponse'}).click();await page.getByRole('button',{name:'Voir mon bilan'}).click();
   await expect(page.locator('#oi-quiz-result')).toContainText('1 / 1');
   await noOverflow(page);
 
@@ -79,7 +79,7 @@ test('espace membre : recherche, favoris, progression, QCM et assistant', async(
   await expect(page.locator('#oi-quiz-form')).toBeVisible();
   await expect(page.locator('.oi-content')).toHaveCount(0);
   await page.locator('#oi-quiz-form input[value="0"]').check();
-  await page.getByRole('button',{name:'Voir ma correction'}).click();
+  await page.getByRole('button',{name:'Valider ma réponse'}).click();await page.getByRole('button',{name:'Voir mon bilan'}).click();
   await expect(page.locator('#oi-quiz-result')).toContainText('1 / 1');
   await noOverflow(page);
   await page.screenshot({path:`.runtime/qcm-${test.info().project.name}.png`,fullPage:true});
@@ -135,7 +135,7 @@ test('inscription réelle : session élève et accès démo sans élévation de 
     await route.continue({postData:data.toString()});
   });
   await page.getByRole('button',{name:'Créer mon compte gratuit'}).click();
-  await expect(page).toHaveURL(/\/espace-revision\/$/);
+  await expect(page).toHaveURL(/\/espace-revision\/(?:\?view=fiches)?$/);
   await expect(page.getByRole('heading',{name:'Vérifie ton adresse e-mail.'})).toBeVisible();
   await confirmEmail(page,email);
   await expect(page.getByRole('heading',{name:'Bonjour Camille Test.',exact:true})).toBeVisible();
