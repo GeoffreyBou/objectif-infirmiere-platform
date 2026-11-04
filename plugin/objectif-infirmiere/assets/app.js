@@ -34,7 +34,6 @@
   let currentTab = 'fiches';
   let activeFiche = null;
   let query = '';
-  let semester = '';
   let unit = null;
   let theme = null;
   const folderNames = {unit:'',theme:''};
@@ -206,15 +205,15 @@
   }
   async function libraryResults(data,quizMode) {
     if(currentTab!=='fiches'||query||theme!==null)return resultCards(data,quizMode);
-    const folders=await api(`library?semestre=${encodeURIComponent(semester)}${unit!==null?'&enseignement='+unit:''}`);
-    return folders.folders.map(folder=>`<button type="button" class="oi-folder-card" data-folder="${Number(folder.id)}" data-folder-name="${esc(folder.name)}"><span class="oi-folder-symbol">${icon('folder')}</span><span class="oi-folder-copy"><span class="oi-eyebrow">${unit===null?'UNITÉ D’ENSEIGNEMENT':'THÈME'}</span><h3>${esc(folder.name)}</h3><span>${folder.count?Number(folder.count)+' fiche'+(folder.count>1?'s':''):'À venir'}</span></span>${icon('arrow')}</button>`).join('') || '<div class="oi-empty"><h3>Aucune fiche dans ce dossier pour le moment.</h3><p>Choisis une autre unité ou modifie le filtre de semestre.</p></div>';
+    const folders=await api(`library${unit!==null?'?enseignement='+unit:''}`);
+    return folders.folders.map(folder=>`<button type="button" class="oi-folder-card" data-folder="${Number(folder.id)}" data-folder-name="${esc(folder.name)}"><span class="oi-folder-symbol">${icon('folder')}</span><span class="oi-folder-copy"><span class="oi-eyebrow">${unit===null?'UNITÉ D’ENSEIGNEMENT':'THÈME'}</span><h3>${esc(folder.name)}</h3><span>${folder.count?Number(folder.count)+' fiche'+(folder.count>1?'s':''):'À venir'}</span></span>${icon('arrow')}</button>`).join('') || '<div class="oi-empty"><h3>Aucune fiche dans ce dossier pour le moment.</h3><p>Choisis une autre unité.</p></div>';
   }
   function searchForm(data, quizMode) {
-    return `<form id="oi-search" class="oi-search"><div class="oi-search-field">${icon('search')}<label class="oi-sr-only" for="oi-query">Rechercher dans mes fiches</label><input id="oi-query" type="search" value="${esc(query)}" placeholder="${quizMode?'Quel sujet veux-tu travailler ?':'Une notion, un médicament, une UE…'}" maxlength="150"><button type="submit" class="oi-search-submit">Rechercher</button></div><div class="oi-semester-field"><label class="oi-sr-only" for="oi-semester">Semestre</label><select id="oi-semester"><option value="">Tous les semestres</option>${(data.semesters||[]).map(s=>`<option value="${Number(s.id)}" ${String(s.id)===semester?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div></form>`;
+    return `<form id="oi-search" class="oi-search"><div class="oi-search-field">${icon('search')}<label class="oi-sr-only" for="oi-query">Rechercher dans mes fiches</label><input id="oi-query" type="search" value="${esc(query)}" placeholder="${quizMode?'Quel sujet veux-tu travailler ?':'Une notion, un médicament, une UE…'}" maxlength="150"><button type="submit" class="oi-search-submit">Rechercher</button></div></form>`;
   }
   function resultCards(data, quizMode) {
     const items = quizMode ? data.items.filter(item=>Number(item.quiz_count)>0) : data.items;
-    return items.map(item=>card(item,quizMode)).join('') || `<div class="oi-empty">${icon(quizMode?'quiz':favoritesOnly?'heart':'book')}<h3>${favoritesOnly?'Tes essentiels, au même endroit.':quizMode?'Aucun QCM pour cette sélection.':'Aucune fiche pour cette sélection.'}</h3><p>${favoritesOnly?'Ajoute une fiche aux favoris depuis sa page pour la retrouver ici.':data.total?'Essaie un autre mot-clé ou un autre semestre.':query?'Essaie un autre mot-clé.':'Les fiches de ce thème arrivent prochainement.'}</p>${query||semester?'<button type="button" data-clear-search>Effacer les filtres</button>':''}</div>`;
+    return items.map(item=>card(item,quizMode)).join('') || `<div class="oi-empty">${icon(quizMode?'quiz':favoritesOnly?'heart':'book')}<h3>${favoritesOnly?'Tes essentiels, au même endroit.':quizMode?'Aucun QCM pour cette sélection.':'Aucune fiche pour cette sélection.'}</h3><p>${favoritesOnly?'Ajoute une fiche aux favoris depuis sa page pour la retrouver ici.':data.total?'Essaie un autre mot-clé.':query?'Essaie un autre mot-clé.':'Les fiches de ce thème arrivent prochainement.'}</p>${query?'<button type="button" data-clear-search>Effacer les filtres</button>':''}</div>`;
   }
   function pagination(data) {
     const target = document.querySelector('#oi-pagination');
@@ -230,10 +229,10 @@
     if(!await loadAccount())return;
     if(sequence!==routeSequence)return;
     favoritesOnly = tab==='favorites';
-    if (reset) { page=1; query=''; semester=''; unit=null; theme=null; }
+    if (reset) { page=1; query='';  unit=null; theme=null; }
     screen().setAttribute('aria-busy','true');
     let data;
-    try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`); }
+    try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`); }
     finally { screen().removeAttribute('aria-busy'); }
     if (sequence!==routeSequence) return;
     account=data.account;
@@ -246,12 +245,10 @@
     if(sequence!==routeSequence)return;
     pagination(data);
     document.querySelector('#oi-search').addEventListener('submit', e=>{e.preventDefault();page=1;search().catch(error);});
-    document.querySelector('#oi-semester').addEventListener('change', ()=>{page=1;search().catch(error);});
     if (document.querySelector('#oi-catalog')) showCatalog(document.querySelector('#oi-catalog')).catch(error);
   }
   async function search() {
     query = document.querySelector('#oi-query')?.value || '';
-    semester = document.querySelector('#oi-semester')?.value || '';
     const sequence = ++searchSequence;
     const route = routeSequence;
     const results = document.querySelector('#oi-results');
@@ -259,7 +256,7 @@
     results?.querySelectorAll('button').forEach(button=>button.disabled=true);
     status('Recherche en cours…');
     try {
-      const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}&semestre=${encodeURIComponent(semester)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`);
+      const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`);
       if (sequence!==searchSequence || route!==routeSequence) return;
       const contents=await libraryResults(data,currentTab==='qcm');
       if(sequence!==searchSequence || route!==routeSequence)return;
@@ -412,7 +409,7 @@
         const destination=currentTab==='qcm'?'qcm':'fiches';
         const opened=activeFiche, chosenTheme=(opened.terms?.theme||[]).find(t=>t.id===Number(b.dataset.readerTheme));
         const chosenUnit=(opened.terms?.enseignement||[]).find(t=>t.id===Number(b.dataset.readerUnit))||(opened.terms?.enseignement||[])[0];
-        if(chosenUnit){unit=Number(chosenUnit.id);theme=chosenTheme?Number(chosenTheme.id):null;folderNames.unit=chosenUnit.name;folderNames.theme=chosenTheme?.name||'';query='';semester='';page=1;await dashboard(destination,false);document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
+        if(chosenUnit){unit=Number(chosenUnit.id);theme=chosenTheme?Number(chosenTheme.id):null;folderNames.unit=chosenUnit.name;folderNames.theme=chosenTheme?.name||'';query='';page=1;await dashboard(destination,false);document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
       }
       if (b.hasAttribute('data-home')) await dashboard();
       if (b.dataset.return) await dashboard(b.dataset.return,false);
@@ -438,7 +435,7 @@
       }
       if (b.hasAttribute('data-ai')) await chat();
       if (b.dataset.prompt) {document.querySelector('#oi-question').value=b.dataset.prompt;document.querySelector('#oi-question').focus();}
-      if (b.hasAttribute('data-clear-search')) {document.querySelector('#oi-query').value='';document.querySelector('#oi-semester').value='';page=1;await search();}
+      if (b.hasAttribute('data-clear-search')) {document.querySelector('#oi-query').value='';page=1;await search();}
       if(b.hasAttribute('data-reader-goal')&&activeFiche?.goal){
         const controls=[...screen().querySelectorAll('[data-reader-goal]')];controls.forEach(control=>control.disabled=true);const opened=activeFiche;try{const r=await api(`goals/${opened.goal.id}/complete`,{fiche:opened.id,done:!opened.goal.done,version:opened.goal.version});if(activeFiche===opened){const g=r.goals.find(g=>g.id===opened.goal.id);opened.goal={...opened.goal,done:!opened.goal.done,version:g.version};controls.forEach(control=>{control.setAttribute('aria-pressed',String(opened.goal.done));control.innerHTML=icon('check')+(opened.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif');});status('Ton objectif est mis à jour.');}}finally{controls.forEach(control=>control.disabled=false);}
       }

@@ -755,3 +755,6 @@
 .oi-app .oi-goals-page .oi-goal-edit{background:#f3f7fe;border:1px solid #d3e1f7;color:#245bd6}
 .oi-app .oi-goals-page .oi-goal-edit:hover,.oi-app .oi-goals-page .oi-goal-edit:focus-visible{background:#e5efff;border-color:#a9c6f4;color:#1749b4}
 .oi-app .oi-goals-page [data-new-goal]:focus-visible,.oi-app .oi-goals-page .oi-goal-edit:focus-visible{outline:3px solid #9dc5ff;outline-offset:3px}
+
+/* The library search occupies the full row without a semester filter. */
+.oi-search{grid-template-columns:minmax(0,1fr)}
