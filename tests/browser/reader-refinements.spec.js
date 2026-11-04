@@ -89,7 +89,12 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
     <table><tbody><tr><td><p><strong>L’ESSENTIEL EN 30 SECONDES</strong></p><p>${essential}</p></td></tr></tbody></table>
     <h2><strong>1. ${titles[0]}</strong></h2><p>Premier contenu de révision, conservé intégralement.</p>
     <h2>2) ${titles[1]}</h2><p>Deuxième contenu de révision, conservé intégralement.</p>
-    <h2>${titles[2]}</h2><p>Troisième contenu de révision, conservé intégralement.</p>`;
+    <h2>${titles[2]}</h2><p>Troisième contenu de révision, conservé intégralement.</p>
+    <p><strong>Un schéma de révision</strong></p>
+    <table><tbody><tr><td><p><strong>Première étape</strong></p><p>Une précision <a href="https://example.org/source">sourcée</a>.</p></td></tr></tbody></table><p>↓</p>
+    <table><tbody><tr><td><p><strong>Deuxième étape</strong></p></td></tr></tbody></table><p>↓</p>
+    <table><tbody><tr><td><p><strong>Troisième étape</strong></p></td></tr></tbody></table>
+    <table><tbody><tr><td><p><strong>POINT CLÉ</strong> Un encart indépendant.</p></td></tr></tbody></table>`;
   await page.route(url => /^\/oi\/v1\/fiches\/\d+$/.test(restPath(url)), async route => {
     const response = await route.fetch();
     const fiche = await response.json();
@@ -104,6 +109,14 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   await expect(page.locator('.oi-word-objectives .oi-callout-icon')).toHaveCount(1);
   await expect(page.locator('.oi-word-essential .oi-callout-icon')).toHaveCount(1);
   await expect(page.locator('.oi-word-essential')).toContainText(essential);
+  await expect(page.locator('.oi-flow')).toHaveCount(1);
+  await expect(page.locator('.oi-flow-number')).toHaveText(['01','02','03']);
+  await expect(page.locator('.oi-flow-copy strong')).toHaveText(['Première étape','Deuxième étape','Troisième étape']);
+  await expect(page.locator('.oi-flow a')).toHaveAttribute('href','https://example.org/source');
+  await expect(page.locator('.oi-flow .oi-callout-icon,.oi-word-callout--plain .oi-callout-icon')).toHaveCount(0);
+  await expect(page.locator('.oi-word-callout--plain')).toContainText('Un encart indépendant.');
+  await expect(page.locator('.oi-breadcrumb > span')).toHaveCount(0);
+  expect(await page.locator('.oi-flow-step').first().evaluate(el=>Math.abs(parseFloat(getComputedStyle(el,'::before').left)-el.getBoundingClientRect().width/2)<1)).toBeTruthy();
   await expect(page.locator('.oi-content h2 .oi-section-number')).toHaveText(['01', '02', '03']);
   await expect(page.locator('#oi-toc a')).toHaveCount(3);
   for (let index = 0; index < titles.length; index++) {
@@ -139,11 +152,29 @@ test('fiche : encarts, numéros uniques du sommaire et impression du cours sans 
   // Rendering and printing must never modify the Word-derived HTML stored by WordPress.
   expect((await api(page, `fiches/${original.id}`)).content).toBe(original.content);
   await page.screenshot({path:`.runtime/reader-refinements-${test.info().project.name}.png`, fullPage:true});
+  expect(new URL(page.url()).searchParams.get('fiche')).toBe(String(original.id));
+  await page.reload();
+  await expect(page.locator('.oi-flow-step')).toHaveCount(3);
+  await expect(page.locator('#oi-toc a').nth(1)).toHaveAttribute('aria-current','location');
+  await expect(page).toHaveURL(/#oi-section-1$/);
 
   await page.locator('.oi-main-nav [data-tab="qcm"]').click();
   await (await search(page, 'Hypokaliémie')).click();
   await expect(page.locator('.oi-reader')).toBeVisible();
   await expect(page.locator('.oi-content')).toHaveCount(0);
+  expect(new URL(page.url()).searchParams.get('view')).toBe('qcm');
+  expect(new URL(page.url()).searchParams.get('fiche')).toBe(String(original.id));
+  await page.reload();
+  await expect(page.locator('.oi-reader')).toBeVisible();
+  await expect(page.locator('.oi-content')).toHaveCount(0);
+  await expect(page.locator('.oi-breadcrumb > span')).toHaveCount(0);
   await expect(page.locator('[data-print-fiche]')).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+test('fiche directe : accès contrôlé et onglet conservé après actualisation',async({page})=>{
+ await login(page);const unlocks=[];page.on('request',r=>{if(restPath(new URL(r.url()))==='/oi/v1/unlock')unlocks.push(r.url());});
+ await page.route(url=>restPath(url)==='/oi/v1/fiches/999999999',route=>route.fulfill({status:403,json:{code:'oi_forbidden',message:'Cette fiche ne fait pas partie de vos accès.'}}));
+ await page.goto('/espace-revision/?view=fiches&fiche=999999999');await expect(page.locator('[role=alert]')).toContainText('Cette fiche ne fait pas partie de vos accès.');await expect(page.locator('.oi-content')).toHaveCount(0);expect(unlocks).toEqual([]);
+ await page.locator('[data-tab=favorites]').click();await expect(page.locator('#oi-favorites-title')).toBeVisible();expect(new URL(page.url()).searchParams.has('fiche')).toBeFalsy();await page.reload();await expect(page.locator('#oi-favorites-title')).toBeVisible();
 });

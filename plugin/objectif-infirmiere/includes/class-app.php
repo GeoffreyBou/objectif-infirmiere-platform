@@ -32,7 +32,8 @@ final class OI_App {
         if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-image-imports',OI_URL.'assets/image-imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',['oi-image-imports'],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',['oi-qcm-display'],OI_VERSION,true);}
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',['oi-qcm-display'],OI_VERSION,true);
-        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals','oi-qcm-display'], OI_VERSION, true);
+        wp_enqueue_script('oi-reader-diagrams',OI_URL.'assets/reader-diagrams.js',[],OI_VERSION,true);
+        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals','oi-qcm-display','oi-reader-diagrams'], OI_VERSION, true);
         $display_name = wp_get_current_user()->display_name;
         preg_match('/^./us', $display_name ?: 'É', $initial);
         wp_localize_script('oi-app', 'OI', [

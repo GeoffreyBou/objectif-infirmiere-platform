@@ -70,7 +70,13 @@
     view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"></div></div>`;
     if (loading) screen().append(loading);
   }
-  function setTab(tab) {
+  function setTab(tab, ficheId=null) {
+    const url=new URL(location.href);
+    const sameReader=ficheId!==null&&url.searchParams.get('view')===tab&&url.searchParams.get('fiche')===String(ficheId);
+    url.searchParams.set('view',tab);
+    if(ficheId!==null)url.searchParams.set('fiche',String(ficheId));else url.searchParams.delete('fiche');
+    if(!sameReader)url.hash='';
+    history.replaceState(history.state,'',url);
     tocObserver?.disconnect();
     tocObserver = null;
     currentTab = tab;
@@ -286,9 +292,9 @@
     const data = await api(`${quizOnly?'qcm':'fiches'}/${id}`);
     if (sequence!==routeSequence) return;
     activeFiche = data;
-    setTab(quizOnly?'qcm':'fiches');
+    setTab(quizOnly?'qcm':'fiches',Number(id));
     const topic = subject(data);
-    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button><span>${esc(data.terms?.semestre?.map(t=>t.name).join(' · ') || 'IFSI')}</span></nav><article class="oi-reader"><div class="oi-reader-hero">${data.cover?`<img class="oi-theme-art oi-fiche-cover" src="${esc(data.cover)}" alt="" width="320" height="320" fetchpriority="high">`:`<div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div>`}<header class="oi-reader-heading">${readerPath(data)}<h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button><button type="button" data-print-fiche>${icon('print')}Imprimer</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb" aria-label="Fil d’Ariane"><button type="button" data-return="${quizOnly?'qcm':'fiches'}">${icon('back')} ${quizOnly?'Tous les QCM':'Mes révisions'}</button></nav><article class="oi-reader"><div class="oi-reader-hero">${data.cover?`<img class="oi-theme-art oi-fiche-cover" src="${esc(data.cover)}" alt="" width="320" height="320" fetchpriority="high">`:`<div class="oi-theme-art oi-theme-art--${artFamily(data)}" aria-hidden="true"></div>`}<header class="oi-reader-heading">${readerPath(data)}<h1>${esc(data.title)}</h1><p class="oi-muted">${quizOnly?'Prends le temps de réfléchir. La correction t’attend à la fin.':`Mise à jour le ${esc(new Date(data.updated+'Z').toLocaleDateString('fr-FR'))}`}</p></header>${!quizOnly?`<div class="oi-actions"><button type="button" data-state="favorite" aria-pressed="${!!data.state?.favorite}">${icon('heart')}${data.state?.favorite?'Favori':'Ajouter aux favoris'}</button>${data.goal?`<button type="button" data-reader-goal aria-pressed="${data.goal.done}">${icon('check')}${data.goal.done?'Révisée pour mon objectif':'Valider pour mon objectif'}</button><button type="button" data-tab="progress">Mon objectif</button>`:`<button type="button" data-state="revised" aria-pressed="${!!data.state?.revised}">${icon('check')}${data.state?.revised?'Révisée':'Marquer comme révisée'}</button>`}<button type="button" class="oi-ask-button" data-ai>${icon('spark')}Poser une question sur cette fiche</button><button type="button" data-print-fiche>${icon('print')}Imprimer</button></div>`:''}</div><p id="oi-status" role="status"></p>${!quizOnly?'<div class="oi-reading-layout"><nav id="oi-toc" aria-label="Sommaire"></nav><div class="oi-content oi-protected" data-protected>'+data.content+'</div></div><div id="oi-watermark"></div>':''}<section id="oi-quiz" class="oi-quiz-section"></section>${!quizOnly?`<section class="oi-related"><span class="oi-eyebrow">GARDE TON ÉLAN</span><h2>On continue ?</h2><div class="oi-grid">${data.related.map(item=>card(item)).join('')}</div></section>${aiBanner()}`:''}</article>`;
     if (!quizOnly) {
       const headings = [...screen().querySelectorAll('.oi-content h2, .oi-content h3')];
       const labels=readerHeadingLabels(headings);
@@ -300,11 +306,12 @@
         if(/^UE\s+[A-E][. ]?\d/i.test(paragraph.textContent.trim()))paragraph.classList.add('oi-word-meta');
         if(/^Objectifs?\s*:/i.test(paragraph.textContent.trim())){paragraph.classList.add('oi-word-objectives');paragraph.insertAdjacentHTML('afterbegin',icon('target','oi-callout-icon'));}
       });
+      window.OIReaderDiagrams.enhance(content);
       content.querySelectorAll(':scope > table').forEach(table=>{
         if(table.rows.length===1&&table.rows[0].cells.length===1){
           table.classList.add('oi-word-callout');const essential=/essentiel.{0,20}30\s+secondes/i.test(table.textContent);
-          if(essential)table.classList.add('oi-word-essential');
-          table.rows[0].cells[0].insertAdjacentHTML('afterbegin',icon(essential?'bolt':'spark','oi-callout-icon'));
+          if(essential){table.classList.add('oi-word-essential');table.rows[0].cells[0].insertAdjacentHTML('afterbegin',icon('bolt','oi-callout-icon'));}
+          else table.classList.add('oi-word-callout--plain');
         }
       });
       followReaderSections(headings);
@@ -313,7 +320,8 @@
     if (data.quiz?.length) await window.OITraining.start(document.querySelector('#oi-quiz'),{scope:'fiche',id:Number(id),count:20},id=>fiche(id));
     else if (!quizOnly && data.quiz_count>0) document.querySelector('#oi-quiz').innerHTML='<h2>La série de QCM associée</h2><p>Les fiches et séries de QCM se débloquent séparément.</p><button type="button" data-unlock="'+Number(id)+'" data-kind="QCM">Débloquer cette série — 1 crédit QCM</button>';
     else if (quizOnly) document.querySelector('#oi-quiz').innerHTML='<div class="oi-empty"><h2>Ce QCM arrive bientôt.</h2><p>Tu peux déjà réviser le cours associé.</p><button type="button" data-fiche="'+Number(id)+'">Ouvrir la fiche</button></div>';
-    window.scrollTo({top:0,behavior:'smooth'});
+    const anchor=/^#oi-section-\d+$/.test(location.hash)?document.getElementById(location.hash.slice(1)):null;
+    if(anchor)anchor.scrollIntoView({behavior:'instant',block:'start'});else window.scrollTo({top:0,behavior:'smooth'});
   }
   async function showCatalog(target) {
     if (!target) return;
@@ -468,6 +476,21 @@
     }
     banner.textContent='La confirmation du paiement prend un peu de temps. Actualise ton espace dans quelques instants avant de tenter un nouvel achat.';
   }
-  if (view && OI.loggedIn) (new URLSearchParams(location.search).get('view')==='recharge'?recharge():new URLSearchParams(location.search).get('view')==='ai'?chat(false):new URLSearchParams(location.search).get('view')==='premium'?premium():new URLSearchParams(location.search).get('view')==='imports'&&OI.admin?imports():new URLSearchParams(location.search).get('view')==='qcm-imports'&&OI.admin?qcmImports():new URLSearchParams(location.search).get('view')==='qcm'?dashboard('qcm'):new URLSearchParams(location.search).get('view')==='progress'?progression():dashboard()).then(paymentReturn).catch(error);
+  async function initialView() {
+    const params=new URLSearchParams(location.search),tab=params.get('view'),rawId=params.get('fiche')||'';
+    const id=/^[1-9]\d*$/.test(rawId)?Number(rawId):0;
+    if(['fiches','qcm'].includes(tab)&&Number.isSafeInteger(id)&&id>0){
+      shell();if(!await loadAccount())return;
+      return fiche(id,tab==='qcm');
+    }
+    if(tab==='recharge')return recharge();
+    if(tab==='ai')return chat(false);
+    if(tab==='premium')return premium();
+    if(tab==='imports'&&OI.admin)return imports();
+    if(tab==='qcm-imports'&&OI.admin)return qcmImports();
+    if(tab==='progress')return progression();
+    return dashboard(['qcm','favorites'].includes(tab)?tab:'fiches');
+  }
+  if (view && OI.loggedIn) initialView().then(paymentReturn).catch(error);
   else if(publicCatalog) showCatalog(publicCatalog).catch(error);
 })();
