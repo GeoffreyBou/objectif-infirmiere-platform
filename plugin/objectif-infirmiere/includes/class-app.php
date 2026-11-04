@@ -29,7 +29,7 @@ final class OI_App {
         wp_enqueue_style('oi-reader-refinement',OI_URL.'assets/reader-refinement.css',['oi-app'],OI_VERSION);
         wp_enqueue_style('oi-sidebar-refinement',OI_URL.'assets/sidebar-refinement.css',['oi-reader-refinement'],OI_VERSION);
         wp_enqueue_script('oi-qcm-display',OI_URL.'assets/qcm-display.js',[],OI_VERSION,true);
-        if(current_user_can('manage_options')){wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-image-imports',OI_URL.'assets/image-imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',['oi-image-imports'],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',['oi-qcm-display'],OI_VERSION,true);}
+        if(current_user_can('manage_options')){wp_enqueue_style('oi-user-admin',OI_URL.'assets/user-admin.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-user-admin',OI_URL.'assets/user-admin.js',[],OI_VERSION,true);wp_enqueue_style('oi-imports',OI_URL.'assets/imports.css',['oi-app'],OI_VERSION);wp_enqueue_script('oi-image-imports',OI_URL.'assets/image-imports.js',[],OI_VERSION,true);wp_enqueue_script('oi-imports',OI_URL.'assets/imports.js',['oi-image-imports'],OI_VERSION,true);wp_enqueue_script('oi-qcm-imports',OI_URL.'assets/qcm-imports.js',['oi-qcm-display'],OI_VERSION,true);}
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_style('oi-training',OI_URL.'assets/training.css',['oi-app'],OI_VERSION);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',['oi-qcm-display'],OI_VERSION,true);
@@ -39,7 +39,7 @@ final class OI_App {
         preg_match('/^./us', $display_name ?: 'É', $initial);
         wp_localize_script('oi-app', 'OI', [
             'api' => esc_url_raw(rest_url('oi/v1/')), 'nonce' => wp_create_nonce('wp_rest'),
-            'admin'=>current_user_can('manage_options'), 'loggedIn' => true, 'name' => $display_name,
+            'adminUserId'=>current_user_can('manage_options')?get_current_user_id():0, 'admin'=>current_user_can('manage_options'), 'loggedIn' => true, 'name' => $display_name,
             'homeUrl'=>self::url('home'), 'memberUrl'=>self::url('member'),
             'brandUrl'=>esc_url_raw(OI_URL . 'assets/brand/'),
             'logoutUrl'=>wp_logout_url(self::url('home')),

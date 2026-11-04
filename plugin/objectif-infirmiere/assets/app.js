@@ -5,6 +5,7 @@
   const view = document.querySelector('#oi-view');
   const publicCatalog = document.querySelector('#oi-catalog');
   const paths = {
+    users: '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 4v3"/>',
     crown: '<path d="m3 6 4 4 5-7 5 7 4-4-2 13H5Z"/><path d="M5 16h14"/>',
     print: '<path d="M7 8V3h10v5M7 17H4V8h16v9h-3"/><path d="M7 14h10v7H7Z"/><path d="M16 11h1"/>',
     target: '<circle cx="11" cy="13" r="8"/><circle cx="11" cy="13" r="4"/><path d="m11 13 9-10m-1 0h3v3"/>',
@@ -66,7 +67,7 @@
     if (document.querySelector('#oi-screen')) return;
     const loading = view.querySelector('#oi-status');
     view.removeAttribute('aria-live');
-    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"></div></div>`;
+    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz')+navButton('users','Gérer les utilisateurs','users'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"></div></div>`;
     if (loading) screen().append(loading);
   }
   function setTab(tab, ficheId=null) {
@@ -172,6 +173,7 @@
     const cards=[['spark','100 réponses supplémentaires','Un crédit par réponse réussie, pour éclaircir les notions qui te posent question.'],['book','Tes sources de révision','Des réponses appuyées sur les fiches accessibles dans ton espace.'],['pulse','À ton rythme','Tes crédits restent disponibles jusqu’à leur utilisation, sans renouvellement automatique.'],['shield','Ton Premium reste actif','Tes fiches, tes QCM, tes favoris et ta progression restent accessibles.']];
     screen().innerHTML=`<section class="oi-premium-page oi-unlock-page oi-recharge-page"><header class="oi-unlock-hero"><span class="oi-unlock-kicker">${icon('spark')}Ton assistant personnel soignant</span><h1>Encore des questions ?<br><span>Continue à progresser.</span></h1><p>Recharge ton assistant et reprends tes révisions là où tu en étais.</p></header><div class="oi-unlock-layout"><div class="oi-unlock-content"><div class="oi-unlock-features">${cards.map(([glyph,title,copy])=>`<article><span class="oi-unlock-feature-icon">${icon(glyph)}</span><h3>${title}</h3><p>${copy}</p></article>`).join('')}</div></div><aside class="oi-unlock-offer" aria-label="Recharger mon assistant"><div class="oi-unlock-offer-top"><span>${icon('spark')}TA RECHARGE IA</span><span class="oi-unlock-pill">Sans abonnement</span></div><h2>100 nouvelles questions.</h2><div class="oi-unlock-price"><strong>${esc(price)}</strong><span>une seule fois</span></div><p class="oi-unlock-payment-note">Un achat ponctuel pour recharger ton assistant.</p><div class="oi-unlock-benefits"><ul>${['100 crédits IA ajoutés après confirmation du paiement','1 crédit par réponse réussie','Crédit restitué en cas d’échec technique','Ton accès Premium reste inchangé'].map(t=>`<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul><img class="oi-unlock-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="500" height="500"></div><button type="button" data-buy-recharge ${preview||!offer.available||!account.verified||!canRecharge()?'disabled':''}>Recharger mon assistant ${icon('arrow')}</button><p class="oi-unlock-checkout-note">${preview?'Aperçu administrateur — achat désactivé.':offer.available?icon('lock')+' Paiement via Stripe':'La recharge sera disponible à l’ouverture de l’assistant.'}${offer.payment_mode==='test'?'<br>Paiement en mode test.':''}</p></aside></div><p id="oi-status" role="status"></p></section>`;
   }
+  async function users(){if(!OI.admin)return;const sequence=++routeSequence;shell();setTab('users');const host=document.createElement('div');screen().replaceChildren(host);await window.OIUserAdmin.render(host);if(sequence!==routeSequence)host.remove();}
   async function qcmImports(){if(!OI.admin)return;const sequence=++routeSequence;shell();setTab('qcm-imports');const host=document.createElement('div');screen().replaceChildren(host);await window.OIQCMImports.render(host);if(sequence!==routeSequence)host.remove();}
   async function imports(){if(!OI.admin)return;const sequence=++routeSequence;shell();setTab('imports');screen().innerHTML='<p role="status">Chargement de ton atelier…</p>';const host=document.createElement('div');screen().replaceChildren(host);await window.OIImports.render(host);if(sequence!==routeSequence)host.remove();}
   async function progression() {
@@ -396,7 +398,7 @@
     const b=e.target.closest('button');
     if (!b || !b.closest('.oi-app')) return;
     try {
-      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='recharge')await recharge();else if(b.dataset.tab==='progress')await progression();else if(b.dataset.tab==='imports')await imports();else if(b.dataset.tab==='qcm-imports')await qcmImports();else await dashboard(b.dataset.tab);}
+      if (b.dataset.tab) {if(b.dataset.tab==='ai') await chat(false);else if(b.dataset.tab==='premium')await premium();else if(b.dataset.tab==='recharge')await recharge();else if(b.dataset.tab==='progress')await progression();else if(b.dataset.tab==='imports')await imports();else if(b.dataset.tab==='users')await users();else if(b.dataset.tab==='qcm-imports')await qcmImports();else await dashboard(b.dataset.tab);}
       if(b.hasAttribute('data-refresh-account'))await dashboard();
       if(b.hasAttribute('data-resend')){b.disabled=true;try{await api('verify/resend',{});status('Un nouveau lien a été envoyé. Vérifie ta boîte mail et les indésirables.');}finally{b.disabled=false;}}
       if(b.dataset.unlock){
@@ -506,6 +508,7 @@
     if(tab==='premium')return premium();
     if(tab==='imports'&&OI.admin)return imports();
     if(tab==='qcm-imports'&&OI.admin)return qcmImports();
+    if(tab==='users'&&OI.admin)return users();
     if(tab==='progress')return progression();
     return dashboard(['qcm','favorites'].includes(tab)?tab:'fiches');
   }
