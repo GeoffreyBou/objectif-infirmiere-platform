@@ -224,14 +224,15 @@
 .oi-app .oi-credit-wallet {
   flex: 0 0 auto;
   margin: 24px 0 2px;
-  padding: 0 4px;
+  padding: 14px 4px 0;
   border: 0;
+  border-top: 1px solid #e2e6ec;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
 .oi-credit-wallet[hidden] { display: none !important; }
-.oi-wallet-title { display: block; margin: 0 5px 10px; color: #627693; font-size: 10px; font-weight: 500; }
+.oi-wallet-title { display: block; text-align: center; margin: 0 5px 10px; color: #627693; font-size: 10px; font-weight: 500; }
 .oi-app .oi-credit-wallet dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
 .oi-credit-wallet dl > div { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 3px 6px; min-width: 0; padding-inline: 4px; }
 .oi-credit-wallet dl > div + div { border-left: 1px solid #dce7f9; }
@@ -245,7 +246,7 @@
 .oi-fiche-card .oi-card-bottom { flex-wrap: wrap; }
 @media (max-width: 760px) {
   .oi-app .oi-sidebar { height: auto; background: transparent; }
-  .oi-app .oi-credit-wallet { margin: 18px 20px 0; padding: 0; display: flex; align-items: center; gap: 12px; }
+  .oi-app .oi-credit-wallet { margin: 18px 20px 0; padding: 12px 0 0; display: flex; align-items: center; gap: 12px; }
   .oi-wallet-title { margin: 0; font-size: 10px; }
   .oi-app .oi-credit-wallet dl { flex: 1; }
   .oi-card-action-end { gap: 7px; }
