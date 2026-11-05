@@ -280,22 +280,7 @@
     const units=data.terms?.enseignement||[], themes=data.terms?.theme||[];
     return `<nav class="oi-reader-path" aria-label="Classement de la fiche">${units.map(t=>`<button type="button" data-reader-unit="${Number(t.id)}" title="${esc(t.name)}">UE ${esc(t.name.match(/^[A-E]\.?[1-9]/i)?.[0]||t.name)}</button>`).join('')}${themes.map(t=>`<button type="button" data-reader-theme="${Number(t.id)}">${esc(t.name)}</button>`).join('')}</nav>`;
   }
-  function readerHeadingLabels(headings) {
-    let section=0,subsection=0;
-    return headings.map((heading,i)=>{
-      heading.id=`oi-section-${i}`;
-      const raw=heading.textContent.trim(), prefix=raw.match(/^(\d+(?:\.\d+)*)(?:[.)]\s+|\s*[–—-]\s+)/);
-      if(heading.tagName==='H2'){section++;subsection=0;}else subsection++;
-      const number=prefix?prefix[1]:(heading.tagName==='H2'?String(section):`${section||1}.${subsection}`);
-      const title=prefix?raw.slice(prefix[0].length):raw;
-      // Remove only an existing numbering prefix; preserve inline links and emphasis.
-      if(prefix){const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);let remaining=heading.textContent.length-heading.textContent.trimStart().length+prefix[0].length,node;while(remaining&&(node=walker.nextNode())){const removed=Math.min(remaining,node.textContent.length);node.textContent=node.textContent.slice(removed);remaining-=removed;}}
-      const titleNode=document.createElement('span');titleNode.className='oi-section-title-text';titleNode.append(...heading.childNodes);
-      const badge=document.createElement('span');badge.className='oi-section-number';badge.textContent=number.padStart(2,'0');
-      heading.classList.add('oi-numbered-heading');heading.append(badge,titleNode);
-      return {id:heading.id,title,number:badge.textContent,sub:heading.tagName==='H3'};
-    });
-  }
+  const readerHeadingLabels = headings => window.OIReaderHeadings.enhance(headings);
   function revisionButton(data) {
     const goal=data.goal, revised=goal?goal.done:!!data.state?.revised;
     const label=goal?(revised?'Révisée pour mon objectif':'Valider pour mon objectif'):(revised?'Révisée':'Marquer comme révisée');

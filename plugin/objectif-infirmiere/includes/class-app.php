@@ -33,8 +33,9 @@ final class OI_App {
         wp_enqueue_script('oi-goals',OI_URL.'assets/goals.js',[],OI_VERSION,true);
         wp_enqueue_style('oi-training',OI_URL.'assets/training.css',['oi-app'],OI_VERSION);
         wp_enqueue_script('oi-training',OI_URL.'assets/training.js',['oi-qcm-display'],OI_VERSION,true);
+        wp_enqueue_script('oi-reader-headings',OI_URL.'assets/reader-headings.js',[],OI_VERSION,true);
         wp_enqueue_script('oi-reader-diagrams',OI_URL.'assets/reader-diagrams.js',[],OI_VERSION,true);
-        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals','oi-qcm-display','oi-reader-diagrams'], OI_VERSION, true);
+        wp_enqueue_script('oi-app', OI_URL . 'assets/app.js', ['oi-training','oi-goals','oi-qcm-display','oi-reader-diagrams','oi-reader-headings'], OI_VERSION, true);
         $display_name = wp_get_current_user()->display_name;
         preg_match('/^./us', $display_name ?: 'É', $initial);
         wp_localize_script('oi-app', 'OI', [
