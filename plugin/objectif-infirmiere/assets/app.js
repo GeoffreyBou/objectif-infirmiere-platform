@@ -334,7 +334,7 @@
       if (data.watermark) {document.querySelector('#oi-watermark').textContent = data.watermark;document.querySelector('.oi-content').setAttribute('data-watermark',data.watermark);}
     }
     if (data.quiz?.length) await window.OITraining.start(document.querySelector('#oi-quiz'),{scope:'fiche',id:Number(id),count:20},id=>fiche(id),{onReady:total=>{if(sequence!==routeSequence)return;const intro=screen().querySelector('[data-quiz-intro]');if(intro)intro.textContent=`${total} question${total>1?'s':''} tirée${total>1?'s':''} au hasard. Prends le temps de réfléchir. À toi de jouer !`;}});
-    else if (!quizOnly && data.quiz_count>0) document.querySelector('#oi-quiz').innerHTML='<h2>La série de QCM associée</h2><p>Les fiches et séries de QCM se débloquent séparément.</p><button type="button" data-unlock="'+Number(id)+'" data-kind="QCM">Débloquer cette série — 1 crédit QCM</button>';
+    else if (!quizOnly && data.quiz_count>0) document.querySelector('#oi-quiz').innerHTML='<h2>Et si on s’entraîner sur le sujet ?</h2><p>Une série de 20 questions pour tester ton niveau</p><button type="button" data-unlock="'+Number(id)+'" data-kind="QCM">Débloquer cette série QCM - 1 Crédit</button>';
     else if (quizOnly) document.querySelector('#oi-quiz').innerHTML='<div class="oi-empty"><h2>Ce QCM arrive bientôt.</h2><p>Tu peux déjà réviser le cours associé.</p><button type="button" data-fiche="'+Number(id)+'">Ouvrir la fiche</button></div>';
     const anchor=/^#oi-section-\d+$/.test(location.hash)?document.getElementById(location.hash.slice(1)):null;
     if(anchor)anchor.scrollIntoView({behavior:'instant',block:'start'});else window.scrollTo({top:0,behavior:'smooth'});
