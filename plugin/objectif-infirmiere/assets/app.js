@@ -69,7 +69,7 @@
     if (document.querySelector('#oi-screen')) return;
     const loading = view.querySelector('#oi-status');
     view.removeAttribute('aria-live');
-    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz')+navButton('users','Gérer les utilisateurs','users'):''}</nav><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"></div></div>`;
+    view.innerHTML = `<div class="oi-workspace"><aside class="oi-sidebar"><nav class="oi-main-nav" aria-label="Mon espace membre">${navButton('fiches','Mes fiches','book')}${navButton('qcm','QCM & partiels','quiz')}${navButton('ai','Mon assistant','spark')}${navButton('favorites','Mes favoris','heart')}${navButton('progress','Ma progression','pulse')}${OI.admin?navButton('imports','Mise à jour Fiches','folder')+navButton('qcm-imports','Gérer les QCM','quiz')+navButton('users','Gérer les utilisateurs','users'):''}</nav><section class="oi-credit-wallet" aria-label="Mes crédits" aria-live="polite" aria-atomic="true" hidden></section><button type="button" class="oi-sidebar-unlock" data-tab="premium" hidden><span class="oi-premium-card-title">${icon('crown')}<strong>Passer Premium</strong></span><span class="oi-premium-card-copy">Débloquez toutes les fiches, QCMs et contenus exclusifs</span><span class="oi-premium-card-cta">Découvrir l’offre ${icon('arrow')}</span></button><div class="oi-sidebar-signature"><p>Réviser aujourd’hui,<br>soigner demain !</p></div></aside><div id="oi-screen" class="oi-screen"></div></div>`;
     if (loading) screen().append(loading);
   }
   function setTab(tab, ficheId=null) {
@@ -137,15 +137,25 @@
   function card(item, quizMode=false) {
     const topic = subject(item), kind=quizMode?'QCM':'FICHE';
     const accessible=!!item.access?.[kind], available=Number(account?.balances?.[kind]||0);
-    const action=accessible?`data-${quizMode?'quiz-fiche':'fiche'}="${Number(item.id)}"`:`data-unlock="${Number(item.id)}" data-kind="${kind}"`;
-    const label=accessible?(quizMode?'Commencer le QCM':item.state?.revised?'Révisée':'Ouvrir la fiche'):(available?`Débloquer ${quizMode?'l’Entraînement':'la Fiche'} pour 1 crédit — ${available} crédit${available>1?'s':''} ${quizMode?'QCM':'Fiche'} restant${available>1?'s':''}`:'0 crédits restants — Passer en mode premium');
-    return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" data-art="${artFamily(item)}" ${action}><span class="oi-card-top">${item.cover?`<img class="oi-card-cover" src="${esc(item.thumbnail||item.cover)}" alt="" loading="lazy" width="88" height="88">`:`<span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span>`}<span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}</span><span class="oi-card-bottom"><span>${label}</span>${icon(accessible?'arrow':'lock')}</span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
+    const action=accessible?`data-${quizMode?'quiz-fiche':'fiche'}="${Number(item.id)}"`:available>0?`data-unlock="${Number(item.id)}" data-kind="${kind}"`:'data-tab="premium"';
+    const label=accessible?(quizMode?'Commencer le QCM':item.state?.revised?'Révisée':'Ouvrir la fiche'):(available>0?`Débloquer ${quizMode?'l’entraînement':'la fiche'}`:'Passer Premium');
+    return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" data-art="${artFamily(item)}" ${action}><span class="oi-card-top">${item.cover?`<img class="oi-card-cover" src="${esc(item.thumbnail||item.cover)}" alt="" loading="lazy" width="88" height="88">`:`<span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span>`}<span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}</span><span class="oi-card-bottom"><span>${label}</span><span class="oi-card-action-end">${!accessible&&available>0?'<span class="oi-credit-cost">1 crédit</span>':''}${icon('arrow')}</span></span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
   }
   function verification() {
     screen().innerHTML=`<section class="oi-verification"><span class="oi-eyebrow">UNE DERNIÈRE ÉTAPE</span><h1>Vérifie ton adresse e-mail.</h1><p>${account.verification_email_sent?'Ouvre le message Objectif Infirmière reçu dans ta boîte mail, puis confirme ton adresse. Pense aussi aux indésirables.':'L’e-mail de confirmation n’a pas pu être envoyé. Tu peux demander un nouvel envoi ci-dessous.'}</p><p>Tu recevras ensuite 5 crédits Fiche, 5 crédits QCM et 5 crédits IA, une seule fois.</p><button type="button" data-resend>Renvoyer le lien de vérification</button><button type="button" data-refresh-account>J’ai confirmé mon adresse</button><p id="oi-status" role="status"></p></section>`;
   }
   function canRecharge() { return !!account?.premium && Number(account?.balances?.IA)===0; }
   function syncAccountNavigation() {
+    const wallet=document.querySelector('.oi-credit-wallet');
+    if(wallet&&account){
+      const unlimited=!!(account.premium||account.administrator);
+      const markup=`<span class="oi-wallet-title">Mes crédits</span><dl>${[['FICHE','Fiches'],['QCM','QCM'],['IA','IA']].map(([kind,label])=>{
+        const infinite=unlimited&&kind!=='IA', value=Math.max(0,Number(account.balances?.[kind])||0);
+        return `<div><dt>${label}</dt><dd${infinite?' class="is-unlimited" title="Illimité" aria-label="Illimité"':` aria-label="${value} crédit${value>1?'s':''} restant${value>1?'s':''}"`}>${infinite?'∞':value}</dd></div>`;
+      }).join('')}</dl>`;
+      if(wallet.innerHTML!==markup)wallet.innerHTML=markup;
+      wallet.hidden=false;
+    }
     const button=document.querySelector('.oi-sidebar-unlock');
     if(button){
       const recharge=canRecharge();button.hidden=!!account.premium&&!recharge;button.dataset.tab=recharge?'recharge':'premium';
@@ -244,7 +254,7 @@
     try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`); }
     finally { screen().removeAttribute('aria-busy'); }
     if (sequence!==routeSequence) return;
-    account=data.account;
+    account=data.account;syncAccountNavigation();
     const quizMode = tab==='qcm';
     const intro = favoritesOnly ? `<div class="oi-page-intro"><span class="oi-eyebrow">TA SÉLECTION PERSONNELLE</span><h1 id="oi-favorites-title">À garder sous la main.</h1></div>` : quizMode ? `<div class="oi-page-intro"><span class="oi-eyebrow">PLACE À LA PRATIQUE</span><h1>Tu sais. Maintenant, <em>prouve-le-toi.</em></h1><p>Teste tes connaissances, comprends tes erreurs et avance vers tes partiels.</p></div>` : `<div class="oi-dashboard-intro"><div><p class="oi-library-welcome">Tes notions de soins infirmiers, un peu plus claires chaque jour.</p><h1>Bonjour ${esc(OI.name)}.</h1></div></div>`;
     const [contents,recent] = await Promise.all([libraryResults(data,quizMode), tab==='fiches'?api('recent'):Promise.resolve([])]);
@@ -267,7 +277,7 @@
     try {
       const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`);
       if (sequence!==searchSequence || route!==routeSequence) return;
-      account=data.account;if(!canFilterOwned())ownedOnly=false;setTab(currentTab);
+      account=data.account;syncAccountNavigation();if(!canFilterOwned())ownedOnly=false;setTab(currentTab);
       const contents=await libraryResults(data,currentTab==='qcm');
       if(sequence!==searchSequence || route!==routeSequence)return;
       results.innerHTML = contents;
@@ -397,7 +407,7 @@
       if(b.dataset.unlock){
         if(!await loadAccount())return;
         b.disabled=true;
-        try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();status('Tes crédits sont épuisés. Tes contenus déjà débloqués restent accessibles.');}else throw e;}finally{b.disabled=false;}
+        try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;syncAccountNavigation();await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();status('Tes crédits sont épuisés. Tes contenus déjà débloqués restent accessibles.');}else throw e;}finally{b.disabled=false;}
       }
       if(b.hasAttribute('data-print-fiche')&&activeFiche&&document.querySelector('.oi-reader .oi-content'))window.print();
       if((b.hasAttribute('data-reader-unit')||b.hasAttribute('data-reader-theme'))&&activeFiche){
