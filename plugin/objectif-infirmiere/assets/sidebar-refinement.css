@@ -222,15 +222,16 @@
 
 /* One shared balance, with compact unlock actions on the content cards. */
 .oi-app .oi-credit-wallet {
+  position: relative;
   flex: 0 0 auto;
   margin: 24px 0 2px;
   padding: 14px 4px 0;
   border: 0;
-  border-top: 1px solid #e2e6ec;
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
+.oi-credit-wallet::before { content: ""; position: absolute; top: 0; left: 25%; width: 50%; height: 1px; background: #e2e6ec; pointer-events: none; }
 .oi-credit-wallet[hidden] { display: none !important; }
 .oi-wallet-title { display: block; text-align: center; margin: 0 5px 10px; color: #627693; font-size: 10px; font-weight: 500; }
 .oi-app .oi-credit-wallet dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
