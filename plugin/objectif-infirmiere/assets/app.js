@@ -62,6 +62,15 @@
     const target = document.querySelector('#oi-status');
     if (target) { target.setAttribute('role','status'); target.textContent = message; }
   }
+  function notifyEmptyCredits(kind) {
+    document.querySelector('.oi-credit-notice')?.remove();
+    const notice=document.createElement('aside');
+    notice.className='oi-credit-notice';
+    const quiz=kind==='QCM';
+    notice.innerHTML=`<span class="oi-credit-notice-icon">${icon('lock')}</span><div role="status" aria-live="polite"><strong>Tes crédits ${quiz?'QCM':'Fiche'} sont épuisés.</strong><p>Tu as été redirigé vers l’offre Premium pour débloquer ${quiz?'cette série et accéder à tous les QCM':'cette fiche et accéder à toutes les fiches'}.</p></div><button type="button" aria-label="Fermer la notification">×</button>`;
+    notice.querySelector('button').addEventListener('click',()=>notice.remove());
+    view.append(notice);
+  }
   function navButton(tab, label, glyph) {
     return `<button type="button" data-tab="${tab}" ${currentTab===tab?'aria-current="page"':''}>${icon(glyph)}<span>${label}</span>${tab==='ai'?'<span class="oi-nav-tag">IA</span>':''}</button>`;
   }
@@ -73,6 +82,7 @@
     if (loading) screen().append(loading);
   }
   function setTab(tab, ficheId=null) {
+    document.querySelector('.oi-credit-notice')?.remove();
     const url=new URL(location.href);
     const sameReader=ficheId!==null&&url.searchParams.get('view')===tab&&url.searchParams.get('fiche')===String(ficheId);
     url.searchParams.set('view',tab);
@@ -407,7 +417,7 @@
       if(b.dataset.unlock){
         if(!await loadAccount())return;
         b.disabled=true;
-        try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;syncAccountNavigation();await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();status('Tes crédits sont épuisés. Tes contenus déjà débloqués restent accessibles.');}else throw e;}finally{b.disabled=false;}
+        try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;syncAccountNavigation();await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();if(currentTab==='premium'&&!account.premium){notifyEmptyCredits(b.dataset.kind);status('Tes contenus déjà débloqués restent accessibles.');}}else throw e;}finally{b.disabled=false;}
       }
       if(b.hasAttribute('data-print-fiche')&&activeFiche&&document.querySelector('.oi-reader .oi-content'))window.print();
       if((b.hasAttribute('data-reader-unit')||b.hasAttribute('data-reader-theme'))&&activeFiche){

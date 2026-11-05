@@ -253,6 +253,22 @@
   .oi-card-action-end { gap: 7px; }
 }
 
+.oi-app .oi-credit-notice {
+  position: fixed; z-index: 100; top: 110px; right: 24px;
+  display: flex; align-items: flex-start; gap: 12px;
+  width: min(440px, calc(100vw - 32px)); padding: 18px;
+  border: 1px solid #cddffc; border-radius: 16px;
+  background: #fff; color: #14345a; box-shadow: 0 12px 38px #17396024;
+}
+.oi-credit-notice-icon { display: grid; place-items: center; flex: 0 0 32px; height: 32px; border-radius: 10px; background: #edf4ff; color: #3155dc; }
+.oi-credit-notice-icon .oi-icon { width: 17px; height: 17px; }
+.oi-app .oi-credit-notice strong { display: block; font-size: 14px; line-height: 1.5; }
+.oi-app .oi-credit-notice p { margin: 5px 0 0; font-size: 12px; line-height: 1.65; color: #4c6283; }
+.oi-app .oi-credit-notice button { flex: 0 0 32px; width: 32px; min-height: 32px; padding: 0; border: 0; border-radius: 8px; background: #f0f5fc; color: #42649b; font-size: 22px; line-height: 1; }
+.oi-app .oi-credit-notice button:hover { background: #dfeaff; color: #14345a; }
+.oi-app .oi-credit-notice button:focus-visible { outline: 2px solid #3155dc; outline-offset: 2px; }
+@media (max-width: 760px) { .oi-app .oi-credit-notice { top: 90px; right: 16px; padding: 14px; gap: 9px; } }
+
 /* Account identity belongs to the shared header, beside the session action. */
 .oi-top-account {
   display: flex;
