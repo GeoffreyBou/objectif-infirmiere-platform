@@ -35,13 +35,13 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
             <div class="oi-hero-copy">
                 <span class="oi-kicker"><span class="oi-status-dot"></span> TES RÉVISIONS EN SOINS INFIRMIERS</span>
                 <h1 id="oi-hero-title">Tes cours d’IFSI.<br>Enfin plus simples<br>à <span class="oi-hero-highlight">réviser.</span></h1>
-                <p class="oi-hero-description">Révise avec des fiches claires, des QCM corrigés et un conseiller IA pensé pour les étudiants infirmiers <small>— en préparation.</small></p>
-                <div class="oi-hero-actions"><a class="oi-btn oi-btn-dark" href="<?php echo $oi_signup; ?>">Créer mon compte gratuit <?php echo $oi_arrow; ?></a><a class="oi-link-arrow" href="#premium">Découvrir le Premium <span aria-hidden="true"><?php echo $oi_diagonal; ?></span></a></div>
+                <p class="oi-hero-description">Révise avec des fiches claires, des QCM corrigés et un conseiller IA pensé pour les étudiants infirmiers.</p>
+                <div class="oi-hero-actions"><a class="oi-btn oi-btn-dark" href="<?php echo $oi_signup; ?>">Créer mon compte gratuit <?php echo $oi_arrow; ?></a><a class="oi-link-arrow" href="#premium">Débloquer tout le contenu <span aria-hidden="true"><?php echo $oi_diagonal; ?></span></a></div>
                 <p class="oi-hero-note"><span>5 fiches + 5 séries de QCM + 5 crédits IA offerts après confirmation de ton e-mail.</span></p>
                 <div class="oi-hero-bottom"><a class="oi-link-arrow" href="#demo">Tester une révision sans compte <?php echo $oi_arrow; ?></a></div>
             </div>
             <div class="oi-hero-visual" aria-label="Aperçu de l’espace de révision">
-                <span class="oi-visual-label"><span></span> Objectif : diplôme d’État infirmier</span><svg class="oi-hero-ecg" viewBox="0 0 540 120" fill="none" aria-hidden="true"><path d="M0 63h100l18-18 20 36 24-69 31 99 26-48h321" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="oi-visual-label oi-reform-label"><?php echo $oi_check; ?> À jour · Réforme 2026</span><svg class="oi-hero-ecg" viewBox="0 0 540 120" fill="none" aria-hidden="true"><path d="M0 63h100l18-18 20 36 24-69 31 99 26-48h321" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <div class="oi-preview-window">
                     <div class="oi-preview-top"><span class="oi-preview-logo"><?php echo $oi_heart; ?></span><div><strong>Mon carnet de révision</strong><span>Des notions qui prennent tout leur sens.</span></div><span class="oi-preview-avatar">M</span></div>
                     <div class="oi-preview-tabs"><span class="is-active">Mes fiches</span><span>Mes QCM</span><span>Mon assistant <small><?php echo $oi_spark; ?></small></span></div>
@@ -56,7 +56,7 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
             </div>
         </section>
 
-        <div class="oi-subject-strip" aria-label="Tes révisions au même endroit"><div class="oi-container"><span>LES NOTIONS QUI COMPTENT</span><p>Anatomie <i><?php echo $oi_heart; ?></i> Pharmacologie <i><?php echo $oi_burst; ?></i> Hygiène <i><?php echo $oi_spark; ?></i> Calculs de doses</p></div></div>
+        <div class="oi-subject-strip oi-reform-strip" aria-label="Ton programme de révision"><div class="oi-container"><div class="oi-reform-strip-label"><?php echo $oi_check; ?><span>Mise à jour<strong>Réforme 2026</strong></span></div><ul class="oi-catalog-highlights"><li><strong>760</strong><span>Fiches</span></li><li><strong>14 000</strong><span>QCM</span></li><li><strong>Assistant</strong><span>personnel</span></li></ul></div></div>
 
         <section id="reviser" class="oi-offer oi-container" aria-labelledby="oi-offer-title">
             <div class="oi-section-heading"><div><span class="oi-eyebrow-public">PENSÉ POUR TES ÉTUDES. ANCRÉ DANS LE SOIN.</span><h2 id="oi-offer-title">Tes cours IFSI.<br><span>Ils prennent tout leur sens.</span></h2></div><p>Entre une UE à valider et un stage à préparer, fais le lien entre ce que tu apprends et le métier qui t’attend.</p></div>

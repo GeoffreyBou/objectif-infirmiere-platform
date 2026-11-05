@@ -288,3 +288,36 @@
 @media(max-width:850px){.oi-free-steps{gap:14px}.oi-free-steps article{padding:20px}.oi-free-steps h3{font-size:18px}.oi-premium-offer{padding:28px;gap:25px}.oi-comparison th,.oi-comparison td{padding:16px}.oi-trust{gap:28px}.oi-hero h1{font-size:54px}}
 @media(max-width:600px){.oi-hero h1{font-size:43px;letter-spacing:-2px}.oi-hero-bottom{display:block;margin-top:22px}.oi-hero-bottom a{font-size:12px}.oi-feature-fiches,.oi-feature-qcm{min-height:0}.oi-feature-fiches{padding-bottom:300px}.oi-fiche-illustration{top:auto;bottom:25px}.oi-free-start{padding-block:65px}.oi-free-steps{grid-template-columns:1fr}.oi-free-steps article{padding:24px}.oi-free-steps article>strong{font-size:44px}.oi-free-steps h3{font-size:21px}.oi-free-steps p{font-size:14px}.oi-comparison{font-size:11px;line-height:1.7;table-layout:fixed}.oi-comparison th,.oi-comparison td{padding:13px 9px;overflow-wrap:anywhere}.oi-comparison th[scope=row]{width:31%}.oi-comparison caption{padding:18px;font-size:12px}.oi-premium-offer{grid-template-columns:1fr;padding:26px}.oi-premium-offer h3{font-size:27px}.oi-premium-buy>strong{font-size:62px}.oi-premium-buy .oi-btn{width:100%;padding:17px 13px;font-size:12px}.oi-trust{grid-template-columns:1fr;gap:4px;padding-bottom:65px}.oi-trust>div:last-child{padding-top:15px}.oi-faq{padding-bottom:60px}}
 @media(max-width:360px){.oi-hero h1{font-size:38px}.oi-premium-offer{padding:22px}.oi-premium-buy .oi-btn{font-size:11px;gap:9px}.oi-comparison{font-size:10px}.oi-feature-fiches{padding-bottom:310px}}
+
+/* Public hero: reform reassurance and a readable catalogue overview. */
+.oi-hero-visual { padding-top: 82px; }
+.oi-hero-visual .oi-reform-label { top: 14px; left: 24px; z-index: 2; padding: 9px 15px; gap: 8px; border: 1px solid #1856cb; border-radius: 11px; background: linear-gradient(110deg, #0868db, #244ac7); color: #fff; font-size: 14px; line-height: 1.4; font-weight: 800; box-shadow: 0 5px 14px #1e5ec52b; }
+.oi-reform-label svg { width: 19px; height: 19px; flex: 0 0 19px; }
+.oi-reform-strip > .oi-container { gap: 32px; min-height: 100px; }
+.oi-reform-strip-label { display: flex; align-items: center; gap: 13px; flex-shrink: 0; color: #315d94; }
+.oi-reform-strip-label > svg { width: 32px; height: 32px; padding: 6px; border: 1px solid #c7dcfa; border-radius: 50%; color: #215dd1; background: #f8fbff; }
+.oi-reform-strip-label span { font-size: 11px; line-height: 1.6; }
+.oi-reform-strip-label strong { display: block; font-size: 16px; color: #14345a; }
+.oi-landing .oi-catalog-highlights { list-style: none; display: flex; align-items: center; justify-content: flex-end; padding: 0; margin: 0; }
+.oi-catalog-highlights li { display: flex; align-items: baseline; justify-content: center; gap: 8px; padding: 0 32px; font-size: 15px; color: #42649b; }
+.oi-catalog-highlights li + li { border-left: 1px solid #cddff4; }
+.oi-catalog-highlights li:last-child { padding-right: 0; }
+.oi-catalog-highlights strong { font-size: 25px; font-weight: 800; letter-spacing: -.6px; color: #14345a; }
+@media (max-width: 1000px) {
+  .oi-catalog-highlights li { padding-inline: 20px; }
+  .oi-catalog-highlights strong { font-size: 22px; }
+}
+@media (max-width: 850px) {
+  .oi-reform-strip > .oi-container { gap: 20px; padding-block: 22px; }
+  .oi-catalog-highlights li:first-child { padding-left: 0; }
+}
+@media (max-width: 650px) {
+  .oi-hero-visual { padding-top: 80px; }
+  .oi-hero-visual .oi-reform-label { top: 16px; left: 18px; font-size: 12px; padding: 8px 12px; }
+  .oi-landing .oi-catalog-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+  .oi-catalog-highlights li { flex-direction: column; align-items: center; gap: 3px; padding: 0 10px; font-size: 12px; }
+  .oi-catalog-highlights li:first-child { padding-left: 10px; }
+  .oi-catalog-highlights li:last-child { padding-right: 10px; }
+  .oi-catalog-highlights strong { font-size: 20px; letter-spacing: -.5px; }
+  .oi-catalog-highlights li:last-child strong { font-size: 17px; line-height: 30px; }
+}
