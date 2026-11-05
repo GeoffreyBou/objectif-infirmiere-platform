@@ -758,3 +758,5 @@
 
 /* The library search occupies the full row without a semester filter. */
 .oi-search{grid-template-columns:minmax(0,1fr)}
+
+.oi-app .oi-folder-trail button[aria-pressed=true]{background:#e5efff;border-color:#adcafa;color:#194fbf;font-weight:700}

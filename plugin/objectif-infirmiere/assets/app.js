@@ -32,6 +32,8 @@
   let aiRequestId = null;
   let page = 1;
   let favoritesOnly = false;
+  let ownedOnly = false;
+  const canFilterOwned = () => currentTab==='fiches' && account && !account.premium && !account.administrator;
   let currentTab = 'fiches';
   let activeFiche = null;
   let query = '';
@@ -74,6 +76,7 @@
     const url=new URL(location.href);
     const sameReader=ficheId!==null&&url.searchParams.get('view')===tab&&url.searchParams.get('fiche')===String(ficheId);
     url.searchParams.set('view',tab);
+    if(tab==='fiches'&&ownedOnly)url.searchParams.set('access','unlocked');else url.searchParams.delete('access');
     if(ficheId!==null)url.searchParams.set('fiche',String(ficheId));else url.searchParams.delete('fiche');
     if(!sameReader)url.hash='';
     history.replaceState(history.state,'',url);
@@ -199,14 +202,15 @@
     return `<section class="oi-recent" aria-labelledby="oi-recent-title"><div class="oi-section-title"><div><span class="oi-eyebrow">REPRENDS LE FIL</span><h2 id="oi-recent-title">Dernières fiches consultées</h2><p>Les plus récentes en premier, pour reprendre là où tu en étais.</p></div></div>${items.length?`<div class="oi-grid">${items.map(item=>card(item)).join('')}</div>`:'<p class="oi-recent-empty">Tes dernières lectures apparaîtront ici dès que tu ouvriras une fiche.</p>'}</section>`;
   }
   function folderFilters() {
+    if(currentTab==='fiches'&&ownedOnly)return '&unlocked=1';
     return ['fiches','qcm'].includes(currentTab)&&!query?(unit!==null?'&enseignement='+unit:'')+(theme!==null?'&theme='+theme:''):'';
   }
   function folderTrail() {
     if(!['fiches','qcm'].includes(currentTab)||(currentTab==='qcm'&&unit===null))return '';
-    return `<nav class="oi-folder-trail" aria-label="${currentTab==='qcm'?'Parcours des QCM':'Parcours des fiches'}"><button type="button" data-library-level="root" ${unit===null&&!query?'aria-current="page"':''}>${icon('folder')} ${currentTab==='qcm'?'Tous les QCM':'Toutes les unités'}</button>${query?'<span>Résultats de recherche</span>':unit!==null?`${icon('arrow')}<button type="button" data-library-level="unit" ${theme===null?'aria-current="page"':''}>${esc(folderNames.unit)}</button>${theme!==null?icon('arrow')+'<span aria-current="page">'+esc(folderNames.theme)+'</span>':''}`:''}</nav>`;
+    return `<nav class="oi-folder-trail" aria-label="${currentTab==='qcm'?'Parcours des QCM':'Parcours des fiches'}"><button type="button" data-library-level="root" ${unit===null&&!query&&!ownedOnly?'aria-current="page"':''}>${icon('folder')} ${currentTab==='qcm'?'Tous les QCM':'Toutes les unités'}</button>${canFilterOwned()?`<button type="button" data-library-access="unlocked" aria-pressed="${ownedOnly}">${icon('book')} Mes Fiches</button>`:''}${query?'<span>Résultats de recherche</span>':unit!==null?`${icon('arrow')}<button type="button" data-library-level="unit" ${theme===null?'aria-current="page"':''}>${esc(folderNames.unit)}</button>${theme!==null?icon('arrow')+'<span aria-current="page">'+esc(folderNames.theme)+'</span>':''}`:''}</nav>`;
   }
   async function libraryResults(data,quizMode) {
-    if(currentTab!=='fiches'||query||theme!==null)return resultCards(data,quizMode);
+    if(currentTab!=='fiches'||ownedOnly||query||theme!==null)return resultCards(data,quizMode);
     const folders=await api(`library${unit!==null?'?enseignement='+unit:''}`);
     return folders.folders.map(folder=>`<button type="button" class="oi-folder-card" data-folder="${Number(folder.id)}" data-folder-name="${esc(folder.name)}"><span class="oi-folder-symbol">${icon('folder')}</span><span class="oi-folder-copy"><span class="oi-eyebrow">${unit===null?'UNITÉ D’ENSEIGNEMENT':'THÈME'}</span><h3>${esc(folder.name)}</h3><span>${folder.count?Number(folder.count)+' fiche'+(folder.count>1?'s':''):'À venir'}</span></span>${icon('arrow')}</button>`).join('') || '<div class="oi-empty"><h3>Aucune fiche dans ce dossier pour le moment.</h3><p>Choisis une autre unité.</p></div>';
   }
@@ -215,12 +219,13 @@
   }
   function resultCards(data, quizMode) {
     const items = quizMode ? data.items.filter(item=>Number(item.quiz_count)>0) : data.items;
+    if(currentTab==='fiches'&&ownedOnly&&!items.length&&!query)return `<div class="oi-empty">${icon('book')}<h3>Tes fiches débloquées, au même endroit.</h3><p>Choisis une fiche dans « Toutes les unités » et débloque-la avec tes crédits pour la retrouver ici.</p><button type="button" data-library-level="root">Explorer les fiches</button></div>`;
     return items.map(item=>card(item,quizMode)).join('') || `<div class="oi-empty">${icon(quizMode?'quiz':favoritesOnly?'heart':'book')}<h3>${favoritesOnly?'Tes essentiels, au même endroit.':quizMode?'Aucun QCM pour cette sélection.':'Aucune fiche pour cette sélection.'}</h3><p>${favoritesOnly?'Ajoute une fiche aux favoris depuis sa page pour la retrouver ici.':data.total?'Essaie un autre mot-clé.':query?'Essaie un autre mot-clé.':'Les fiches de ce thème arrivent prochainement.'}</p>${query?'<button type="button" data-clear-search>Effacer les filtres</button>':''}</div>`;
   }
   function pagination(data) {
     const target = document.querySelector('#oi-pagination');
     if (!target) return;
-    if(currentTab==='fiches'&&!query&&theme===null){target.innerHTML='';return;}
+    if(currentTab==='fiches'&&!ownedOnly&&!query&&theme===null){target.innerHTML='';return;}
     target.innerHTML = `<span>${Number(data.total)} fiche${Number(data.total)>1?'s':''}${currentTab==='qcm'?' à explorer':''}${Number(data.pages)>1?` · Page ${page} sur ${Number(data.pages)}`:''}</span><div>${page>1?'<button type="button" data-page="-1">'+icon('back')+' Précédent</button>':''}${page<Number(data.pages)?'<button type="button" data-page="1">Suivant '+icon('arrow')+'</button>':''}</div>`;
   }
   async function dashboard(tab='fiches', reset=true) {
@@ -231,7 +236,9 @@
     if(!await loadAccount())return;
     if(sequence!==routeSequence)return;
     favoritesOnly = tab==='favorites';
-    if (reset) { page=1; query='';  unit=null; theme=null; }
+    if (reset) { page=1; query=''; unit=null; theme=null; ownedOnly=false; }
+    if(!canFilterOwned())ownedOnly=false;
+    setTab(tab);
     screen().setAttribute('aria-busy','true');
     let data;
     try { data=await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`); }
@@ -260,6 +267,7 @@
     try {
       const data = await api(`fiches?page=${page}&q=${encodeURIComponent(query)}${favoritesOnly?'&favorites=1':''}${currentTab==='qcm'?'&kind=QCM':''}${folderFilters()}`);
       if (sequence!==searchSequence || route!==routeSequence) return;
+      account=data.account;if(!canFilterOwned())ownedOnly=false;setTab(currentTab);
       const contents=await libraryResults(data,currentTab==='qcm');
       if(sequence!==searchSequence || route!==routeSequence)return;
       results.innerHTML = contents;
@@ -411,7 +419,7 @@
         const destination=currentTab==='qcm'?'qcm':'fiches';
         const opened=activeFiche, chosenTheme=(opened.terms?.theme||[]).find(t=>t.id===Number(b.dataset.readerTheme));
         const chosenUnit=(opened.terms?.enseignement||[]).find(t=>t.id===Number(b.dataset.readerUnit))||(opened.terms?.enseignement||[])[0];
-        if(chosenUnit){unit=Number(chosenUnit.id);theme=chosenTheme?Number(chosenTheme.id):null;folderNames.unit=chosenUnit.name;folderNames.theme=chosenTheme?.name||'';query='';page=1;await dashboard(destination,false);document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
+        if(chosenUnit){ownedOnly=false;unit=Number(chosenUnit.id);theme=chosenTheme?Number(chosenTheme.id):null;folderNames.unit=chosenUnit.name;folderNames.theme=chosenTheme?.name||'';query='';page=1;await dashboard(destination,false);document.querySelector('#oi-library-title')?.scrollIntoView({behavior:'smooth'});}
       }
       if (b.hasAttribute('data-home')) await dashboard();
       if (b.dataset.return) await dashboard(b.dataset.return,false);
@@ -421,7 +429,9 @@
         else{theme=selected;folderNames.theme=b.dataset.folderName;}
         page=1;await search();document.querySelector('#oi-folder-trail button:last-child')?.focus();
       }
+      if(b.dataset.libraryAccess==='unlocked'&&canFilterOwned()){ownedOnly=true;unit=null;theme=null;document.querySelector('#oi-query').value='';page=1;await search();document.querySelector('[data-library-access]')?.focus();}
       if(b.hasAttribute('data-library-level')) {
+        ownedOnly=false;
         if(b.dataset.libraryLevel==='root'){unit=null;theme=null;}else theme=null;
         document.querySelector('#oi-query').value='';page=1;await search();
       }
@@ -498,6 +508,7 @@
   }
   async function initialView() {
     const params=new URLSearchParams(location.search),tab=params.get('view'),rawId=params.get('fiche')||'';
+    ownedOnly=tab==='fiches'&&params.get('access')==='unlocked';
     const id=/^[1-9]\d*$/.test(rawId)?Number(rawId):0;
     if(['fiches','qcm'].includes(tab)&&Number.isSafeInteger(id)&&id>0){
       shell();if(!await loadAccount())return;
@@ -510,7 +521,7 @@
     if(tab==='qcm-imports'&&OI.admin)return qcmImports();
     if(tab==='users'&&OI.admin)return users();
     if(tab==='progress')return progression();
-    return dashboard(['qcm','favorites'].includes(tab)?tab:'fiches');
+    return dashboard(['qcm','favorites'].includes(tab)?tab:'fiches',!ownedOnly);
   }
   if (view && OI.loggedIn) initialView().then(paymentReturn).catch(error);
   else if(publicCatalog) showCatalog(publicCatalog).catch(error);

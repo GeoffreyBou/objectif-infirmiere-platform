@@ -33,6 +33,7 @@ final class OI_API {
     }
     public static function listing(WP_REST_Request $r): array {
         $allowed = OI_Model::ids(array_merge(OI_Offer::catalogue(), OI_Model::allowed(get_current_user_id()), OI_Credits::unlocked(get_current_user_id(),'QCM')));
+        if(rest_sanitize_boolean($r['unlocked']??false))$allowed=array_values(array_intersect($allowed,OI_Model::allowed(get_current_user_id())));
         if($r['kind']==='QCM')$allowed=array_values(array_filter($allowed,fn($id)=>(bool)OI_Revision::quiz($id)));
         $args = ['post_type' => 'oi_fiche', 'post_status' => 'publish', 'post__in' => $allowed ?: [0], 'posts_per_page' => 20, 'paged' => max(1, absint($r['page'])), 'orderby' => 'title', 'order' => 'ASC', 'search_columns'=>['post_title']];
         if ($r['favorites']) { $args['post__in'] = array_values(array_filter($allowed, fn($id) => !empty(OI_Revision::state(get_current_user_id(), $id)['favorite']))) ?: [0]; }
