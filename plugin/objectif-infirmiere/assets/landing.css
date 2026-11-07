@@ -327,3 +327,38 @@
 @media (max-width: 360px) {
   .oi-hero-visual .oi-reform-label { font-size: 11px; gap: 6px; padding-inline: 9px; }
 }
+
+/* Four clear steps, with the free start integrated into the explanation. */
+.oi-offer .oi-section-heading > p { max-width: 360px; }
+.oi-offer .oi-feature-heading > span:last-of-type { font-size: 18px; line-height: 1.4; letter-spacing: -.25px; color: #315d94; font-weight: 750; }
+.oi-offer .oi-feature-heading { align-items: flex-start; flex-wrap: nowrap; }
+.oi-offer .oi-feature-ai .oi-feature-heading > span:last-of-type { color: #d5e7ff; }
+.oi-offer .oi-feature-heading > span:last-of-type { padding-top: 4px; }
+.oi-offer .oi-feature > p { max-width: 420px; }
+.oi-trial-step { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; margin-top: 22px; padding: 34px 36px; border: 1px solid #c8dcfa; border-radius: 22px; background: radial-gradient(ellipse at 100% 0, #dcecff, transparent 65%), linear-gradient(120deg, #f2f7ff, #edf5ff); }
+.oi-trial-copy h3 { font-size: 30px; font-weight: 800; line-height: 1.2; letter-spacing: -.9px; color: #14345a; }
+.oi-trial-copy > p { font-size: 14px; line-height: 1.8; color: #536d8f; margin: 14px 0 0; max-width: 410px; }
+.oi-trial-access { text-align: center; }
+.oi-landing .oi-trial-benefits { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 24px; padding: 0; gap: 0; }
+.oi-trial-benefits li { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 0 12px; color: #42649b; }
+.oi-trial-benefits li + li { border-left: 1px solid #cddff4; }
+.oi-trial-benefits strong { font-size: 38px; font-weight: 800; line-height: 1; letter-spacing: -1px; color: #215dd1; }
+.oi-trial-benefits span { font-size: 13px; line-height: 1.5; }
+.oi-trial-access > .oi-btn { font-size: 14px; padding: 16px 24px; gap: 22px; }
+.oi-trial-access .oi-trial-note { margin: 13px auto 0; font-size: 11px; line-height: 1.7; color: #536d8f; max-width: 400px; }
+@media (max-width: 1000px) {
+  .oi-offer .oi-feature-heading > span:last-of-type { font-size: 16px; }
+  .oi-trial-step { gap: 24px; padding: 28px; }
+}
+@media (max-width: 650px) {
+  .oi-offer .oi-feature-heading > span:last-of-type { font-size: 17px; }
+  .oi-offer .oi-feature-fiches { padding-bottom: 26px; }
+  .oi-offer .oi-fiche-illustration { position: relative; top: auto; bottom: auto; left: auto; right: auto; height: 310px; margin: 40px 10px 0; }
+  .oi-offer .oi-mini-question { margin-bottom: 0; }
+  .oi-trial-step { grid-template-columns: minmax(0, 1fr); gap: 26px; padding: 25px 22px; }
+  .oi-trial-copy h3 { font-size: 28px; }
+  .oi-trial-benefits li { padding-inline: 7px; }
+  .oi-trial-benefits strong { font-size: 32px; }
+  .oi-trial-benefits span { font-size: 12px; }
+  .oi-trial-access > .oi-btn { width: 100%; padding-inline: 14px; gap: 12px; }
+}
