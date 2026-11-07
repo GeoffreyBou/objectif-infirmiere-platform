@@ -10,6 +10,7 @@ $oi_mascot = esc_url(OI_URL . 'assets/brand/mascot.png');
 $oi_monitor = esc_url(OI_URL . 'assets/brand/mascot-monitor.png');
 $oi_arrow = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 $oi_check = '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 10 3.5 3.5L15 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+$oi_refresh = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6.1 6.1A8 8 0 0 1 20 12M4 12a8 8 0 0 0 13.9 5.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 $oi_spark = '<svg class="oi-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1.8 7.1 3.9 9.2 11 11-7.1 1.8-9.2 3.9-11 11C10.2 15.9 8.1 13.8 1 12 8.1 10.2 10.2 8.1 12 1Z" fill="currentColor"/></svg>';
 $oi_burst = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 $oi_heart = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 6l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.3a5.5 5.5 0 0 0 0-7.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
@@ -41,7 +42,7 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
                 <div class="oi-hero-bottom"><a class="oi-link-arrow" href="#demo">Tester une révision sans compte <?php echo $oi_arrow; ?></a></div>
             </div>
             <div class="oi-hero-visual" aria-label="Aperçu de l’espace de révision">
-                <span class="oi-visual-label oi-reform-label"><?php echo $oi_check; ?> À jour · Réforme 2026</span><svg class="oi-hero-ecg" viewBox="0 0 540 120" fill="none" aria-hidden="true"><path d="M0 63h100l18-18 20 36 24-69 31 99 26-48h321" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="oi-visual-label oi-reform-label"><?php echo $oi_check; ?> Mise à jour Réforme 2026 incluse</span><svg class="oi-hero-ecg" viewBox="0 0 540 120" fill="none" aria-hidden="true"><path d="M0 63h100l18-18 20 36 24-69 31 99 26-48h321" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <div class="oi-preview-window">
                     <div class="oi-preview-top"><span class="oi-preview-logo"><?php echo $oi_heart; ?></span><div><strong>Mon carnet de révision</strong><span>Des notions qui prennent tout leur sens.</span></div><span class="oi-preview-avatar">M</span></div>
                     <div class="oi-preview-tabs"><span class="is-active">Mes fiches</span><span>Mes QCM</span><span>Mon assistant <small><?php echo $oi_spark; ?></small></span></div>
@@ -56,7 +57,7 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
             </div>
         </section>
 
-        <div class="oi-subject-strip oi-reform-strip" aria-label="Ton programme de révision"><div class="oi-container"><div class="oi-reform-strip-label"><?php echo $oi_check; ?><span>Mise à jour<strong>Réforme 2026</strong></span></div><ul class="oi-catalog-highlights"><li><strong>760</strong><span>Fiches</span></li><li><strong>14 000</strong><span>QCM</span></li><li><strong>Assistant</strong><span>personnel</span></li></ul></div></div>
+        <div class="oi-subject-strip oi-reform-strip" aria-label="Ton programme de révision"><div class="oi-container"><div class="oi-reform-strip-label"><?php echo $oi_refresh; ?><span>Mise à jour<strong>Réforme 2026</strong></span></div><ul class="oi-catalog-highlights"><li><strong>760</strong><span>Fiches</span></li><li><strong>14 000</strong><span>QCM</span></li><li class="oi-highlight-assistant"><span>Ton</span><strong>Assistant personnel</strong></li></ul><a class="oi-btn oi-btn-dark oi-strip-signup" href="<?php echo $oi_signup; ?>">M’inscrire <?php echo $oi_arrow; ?></a></div></div>
 
         <section id="reviser" class="oi-offer oi-container" aria-labelledby="oi-offer-title">
             <div class="oi-section-heading"><div><span class="oi-eyebrow-public">PENSÉ POUR TES ÉTUDES. ANCRÉ DANS LE SOIN.</span><h2 id="oi-offer-title">Tes cours IFSI.<br><span>Ils prennent tout leur sens.</span></h2></div><p>Entre une UE à valider et un stage à préparer, fais le lien entre ce que tu apprends et le métier qui t’attend.</p></div>

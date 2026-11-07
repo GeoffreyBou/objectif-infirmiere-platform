@@ -293,31 +293,37 @@
 .oi-hero-visual { padding-top: 82px; }
 .oi-hero-visual .oi-reform-label { top: 14px; left: 24px; z-index: 2; padding: 9px 15px; gap: 8px; border: 1px solid #1856cb; border-radius: 11px; background: linear-gradient(110deg, #0868db, #244ac7); color: #fff; font-size: 14px; line-height: 1.4; font-weight: 800; box-shadow: 0 5px 14px #1e5ec52b; }
 .oi-reform-label svg { width: 19px; height: 19px; flex: 0 0 19px; }
-.oi-reform-strip > .oi-container { gap: 32px; min-height: 100px; }
-.oi-reform-strip-label { display: flex; align-items: center; gap: 13px; flex-shrink: 0; color: #315d94; }
-.oi-reform-strip-label > svg { width: 32px; height: 32px; padding: 6px; border: 1px solid #c7dcfa; border-radius: 50%; color: #215dd1; background: #f8fbff; }
-.oi-reform-strip-label span { font-size: 11px; line-height: 1.6; }
-.oi-reform-strip-label strong { display: block; font-size: 16px; color: #14345a; }
-.oi-landing .oi-catalog-highlights { list-style: none; display: flex; align-items: center; justify-content: flex-end; padding: 0; margin: 0; }
-.oi-catalog-highlights li { display: flex; align-items: baseline; justify-content: center; gap: 8px; padding: 0 32px; font-size: 15px; color: #42649b; }
+ .oi-reform-strip > .oi-container { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 32px; min-height: 110px; padding-block: 18px; }
+.oi-reform-strip-label { display: flex; align-items: center; justify-content: center; gap: 12px; color: #215dd1; text-align: center; }
+.oi-reform-strip-label > svg { width: 38px; height: 38px; flex: 0 0 38px; padding: 8px; border: 1px solid #bdd6fa; border-radius: 12px; color: #215dd1; background: #e0edff; }
+.oi-reform-strip-label span { font-size: 16px; font-weight: 750; line-height: 1.5; }
+.oi-reform-strip-label strong { display: block; font-size: 16px; font-weight: 750; color: #14345a; }
+.oi-landing .oi-catalog-highlights { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; padding: 0; margin: 0; text-align: center; }
+.oi-catalog-highlights li { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0 18px; font-size: 14px; color: #42649b; }
 .oi-catalog-highlights li + li { border-left: 1px solid #cddff4; }
-.oi-catalog-highlights li:last-child { padding-right: 0; }
-.oi-catalog-highlights strong { font-size: 25px; font-weight: 800; letter-spacing: -.6px; color: #14345a; }
-@media (max-width: 1000px) {
-  .oi-catalog-highlights li { padding-inline: 20px; }
-  .oi-catalog-highlights strong { font-size: 22px; }
+.oi-catalog-highlights strong { font-size: 26px; font-weight: 800; letter-spacing: -.6px; color: #14345a; line-height: 1.25; }
+.oi-catalog-highlights .oi-highlight-assistant strong { font-size: 18px; letter-spacing: -.3px; }
+.oi-reform-strip .oi-strip-signup { justify-self: end; font-size: 13px; gap: 18px; padding: 15px 20px; white-space: nowrap; }
+.oi-hero-visual .oi-reform-label { max-width: calc(100% - 48px); }
+@media (max-width: 1100px) {
+  .oi-reform-strip > .oi-container { gap: 18px; }
+  .oi-catalog-highlights li { padding-inline: 12px; }
+  .oi-reform-strip-label span, .oi-reform-strip-label strong { font-size: 14px; }
+  .oi-reform-strip .oi-strip-signup { gap: 10px; padding-inline: 16px; }
 }
 @media (max-width: 850px) {
-  .oi-reform-strip > .oi-container { gap: 20px; padding-block: 22px; }
-  .oi-catalog-highlights li:first-child { padding-left: 0; }
+  .oi-reform-strip > .oi-container { grid-template-columns: minmax(0, 1fr) auto; gap: 24px; padding-block: 24px; }
+  .oi-reform-strip-label { grid-column: 1 / -1; }
 }
 @media (max-width: 650px) {
   .oi-hero-visual { padding-top: 80px; }
-  .oi-hero-visual .oi-reform-label { top: 16px; left: 18px; font-size: 12px; padding: 8px 12px; }
-  .oi-landing .oi-catalog-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
-  .oi-catalog-highlights li { flex-direction: column; align-items: center; gap: 3px; padding: 0 10px; font-size: 12px; }
-  .oi-catalog-highlights li:first-child { padding-left: 10px; }
-  .oi-catalog-highlights li:last-child { padding-right: 10px; }
-  .oi-catalog-highlights strong { font-size: 20px; letter-spacing: -.5px; }
-  .oi-catalog-highlights li:last-child strong { font-size: 17px; line-height: 30px; }
+  .oi-hero-visual .oi-reform-label { top: 16px; left: 18px; max-width: calc(100% - 36px); font-size: 12px; padding: 8px 12px; }
+  .oi-reform-strip > .oi-container { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .oi-catalog-highlights li { padding: 0 8px; font-size: 12px; }
+  .oi-catalog-highlights strong { font-size: 22px; }
+  .oi-catalog-highlights .oi-highlight-assistant strong { font-size: 15px; }
+  .oi-reform-strip .oi-strip-signup { justify-self: center; min-width: 170px; }
+}
+@media (max-width: 360px) {
+  .oi-hero-visual .oi-reform-label { font-size: 11px; gap: 6px; padding-inline: 9px; }
 }
