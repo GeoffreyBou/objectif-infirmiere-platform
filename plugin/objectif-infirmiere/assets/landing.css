@@ -455,3 +455,40 @@
   .oi-founders-copy h2 { font-size: 33px; letter-spacing: -1.2px; }
   .oi-founders-social a { flex: 1; padding-inline: 10px; }
 }
+
+/* A centred FAQ, organised around starting and using the learning space. */
+.oi-faq.oi-faq-refresh { display: block; padding-bottom: 80px; }
+.oi-faq-panel { padding: 46px; border: 1px solid #dce9fb; border-radius: 28px; background: linear-gradient(145deg, #f6faff, #edf5ff); }
+.oi-faq-intro { text-align: center; margin-bottom: 34px; }
+.oi-faq-refresh .oi-faq-intro h2 { margin: 0; font-size: 42px; line-height: 1.16; letter-spacing: -1.6px; }
+.oi-faq-intro h2 br { display: none; }
+.oi-faq-intro h2 span { color: #487ab9; }
+.oi-faq-intro h2 span::before { content: ' '; }
+.oi-faq-intro p { margin: 14px 0 0; color: #536d8f; font-size: 14px; line-height: 1.8; }
+.oi-faq-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 24px; }
+.oi-faq-group h3 { margin: 0 0 13px 5px; color: #42649b; font-size: 13px; font-weight: 750; }
+.oi-faq-refresh .oi-faq-items { display: grid; gap: 10px; border: 0; }
+.oi-faq-refresh .oi-faq-items details { padding: 0; border: 1px solid #d7e5f9; border-radius: 14px; background: #fff; box-shadow: 0 3px 12px #234b8510; }
+.oi-faq-refresh .oi-faq-items summary { padding: 18px; min-height: 76px; gap: 14px; font-size: 13px; line-height: 1.6; color: #14345a; border-radius: 14px; }
+.oi-faq-refresh .oi-faq-items summary > span { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 27px; border-radius: 50%; background: #edf4ff; color: #3155dc; font-size: 20px; line-height: 1; }
+.oi-faq-refresh .oi-faq-items summary:hover { background: #f7faff; }
+.oi-faq-refresh .oi-faq-items summary:focus-visible { outline: 3px solid #527af1; outline-offset: 3px; }
+.oi-faq-refresh .oi-faq-items details[open] { border-color: #aac8f4; }
+.oi-faq-refresh .oi-faq-items details[open] summary { color: #215dd1; }
+.oi-faq-refresh .oi-faq-items details > p { margin: 0; padding: 0 18px 20px; color: #536d8f; font-size: 13px; line-height: 1.85; }
+@media (max-width: 850px) {
+  .oi-faq-panel { padding: 30px 24px; }
+  .oi-faq-groups { gap: 16px; }
+  .oi-faq-refresh .oi-faq-intro h2 { font-size: 36px; }
+}
+@media (max-width: 650px) {
+  .oi-faq.oi-faq-refresh { padding-bottom: 60px; }
+  .oi-faq-panel { padding: 28px 16px; border-radius: 22px; }
+  .oi-faq-groups { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+  .oi-faq-refresh .oi-faq-intro h2 { font-size: 32px; letter-spacing: -1.1px; }
+  .oi-faq-refresh .oi-faq-intro h2 br { display: block; }
+  .oi-faq-intro h2 span::before { content: none; }
+  .oi-faq-intro p { font-size: 13px; }
+  .oi-faq-refresh .oi-faq-items summary { padding: 15px; min-height: 70px; gap: 10px; }
+  .oi-faq-refresh .oi-faq-items details > p { padding-inline: 15px; }
+}
