@@ -330,6 +330,7 @@
 
 /* Four clear steps, with the free start integrated into the explanation. */
 .oi-offer .oi-section-heading > p { max-width: 360px; }
+@media (min-width: 1100px) { .oi-offer .oi-section-heading > p { max-width: 560px; flex: 0 1 48%; } }
 .oi-offer .oi-feature-heading > span:last-of-type { font-size: 18px; line-height: 1.4; letter-spacing: -.25px; color: #315d94; font-weight: 750; }
 .oi-offer .oi-feature-heading { align-items: flex-start; flex-wrap: nowrap; }
 .oi-offer .oi-feature-ai .oi-feature-heading > span:last-of-type { color: #d5e7ff; }
