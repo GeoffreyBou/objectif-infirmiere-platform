@@ -500,7 +500,7 @@
 .oi-try-intro h2 { color: #14345a; font-size: clamp(32px, 3.3vw, 46px); line-height: 1.15; letter-spacing: -1.6px; margin: 0 0 20px; font-weight: 800; }
 .oi-try-intro h2 > span { color: #487ab9; }
 .oi-try-intro p { color: #536d8f; font-size: 14px; line-height: 1.85; margin: 0 0 15px; }
-.oi-try-free { display: inline-block; padding: 7px 14px; border-radius: 30px; background: #fff9; color: #42649b; font-size: 12px; }
+.oi-try-intro .oi-eyebrow-public { font-size: clamp(13px, 1.2vw, 16px); line-height: 1.6; letter-spacing: 1.8px; }
 .oi-try-workspace { max-width: 950px; margin: auto; border: 1px solid #d3e3fa; border-radius: 24px; background: #fff; box-shadow: 0 20px 55px -28px #22518f38; overflow: hidden; }
 .oi-try-topics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 12px; background: #f7faff; border-bottom: 1px solid #e1ebfa; }
 .oi-try-topics button { display: flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #536d8f; font: inherit; font-size: 13px; font-weight: 650; padding: 13px 9px; cursor: pointer; line-height: 1.45; }
@@ -600,3 +600,15 @@
   .oi-try-invitation .oi-btn { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .oi-try-section * { animation: none; transition: none; scroll-behavior: auto; } }
+
+/* Shared legal links sit in the centre of the public footer. */
+.oi-footer-bottom { display: grid; grid-template-columns: 1fr auto 1fr; }
+.oi-footer-bottom > span:last-child { text-align: right; }
+.oi-footer-legal { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 22px; }
+.oi-footer-legal a { color: #42649b; font-size: 11px; font-weight: 650; text-decoration: none; }
+.oi-footer-legal a:hover { color: #215dd1; text-decoration: underline; text-underline-offset: 3px; }
+.oi-footer-legal a:focus-visible { outline: 3px solid #527af1; outline-offset: 4px; }
+@media (max-width: 850px) {
+  .oi-footer-bottom { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 15px; }
+  .oi-footer-bottom > span:last-child { text-align: center; }
+}

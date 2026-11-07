@@ -5,12 +5,17 @@ final class OI_App {
         $id = (int)get_option('oi_page_' . $view);
         $url = $id && get_post_status($id) === 'publish' ? get_permalink($id) : false;
         if ($view === 'home') { return home_url('/'); }
-        return $url ?: home_url('/' . ['member'=>'espace-revision', 'register'=>'inscription', 'login'=>'connexion', 'home'=>''][$view] . '/');
+        return $url ?: home_url('/' . ['member'=>'espace-revision', 'register'=>'inscription', 'login'=>'connexion', 'legal'=>'mentions-legales', 'privacy'=>'politique-de-confidentialite', 'home'=>''][$view] . '/');
     }
     public static function assets(): void {
         wp_enqueue_style('oi-base', OI_URL . 'assets/base.css', [], OI_VERSION);
     }
     public static function view(): string {
+        if (is_singular('page')) {
+            foreach (['legal', 'privacy'] as $view) {
+                if (get_queried_object_id() === (int)get_option('oi_page_' . $view)) { return $view; }
+            }
+        }
         $content = is_singular('page') ? trim((string)get_post()->post_content) : '';
         return ['[objectif_infirmiere]'=>'member', '[objectif_infirmiere_home]'=>'home', '[objectif_infirmiere_register]'=>'register', '[objectif_infirmiere_login]'=>'login'][$content] ?? '';
     }

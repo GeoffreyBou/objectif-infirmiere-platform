@@ -19,7 +19,7 @@
       if (['hygiene','calculs'].includes(selected)) url.searchParams.set('interest', selected);
       return url.href;
     };
-    const excerpt = question => `<details class="oi-try-excerpt"><summary>Comprendre avec la fiche <span aria-hidden="true">＋</span></summary><div><span>EXTRAIT DE LA FICHE</span><h4>${escape(topics[selected].ficheTitle)}</h4><p>${escape(question.excerpt)}</p></div></details>`;
+    const excerpt = question => `<details class="oi-try-excerpt"><summary>Comprendre avec la fiche <span aria-hidden="true">＋</span></summary><div><span>EXTRAIT DE LA FICHE DE NOTRE PLATEFORME</span><h4>${escape(topics[selected].ficheTitle)}</h4><p>${escape(question.excerpt)}</p></div></details>`;
     const focus = selector => {
       const target = panel.querySelector(selector);
       if (target) { target.focus({preventScroll:true}); target.scrollIntoView({block:'nearest', behavior:'instant'}); }

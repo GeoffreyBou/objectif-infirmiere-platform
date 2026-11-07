@@ -5,6 +5,7 @@ $view = OI_App::view();
 OI_App::assets();
 $app = match ($view) {
     'home' => OI_App::landing(),
+    'legal', 'privacy' => OI_Legal::render(),
     'register' => OI_Auth::render('register'),
     'login' => OI_Auth::render('login'),
     default => OI_App::render(),

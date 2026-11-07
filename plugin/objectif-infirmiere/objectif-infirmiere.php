@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.3.0-rc.72
+ * Version: 0.3.0-rc.73
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.3.0-rc.72');
+define('OI_VERSION', '0.3.0-rc.73');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -25,6 +25,8 @@ add_action('personal_options_update', ['OI_Admin', 'save_user']);
 add_action('edit_user_profile_update', ['OI_Admin', 'save_user']);
 require_once OI_DIR . 'includes/class-api.php';
 require_once OI_DIR . 'includes/class-app.php';
+require_once OI_DIR . 'includes/class-legal.php';
+add_action('init', [OI_Legal::class, 'install']);
 add_action('rest_api_init', ['OI_API', 'register']);
 add_shortcode('objectif_infirmiere', ['OI_App', 'render']);
 add_shortcode('objectif_infirmiere_home', ['OI_App', 'landing']);

@@ -97,7 +97,7 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
 
         <section id="demo" class="oi-try-section" aria-labelledby="oi-demo-title">
             <div class="oi-container">
-                <header class="oi-try-intro"><span class="oi-eyebrow-public">ESSAIE PAR TOI-MÊME</span><h2 id="oi-demo-title">Une question. Une correction.<br><span>Et ça devient plus clair.</span></h2><p>Choisis un sujet et teste-toi sur trois questions de notre catalogue.<br>Comprends tes réponses, puis retrouve les repères dans la fiche.</p><span class="oi-try-free">Sans compte · Sans crédit · À ton rythme</span></header>
+                <header class="oi-try-intro"><span class="oi-eyebrow-public">ESSAIE PAR TOI-MÊME MAINTENANT !</span><h2 id="oi-demo-title">Une question. Une correction.<br><span>Et ça devient plus clair.</span></h2><p>Choisis un sujet et teste-toi sur trois questions de notre catalogue.</p></header>
                 <div class="oi-try-workspace">
                     <div class="oi-try-topics" role="group" aria-label="Choisir un sujet de démonstration"><button type="button" data-demo-topic="hygiene" aria-pressed="true"><span aria-hidden="true">01</span> Précautions standard</button><button type="button" data-demo-topic="calculs" aria-pressed="false"><span aria-hidden="true">02</span> Calculs de doses</button><button type="button" data-demo-topic="avc" aria-pressed="false"><span aria-hidden="true">03</span> Pathologie – AVC</button></div>
                     <div id="oi-demo-panel" class="oi-try-panel"><p>Trois questions, leur correction et des extraits de nos fiches pour découvrir ta façon de réviser.</p><noscript><p>Active JavaScript pour essayer la démonstration interactive, ou crée directement ton espace gratuit.</p></noscript></div>
@@ -136,5 +136,5 @@ $oi_diagonal = '<svg class="oi-symbol" viewBox="0 0 24 24" fill="none" aria-hidd
 
     </main>
 
-    <footer class="oi-footer"><div class="oi-container"><div class="oi-footer-top"><a class="oi-site-brand" href="<?php echo esc_url(OI_App::url('home')); ?>"><img class="oi-brand-image" src="<?php echo $oi_brand; ?>" width="1300" height="436" alt="Objectif Infirmière — La référence de la révision en ligne"></a><p>Apprendre aujourd’hui.<br><strong>Prendre soin demain.</strong></p><nav aria-label="Navigation de pied de page"><a href="#reviser">Les révisions</a><a href="#demo">Essayer une notion</a><a href="#faq">Questions fréquentes</a><a href="<?php echo $oi_login; ?>">Mon espace</a></nav></div><div class="oi-footer-bottom"><span>© <?php echo esc_html(wp_date('Y')); ?> Objectif Infirmière</span><span>Avec toi, du premier cours au prochain déclic. <i aria-hidden="true"><?php echo $oi_spark; ?></i></span></div></div></footer>
+    <?php require OI_DIR . 'templates/public-footer.php'; ?>
 </div>
