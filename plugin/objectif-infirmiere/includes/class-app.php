@@ -18,7 +18,8 @@ final class OI_App {
         OI_Metrics::count('home_view');
         self::assets();
         wp_enqueue_style('oi-landing', OI_URL . 'assets/landing.css', ['oi-base'], OI_VERSION);
-        wp_enqueue_script('oi-public', OI_URL . 'assets/public.js', [], OI_VERSION, true);
+        wp_enqueue_script('oi-demo-content', OI_URL . 'assets/demo-content.js', [], OI_VERSION, true);
+        wp_enqueue_script('oi-public', OI_URL . 'assets/public.js', ['oi-demo-content'], OI_VERSION, true);
         ob_start(); require OI_DIR . 'templates/landing.php'; return ob_get_clean();
     }
     public static function render(): string {

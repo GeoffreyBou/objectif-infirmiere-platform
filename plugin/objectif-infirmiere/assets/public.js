@@ -1,28 +1,75 @@
 (() => {
   'use strict';
-  const topics = {
-    hygiene:{tag:'SOINS INFIRMIERS',title:'Les bons réflexes commencent par les mains.',text:'L’hygiène des mains participe à la prévention de la transmission des micro-organismes. Un geste essentiel, avant comme après le soin.',key:'Les gants ne remplacent pas l’hygiène des mains.',question:'Le port de gants remplace-t-il l’hygiène des mains ?',answers:['Oui, les gants suffisent.','Non, les deux ont leur place.'],correct:1,explanation:'Exactement. Les gants ne dispensent pas de l’hygiène des mains : les protocoles précisent les gestes adaptés à chaque situation.'},
-    calculs:{tag:'MÉTHODE & CALCULS',title:'Les conversions, sans se mélanger.',text:'Avant de calculer, commence par aligner les unités. Un litre contient 1 000 millilitres : convertir devient plus simple quand le repère est clair.',key:'1 L = 1 000 mL. Pour passer de L à mL, on multiplie par 1 000.',question:'0,5 litre correspond à…',answers:['50 mL','500 mL','5 000 mL'],correct:1,explanation:'0,5 × 1 000 = 500 mL. Ce repère illustre une conversion ; un calcul de soins exige aussi les vérifications prévues par les protocoles.'},
-    cardio:{tag:'ANATOMIE & PHYSIOLOGIE',title:'Le cœur d’une notion, en quelques lignes.',text:'Le cœur met le sang en circulation. Les artères transportent le sang en s’éloignant du cœur, tandis que les veines le ramènent vers le cœur.',key:'Artères : au départ du cœur. Veines : retour vers le cœur.',question:'Quel est le rôle des artères ?',answers:['Transporter le sang du cœur vers les organes.','Ramener le sang vers le cœur.','Produire de l’oxygène.'],correct:0,explanation:'Le repère est le sens de circulation par rapport au cœur. Il permet de distinguer artères et veines sans les confondre avec la teneur en oxygène.'},
-  };
-  const panel=document.querySelector('#oi-demo-panel');
-  let selected='hygiene';
-  const render=topic=>{
-    if(!panel||!topics[topic])return;
-    selected=topic;const data=topics[topic];
-    document.querySelectorAll('[data-demo-topic]').forEach(b=>{const active=b.dataset.demoTopic===topic;b.setAttribute('aria-pressed',String(active));b.classList.toggle('is-active',active);});
-    panel.innerHTML=`<div class="oi-demo-live-head"><span>${data.tag}</span><span>EXTRAIT DÉCOUVERTE</span></div><h3>${data.title}</h3><p class="oi-demo-concept">${data.text}</p><div class="oi-demo-key"><span aria-hidden="true">✦</span><div><strong>Le repère à retenir</strong><p>${data.key}</p></div></div><div class="oi-demo-quiz"><span class="oi-demo-kicker">À TOI DE JOUER</span><h4>${data.question}</h4><div class="oi-demo-options">${data.answers.map((answer,index)=>`<button type="button" class="oi-demo-option" data-demo-answer="${index}"><span>${String.fromCharCode(65+index)}</span>${answer}</button>`).join('')}</div><p class="oi-demo-feedback" role="status"></p></div>`;
-    document.querySelectorAll('[data-demo-signup]').forEach(a=>{const u=new URL(a.href,location.href);u.searchParams.set('interest',topic);a.href=u.href;});
-  };
-  document.querySelectorAll('[data-demo-topic]').forEach(b=>b.addEventListener('click',()=>render(b.dataset.demoTopic)));
-  panel?.addEventListener('click',event=>{
-    const button=event.target.closest('[data-demo-answer]');if(!button)return;
-    const data=topics[selected];const correct=Number(button.dataset.demoAnswer)===data.correct;
-    panel.querySelectorAll('[data-demo-answer]').forEach(b=>{b.classList.remove('is-correct','is-incorrect');b.setAttribute('aria-pressed',String(b===button));});
-    button.classList.add(correct?'is-correct':'is-incorrect');
-    const feedback=panel.querySelector('.oi-demo-feedback');feedback.textContent=correct?data.explanation:'Pas tout à fait. Relis le repère à retenir et essaie à nouveau.';feedback.classList.toggle('is-correct',correct);
-  });
-  if(panel)render(selected);
+  const panel = document.querySelector('#oi-demo-panel');
+  const topics = window.OIDemoTopics;
+  if (panel && topics) {
+    const signup = document.querySelector('[data-demo-signup]');
+    const signupBase = signup.href;
+    const states = {};
+    let selected = 'hygiene';
+    const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fresh = () => ({index:0, choices:[], results:[], done:false});
+    const state = () => states[selected] || (states[selected] = fresh());
+    const number = value => String(value).padStart(2, '0');
+    const correct = (question, choices) => question.correct.length === choices.length && question.correct.every(i => choices.includes(i));
+    const destination = () => {
+      const url = new URL(signupBase, location.href);
+      // Registration currently offers hygiene, calculs and cardio. AVC has no matching preference.
+      url.searchParams.delete('interest');
+      if (['hygiene','calculs'].includes(selected)) url.searchParams.set('interest', selected);
+      return url.href;
+    };
+    const excerpt = question => `<details class="oi-try-excerpt"><summary>Comprendre avec la fiche <span aria-hidden="true">＋</span></summary><div><span>EXTRAIT DE LA FICHE</span><h4>${escape(topics[selected].ficheTitle)}</h4><p>${escape(question.excerpt)}</p></div></details>`;
+    const focus = selector => {
+      const target = panel.querySelector(selector);
+      if (target) { target.focus({preventScroll:true}); target.scrollIntoView({block:'nearest', behavior:'instant'}); }
+    };
+    const render = focusOn => {
+      const data = topics[selected], current = state();
+      document.querySelectorAll('[data-demo-topic]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.demoTopic === selected)));
+      signup.href = destination();
+      if (current.done) {
+        const score = current.results.filter(result => result.correct).length;
+        panel.innerHTML = `<div class="oi-try-finish"><div class="oi-try-score" aria-label="${score} bonnes réponses sur 3">${score}<span>/ 3</span></div><div><span class="oi-try-eyebrow">TON PREMIER BILAN</span><h3 tabindex="-1" data-demo-focus>${score === 3 ? 'Trois repères bien en place.' : 'Tu sais quoi retravailler.'}</h3><p>${score} réponse${score > 1 ? 's' : ''} juste${score > 1 ? 's' : ''} · ${3-score} question${3-score > 1 ? 's' : ''} à revoir</p></div></div><div class="oi-try-review">${data.questions.map((q,i) => `<details><summary><span class="oi-try-number">${number(i+1)}</span><span>${escape(q.question)}</span><b class="${current.results[i].correct ? 'is-right' : 'is-wrong'}">${current.results[i].correct ? '✓ Juste' : '× À revoir'}</b></summary><div><p><strong>Ta réponse :</strong> ${current.results[i].choices.map(n => escape(q.options[n])).join(' ; ')}</p><p><strong>Réponse attendue :</strong> ${q.correct.map(n => escape(q.options[n])).join(' ; ')}</p><p>${escape(q.explanation)}</p></div></details>`).join('')}</div><div class="oi-try-invitation"><div><h4>Ce n’est que le début.</h4><p>5 fiches, 5 séries de QCM et 5 questions à ton assistant offertes après confirmation de ton e-mail.</p></div><a class="oi-btn oi-btn-dark" href="${escape(destination())}">Continuer gratuitement <span aria-hidden="true">→</span></a></div><button type="button" class="oi-try-restart" data-demo-restart>Recommencer ce sujet <span aria-hidden="true">↻</span></button>`;
+      } else {
+        const q = data.questions[current.index], result = current.results[current.index], multiple = q.correct.length > 1;
+        panel.innerHTML = `<div class="oi-try-progress"><span>${escape(data.title)}</span><span>Question <strong>${number(current.index+1)}</strong> / 03</span></div><div class="oi-try-track" aria-hidden="true">${data.questions.map((_,i) => `<span class="${current.results[i] ? (current.results[i].correct ? 'is-right' : 'is-wrong') : (i === current.index ? 'is-current' : '')}"></span>`).join('')}</div><fieldset class="oi-try-question"><legend><span class="oi-try-number" aria-hidden="true">${number(current.index+1)}</span><span tabindex="-1" data-demo-focus>${escape(q.question)}</span></legend><p class="oi-try-hint">${multiple ? 'Plusieurs réponses possibles.' : 'Une seule réponse attendue.'}</p><div class="oi-try-answers">${q.options.map((answer,i) => {
+          const chosen = current.choices.includes(i), right = q.correct.includes(i);
+          const status = result ? (right ? 'is-right' : chosen ? 'is-wrong' : '') : '';
+          const label = result ? (right ? (chosen ? 'Bonne réponse · Choisie' : 'Bonne réponse · Non choisie') : chosen ? 'Ta réponse · Incorrecte' : '') : '';
+          return `<label class="oi-try-answer ${status}"><input type="${multiple ? 'checkbox' : 'radio'}" name="demo-answer" value="${i}" ${chosen ? 'checked' : ''} ${result ? 'disabled' : ''}><span class="oi-try-letter" aria-hidden="true">${String.fromCharCode(65+i)}</span><span>${escape(answer)}${label ? `<small>${label}</small>` : ''}</span>${result && (right || chosen) ? `<b aria-hidden="true">${right ? '✓' : '×'}</b>` : ''}</label>`;
+        }).join('')}</div></fieldset>${result ? `<section class="oi-try-correction" aria-labelledby="oi-demo-correction"><h4 id="oi-demo-correction" tabindex="-1">${result.correct ? '✓ Bien vu !' : 'Un repère à retenir.'}</h4><p>${escape(q.explanation)}</p><details><summary>Le détail des réponses</summary><ul>${q.details.map((line,i) => `<li><strong>${String.fromCharCode(65+i)} · ${q.correct.includes(i) ? 'Vrai' : 'Faux'}</strong> ${escape(line)}</li>`).join('')}</ul></details></section>${excerpt(q)}` : ''}<div class="oi-try-actions"><span>${result ? 'Chaque correction fait avancer.' : 'Prends le temps de réfléchir.'}</span><button type="button" class="oi-btn oi-btn-dark" ${result ? 'data-demo-next' : `data-demo-validate ${current.choices.length ? '' : 'disabled'}`}>${result ? (current.index === 2 ? 'Voir mon bilan' : 'Question suivante') : 'Valider ma réponse'} <span aria-hidden="true">→</span></button></div>`;
+      }
+      if (focusOn) focus(focusOn);
+    };
+    panel.addEventListener('change', event => {
+      const input = event.target.closest('input[name="demo-answer"]');
+      if (!input) return;
+      const current = state();
+      if (current.done || current.results[current.index]) return;
+      current.choices = Array.from(panel.querySelectorAll('input[name="demo-answer"]:checked'), i => Number(i.value));
+      panel.querySelector('[data-demo-validate]').disabled = !current.choices.length;
+    });
+    panel.addEventListener('click', event => {
+      const current = state();
+      if (event.target.closest('[data-demo-validate]') && !current.done && !current.results[current.index] && current.choices.length) {
+        current.results[current.index] = {choices:[...current.choices], correct:correct(topics[selected].questions[current.index], current.choices)};
+        render('#oi-demo-correction');
+      } else if (event.target.closest('[data-demo-next]') && !current.done && current.results[current.index]) {
+        if (current.index === 2) current.done = true;
+        else {current.index++; current.choices = [];}
+        render('[data-demo-focus]');
+      } else if (event.target.closest('[data-demo-restart]')) {
+        states[selected] = fresh(); render('[data-demo-focus]');
+      }
+    });
+    document.querySelectorAll('[data-demo-topic]').forEach(button => button.addEventListener('click', () => {
+      if (!topics[button.dataset.demoTopic]) return;
+      selected = button.dataset.demoTopic;
+      render('[data-demo-focus]');
+    }));
+    render();
+  }
   const toggle=document.querySelector('[data-menu-toggle]');const menu=document.querySelector('[data-menu]');
   toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));menu?.classList.toggle('is-open',open);});
   menu?.addEventListener('click',e=>{if(e.target.closest('a')){toggle?.setAttribute('aria-expanded','false');menu.classList.remove('is-open');}});
