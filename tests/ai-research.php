@@ -8,11 +8,11 @@ $other=wp_insert_post(['post_type'=>'oi_fiche','post_status'=>'publish','post_ti
 $pack=wp_insert_post(['post_type'=>'oi_pack','post_status'=>'publish','post_title'=>'Accès de recette']);update_post_meta($pack,'oi_fiches',[$fiche]);update_user_meta($user,'oi_packs',[$pack]);
 foreach([$fiche,$other]as$id)foreach(['oi_ai_file'=>'file_'.$id,'oi_ai_hash'=>OI_AI::hash($id),'oi_ai_store'=>'vs_research']as$k=>$v)update_post_meta($id,$k,$v);
 wp_set_current_user($user);update_user_meta($user,'oi_email_verified',gmdate('c'));OI_Credits::welcome($user);
-$observed='https://www.has-sante.fr/jcms/fixture';$declared=$observed;$calls=0;$body=[];$search=[];$web_body=[];$web_ok=true;
-$transport=function($pre,$args,$url)use($fiche,$other,$observed,&$declared,&$calls,&$body,&$search,&$web_body,&$web_ok){
+$observed='https://www.has-sante.fr/jcms/fixture';$declared=$observed;$calls=0;$body=[];$search=[];$web_body=[];$web_ok=true;$course_only=false;$cite_course=true;
+$transport=function($pre,$args,$url)use($fiche,$other,$observed,&$declared,&$calls,&$body,&$search,&$web_body,&$web_ok,&$course_only,&$cite_course){
  if(!str_starts_with($url,'https://api.openai.com/'))return $pre;
  if(str_ends_with($url,'/search')){$search=json_decode($args['body'],true);$data=['data'=>[['file_id'=>'file_'.$other,'content'=>[['type'=>'text','text'=>'SECRET_UNAUTHORIZED_COURSE']]],['file_id'=>'file_'.$fiche,'content'=>[['type'=>'text','text'=>'Les gants ne remplacent pas l’hygiène des mains.']]]]];}
- else{$calls++;$body=json_decode($args['body'],true);if(!empty($body['tools']))$web_body=$body;$data=['status'=>'completed','output'=>[['type'=>'web_search_call','status'=>'completed','action'=>['sources'=>[['url'=>$observed,'title'=>'HAS – Hygiène']]]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'Les gants ne remplacent pas l’hygiène des mains [R1].','source_ids'=>[$fiche],'source_urls'=>[$declared],'sufficient_sources'=>true]),'annotations'=>[]]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>20]];}
+ else{$calls++;$body=json_decode($args['body'],true);if(!empty($body['tools']))$web_body=$body;$data=['status'=>'completed','output'=>[['type'=>'web_search_call','status'=>'completed','action'=>['sources'=>[['url'=>$observed,'title'=>'HAS – Hygiène']]]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>$course_only?'Je te propose une grille d’analyse fondée sur les principes d’hygiène de tes fiches.':'Les gants ne remplacent pas l’hygiène des mains [R1].','source_ids'=>$cite_course?[$fiche]:[],'source_urls'=>$course_only?[]:[$declared],'sufficient_sources'=>true]),'annotations'=>[]]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>20]];}
  if(!empty($body['tools'])&&str_ends_with($url,'/responses'))$data['output'][1]['content'][0]['text']='Les gants ne remplacent pas l’hygiène des mains, selon la HAS.';
  if(!$web_ok&&!empty($body['tools'])&&str_ends_with($url,'/responses'))$data['output'][0]['action']['sources']=[];
  return ['headers'=>[],'body'=>wp_json_encode($data),'response'=>['code'=>200]];
@@ -43,6 +43,13 @@ try{
  $assert(empty($body['tools']),'No web tool when research is off');
  $web_ok=false;$r->set_param('research',true);$r->set_param('request_id',wp_generate_uuid4());$before_calls=$calls;$res=rest_do_request($r);
  $assert($res->get_status()===502&&$calls===$before_calls+1&&OI_Credits::balances($user)['IA']===4,'Unproven web search stops before generation and refunds credit');
+ // Clear only this isolated fixture's rate bucket before the additional regression cases.
+ $wpdb->delete($wpdb->prefix.'oi_rates',['bucket'=>hash('sha256','ai|user:'.$user.'|'.intdiv(time(),60))]);
+ $web_ok=true;$course_only=true;$r->set_param('request_id',wp_generate_uuid4());$res=rest_do_request($r);
+ $assert($res->get_status()===200&&count($res->get_data()['sources'])===1&&$res->get_data()['web_sources']===[],'Research enabled accepts course-grounded synthesis without forcing an external reference');
+ $assert(OI_Credits::balances($user)['IA']===3,'Course synthesis consumes one credit');
+ $cite_course=false;$r->set_param('request_id',wp_generate_uuid4());$res=rest_do_request($r);
+ $assert($res->get_status()===502&&OI_Credits::balances($user)['IA']===3,'Answer without any evidence still rejected and refunded');
  echo "AI research : $n assertions réussies.\n";
 }finally{
  remove_filter('pre_http_request',$transport,10);foreach($before as$k=>$v){if($v===null)delete_option($k);else update_option($k,$v);}

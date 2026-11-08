@@ -1,6 +1,6 @@
 # Recette de l’assistant IA — app-dev
 
-État au 8 novembre 2026, version **0.3.0-rc.91**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
+État au 8 novembre 2026, version **0.3.0-rc.93**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
 
 ## Configuration actuelle
 
@@ -75,6 +75,18 @@ Essayer notamment : expliquer les liens entre hygiène des mains et asepsie, dis
 | 1892 | Transmissions cliniques structurées |
 | 1690 | Antibiotiques : classes, bon usage et surveillance |
 
+## Synthèse pédagogique et attente visible (rc93)
+
+Un retour utilisateur sur « les 5 points clés pour analyser une situation d’hygiène » a révélé un rejet excessif : le diagnostic contenait une réponse complète, `sufficient_sources=true`, deux fiches citées et autorisées (2003, 1993), mais aucune référence web déclarée malgré une recherche externe activée. L’exigence d’au moins une citation externe bloquait donc une réponse déjà documentée par les cours.
+
+Le contrôle accepte désormais une synthèse fondée uniquement sur les fiches, même si une recherche externe a été demandée. Il continue à refuser une réponse sans aucune source, une URL non retrouvée ou une fiche non autorisée. Les consignes permettent explicitement de construire une grille, un plan ou un exercice à partir des principes des sources ; la construction doit être présentée comme une proposition pédagogique et non comme une liste officielle. Une page externe hors sujet ne doit pas être citée pour remplir artificiellement la liste.
+
+Après déploiement, la question exacte a été rejouée avec et sans recherche externe : deux réponses complètes, cinq points numérotés, construction annoncée comme proposition pédagogique, fiches autorisées et un seul crédit consommé à chaque fois. Avec recherche activée, des références externes vérifiées ont été ajoutées. Le refus d’inventer une dose pour un enfant sans médicament ni prescription complète reste effectif. Le cas précis « recherche activée + fiches citées + aucune URL » est couvert par une régression automatisée, ainsi que le rejet maintenu d’une réponse sans aucune source.
+
+Vérification navigateur du loader avec réponses simulées retardées : bureau et mobile, animations réduites, disparition après succès, erreur et changement de page, bouton réactivé et saisie conservée après erreur. Les appels réels de qualité ci-dessus sont distincts de ce test de présentation.
+
+L’attente apparaît dans la conversation, au-dessus du formulaire : mascotte, message de préparation, points et barre animés sans pourcentage fictif. Le composant disparaît à la réception ou à l’échec ; le texte saisi reste disponible après une erreur. Les animations respectent la préférence de réduction des mouvements.
+
 ## À poursuivre avant le lancement sur le domaine principal
 
 - Faire relire les réponses par Anaïs et Geoffrey, avec une batterie plus large et répétée sur le modèle et les consignes retenus. Cette recette n’est pas une validation clinique exhaustive.
@@ -86,7 +98,7 @@ Essayer notamment : expliquer les liens entre hygiène des mains et asepsie, dis
 - IA : 21 assertions avec fournisseur simulé (accès, citations, crédits, quotas, synchronisation).
 - Console administrateur : 20 assertions (droits, absence de contournement, bornes, diagnostic sans message brut).
 - Catalogue : 13 assertions (110 fiches accessibles, périmètre complet, contexte borné, administration protégée).
-- Recherche externe : 26 assertions (domaines, preuve réelle, annotations natives, normalisation, rejet/restauration, absence de transmission d’une fiche interdite).
+- Recherche externe : 29 assertions (domaines, preuve réelle, annotations natives, normalisation, rejet/restauration, absence de transmission d’une fiche interdite).
 - Contrat de réponse : 16 assertions (réponse complète, preuve de recherche, identifiant inventé, rejeu, restitution, modèle de comparaison autorisé).
 - Les endpoints de recette exigent `manage_options` et l’authentification REST. Le paramètre public `preview` ne contourne pas la désactivation. Le choix de modèle pour une comparaison est limité à deux modèles et réservé aux administrateurs ; il ne change pas le modèle du service étudiant.
 - Console navigateur réelle : question envoyée, réponse GPT-4.1 affichée, lien vers la fiche, solde mis à jour ; aucune erreur JavaScript. Capture conservée hors Git.

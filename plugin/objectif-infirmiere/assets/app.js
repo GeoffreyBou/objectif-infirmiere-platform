@@ -394,21 +394,26 @@
       e.preventDefault();
       const button=e.target.querySelector('button[type=submit]');
       const question=document.querySelector('#oi-question').value.trim();
-      if (!question) return;
+      if (!question || button.disabled) return;
       const sequence=routeSequence;
-      button.disabled=true;
-      status(document.querySelector('#oi-research')?.checked?'Ton assistant consulte tes fiches et les références de santé…':'Ton assistant cherche dans tes fiches…');
+      const research=!!document.querySelector('#oi-research')?.checked;
+      const buttonLabel=button.innerHTML;
+      button.disabled=true;button.textContent='Réponse en cours…';e.target.setAttribute('aria-busy','true');status();
+      const pending=document.createElement('div');pending.className='oi-ai-pending';pending.setAttribute('role','status');pending.setAttribute('aria-atomic','true');
+      pending.innerHTML=`<div class="oi-ai-pending-avatar"><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="64" height="64"></div><div class="oi-ai-pending-copy"><strong>Ton assistant prépare ta réponse<span class="oi-ai-pending-dots" aria-hidden="true"><i></i><i></i><i></i></span></strong><p>${research?'Il croise tes fiches avec les références de santé pour t’aider à comprendre.':'Il explore tes fiches pour t’aider à comprendre et faire les liens.'}</p><span class="oi-ai-pending-track" aria-hidden="true"></span></div>`;
+      document.querySelector('#oi-answer').append(pending);
+      pending.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
       try {
         aiRequestId ||= crypto.randomUUID();
-        const answer=await api('ai',{question,fiche_id:context?.id || 0,request_id:aiRequestId,research:!!document.querySelector('#oi-research')?.checked});
+        const answer=await api('ai',{question,fiche_id:context?.id || 0,request_id:aiRequestId,research});
         aiRequestId=null;account=await api('account');syncAccountNavigation();document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent=Number(account.balances.IA));
         if (sequence!==routeSequence) return;
-        status();
+        status();pending.remove();
         const output=document.querySelector('#oi-answer');
         output.insertAdjacentHTML('beforeend',`<div class="oi-message oi-message-user"><span>TOI</span><p>${esc(question)}</p></div><div class="oi-message oi-message-assistant"><span class="oi-assistant-signature"><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="44" height="44"> TON ASSISTANT</span><p class="oi-answer-text">${aiAnswerText(answer)}</p>${aiWebReferences(answer)}${answer.sources?.length?`<div class="oi-answer-sources"><strong>Pour aller plus loin</strong>${answer.sources.map(s=>`<button type="button" data-fiche="${Number(s.id)}">${icon('book')}${esc(s.title)}${icon('arrow')}</button>`).join('')}</div>`:''}</div>`);
         document.querySelector('#oi-question').value='';
         output.lastElementChild.scrollIntoView({behavior:'smooth',block:'nearest'});
-      } catch(e) {if(e.status)aiRequestId=null;if(sequence===routeSequence) error(e);} finally {button.disabled=!account.ai_available||Number(account.balances.IA)===0;}
+      } catch(e) {if(e.status)aiRequestId=null;if(sequence===routeSequence) error(e);} finally {pending.remove();e.target.removeAttribute('aria-busy');button.innerHTML=buttonLabel;button.disabled=!account.ai_available||Number(account.balances.IA)===0;}
     });
     window.scrollTo({top:0,behavior:'smooth'});
   }
