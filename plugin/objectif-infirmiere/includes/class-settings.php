@@ -41,6 +41,7 @@ final class OI_Settings {
     }
     public static function ai(): void {
         if(!current_user_can('manage_options'))return;
+        OI_AI_Validation::panel();
         global $wpdb;
         $today=$wpdb->get_row($wpdb->prepare("SELECT COALESCE(SUM(requests),0) AS requests,COALESCE(SUM(input_tokens),0) AS input_tokens,COALESCE(SUM(output_tokens),0) AS output_tokens FROM {$wpdb->prefix}oi_ai_usage WHERE day=%s",gmdate('Y-m-d')));
         $month=$wpdb->get_row($wpdb->prepare("SELECT COALESCE(SUM(requests),0) AS requests,COUNT(DISTINCT user_id) AS users,COALESCE(SUM(input_tokens),0) AS input_tokens,COALESCE(SUM(output_tokens),0) AS output_tokens FROM {$wpdb->prefix}oi_ai_usage WHERE day>=%s",gmdate('Y-m-d',strtotime('-29 days'))));

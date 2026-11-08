@@ -1,6 +1,6 @@
 # Raccordement Stripe et préparation de l’assistant
 
-État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.76**. Le raccordement OpenAI est prêt à recevoir la nouvelle clé avant les essais IA. Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
+État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.78**. La clé OpenAI est raccordée et 12 fiches sont indexées ; la génération est bloquée par un solde API épuisé. Voir [la recette IA](RECETTE-IA.md). Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
 
 ## Configuration Stripe
 

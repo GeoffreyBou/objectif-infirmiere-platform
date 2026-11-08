@@ -4,7 +4,7 @@ cd "$(dirname "$0")/.."
 # Local development only. DB tests create/delete their own fixtures.
 scripts/dc.sh exec -T wordpress bash -o pipefail -c 'find wp-content/plugins/objectif-infirmiere -name "*.php" -print0 | while IFS= read -r -d "" file; do php -l "$file" || exit $?; done'
 for js in plugin/objectif-infirmiere/assets/*.js; do node --check "$js"; done
-for suite in socle experience stripe stripe-secrets ai-secrets ai ai-topups revision library imports fiche-art docx-headers programme-reference programme-alignment drive-theme-fallback drive-classification curriculum-audit qcm qcm-workbooks qcm-stepwise goals auth credits premium-refunds freemium-admin user-admin unlocked-library; do
+for suite in socle experience stripe stripe-secrets ai-secrets ai-validation ai ai-topups revision library imports fiche-art docx-headers programme-reference programme-alignment drive-theme-fallback drive-classification curriculum-audit qcm qcm-workbooks qcm-stepwise goals auth credits premium-refunds freemium-admin user-admin unlocked-library; do
   scripts/dc.sh wp eval-file "/tests/$suite.php"
 done
 # Preserve unrelated users even if a restored DB makes ignored fixture IDs stale.
