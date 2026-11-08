@@ -7,6 +7,11 @@ for js in plugin/objectif-infirmiere/assets/*.js; do node --check "$js"; done
 for suite in socle experience stripe stripe-secrets ai-secrets ai-validation ai-response-contract ai-research ai-catalogue ai ai-topups revision library imports fiche-art docx-headers programme-reference programme-alignment drive-theme-fallback drive-classification curriculum-audit qcm qcm-workbooks qcm-stepwise goals auth credits premium-refunds freemium-admin user-admin unlocked-library; do
   scripts/dc.sh wp eval-file "/tests/$suite.php"
 done
+# Verify the same payment/credit flows with simulated LIVE objects.
+for suite in stripe ai-topups; do
+  scripts/dc.sh run --rm -e OI_TEST_STRIPE_MODE=live cli wp eval-file "/tests/$suite.php"
+done
+scripts/dc.sh run --rm -v "$PWD/tools/migration:/migration:ro" cli wp eval-file /tests/migration.php
 # Preserve unrelated users even if a restored DB makes ignored fixture IDs stale.
 python3 scripts/clean-test-users.py browser
 python3 scripts/clean-test-users.py signup

@@ -7,9 +7,27 @@ final class OI_Stripe {
         if ($value !== '') { return $value; }
         return $name === 'OI_OPENAI_API_KEY' ? OI_AI_Secrets::get($name) : OI_Stripe_Secrets::get($name);
     }
+    public static function mode(): string {
+        $mode = defined('OI_STRIPE_MODE') ? OI_STRIPE_MODE : get_option('oi_stripe_mode', 'test');
+        return $mode === 'live' ? 'live' : 'test';
+    }
+    public static function matches_mode(array $object): bool {
+        return isset($object['livemode']) && $object['livemode'] === (self::mode() === 'live');
+    }
+    public static function session_id(mixed $id): bool {
+        return is_string($id) && (bool)preg_match('/^cs_' . self::mode() . '_[A-Za-z0-9]+$/', $id);
+    }
+    public static function site_id(): string { return hash('sha256', untrailingslashit(home_url('/'))); }
+    public static function matches_site(array $session): bool {
+        $site = $session['metadata']['oi_site'] ?? '';
+        return is_string($site) && ($site === self::site_id() || ($site === '' && self::mode() === 'test'));
+    }
+    private static function key_matches_mode(string $key): bool {
+        return (bool)preg_match('/^(sk|rk)_' . self::mode() . '_[A-Za-z0-9]+$/', $key);
+    }
     public static function configured(): bool {
         $key = self::secret('OI_STRIPE_SECRET_KEY');
-        return $key !== '' && !preg_match('/^(sk|rk)_live_/', $key) && self::secret('OI_STRIPE_WEBHOOK_SECRET') !== '';
+        return self::key_matches_mode($key) && self::secret('OI_STRIPE_WEBHOOK_SECRET') !== '';
     }
     public static function register(): void {
         register_rest_route('oi/v1', '/checkout', ['methods' => 'POST', 'permission_callback' => [OI_API::class, 'auth'], 'callback' => [self::class, 'checkout']]);
@@ -17,8 +35,8 @@ final class OI_Stripe {
     }
     public static function request(string $method, string $path, array $body = []): array|WP_Error {
         $key = self::secret('OI_STRIPE_SECRET_KEY');
-        if (!$key || str_starts_with($key, 'sk_live_') || str_starts_with($key, 'rk_live_')) {
-            return new WP_Error('oi_stripe_config', 'Le paiement TEST n’est pas encore configuré.', ['status' => 503]);
+        if (!self::key_matches_mode($key)) {
+            return new WP_Error('oi_stripe_config', 'Le paiement n’est pas configuré pour cet environnement.', ['status' => 503]);
         }
         $response = wp_remote_request('https://api.stripe.com/v1/' . $path, ['method' => $method, 'timeout' => 25, 'redirection' => 0, 'headers' => ['Authorization' => 'Bearer ' . $key, 'Stripe-Version' => '2024-06-20'], 'body' => $body]);
         if (is_wp_error($response)) { return new WP_Error('oi_stripe_unavailable', 'Le paiement est momentanément indisponible.', ['status' => 503]); }
@@ -36,22 +54,22 @@ final class OI_Stripe {
         if (get_post_type($pack) !== 'oi_pack' || get_post_status($pack) !== 'publish' || !preg_match('/^price_[A-Za-z0-9]+$/', $price)) {
             return new WP_Error('oi_pack', 'Ce pack n’est pas disponible à l’achat.', ['status' => 400]);
         }
-        if (!self::configured()) { return new WP_Error('oi_stripe_config', 'Le raccordement Stripe TEST et son webhook ne sont pas encore configurés.', ['status'=>503]); }
+        if (!self::configured()) { return new WP_Error('oi_stripe_config', 'Le raccordement Stripe et son webhook ne sont pas encore configurés.', ['status'=>503]); }
         $verified_price = self::request('GET', 'prices/' . rawurlencode($price));
         if (is_wp_error($verified_price)) { return $verified_price; }
-        if (($verified_price['livemode'] ?? true) !== false || ($verified_price['active'] ?? false) !== true || ($verified_price['type'] ?? '') !== 'one_time') { return new WP_Error('oi_price_test', 'Un prix Stripe TEST actif et ponctuel est requis.', ['status' => 400]); }
+        if (!self::matches_mode($verified_price) || ($verified_price['active'] ?? false) !== true || ($verified_price['type'] ?? '') !== 'one_time') { return new WP_Error('oi_price_test', 'Un prix Stripe actif et ponctuel du bon environnement est requis.', ['status' => 400]); }
         if(($verified_price['unit_amount']??0)!==5900||strtolower($verified_price['currency']??'')!=='eur')return new WP_Error('oi_price','Le prix attendu est 59 EUR en paiement unique.',['status'=>400]);
         $data = self::request('POST', 'checkout/sessions', [
             'mode' => 'payment', 'line_items[0][price]' => $price, 'line_items[0][quantity]' => 1,
             'success_url' => add_query_arg('oi_payment','received',OI_App::url('member')), 'cancel_url' => add_query_arg(['oi_payment'=>'cancelled','view'=>'premium'],OI_App::url('member')),
             'client_reference_id'=>get_current_user_id(), 'customer_email'=>wp_get_current_user()->user_email,
-            'metadata[oi_user_id]'=>get_current_user_id(),
+            'metadata[oi_user_id]'=>get_current_user_id(), 'metadata[oi_site]'=>self::site_id(),
             'metadata[oi_pack_id]' => $pack,
         ]);
         if (is_wp_error($data)) { return $data; }
         $url = $data['url'] ?? '';
-        if (($data['livemode'] ?? true) !== false || wp_parse_url($url, PHP_URL_HOST) !== 'checkout.stripe.com' || wp_parse_url($url, PHP_URL_SCHEME) !== 'https') {
-            return new WP_Error('oi_test_only', 'Une session de paiement TEST valide est requise.', ['status' => 502]);
+        if (!self::matches_mode($data) || !self::session_id($data['id'] ?? '') || wp_parse_url($url, PHP_URL_HOST) !== 'checkout.stripe.com' || wp_parse_url($url, PHP_URL_SCHEME) !== 'https') {
+            return new WP_Error('oi_test_only', 'Une session de paiement du bon environnement est requise.', ['status' => 502]);
         }
         OI_Metrics::count('checkout_started',get_current_user_id());
         return ['url' => $url];
@@ -75,11 +93,11 @@ final class OI_Stripe {
             return new WP_Error('oi_signature', 'Signature Stripe invalide.', ['status' => 400]);
         }
         $event = json_decode($r->get_body(), true);
-        if (!is_array($event) || ($event['livemode'] ?? true) !== false) { return new WP_Error('oi_test_only', 'Événement TEST requis.', ['status' => 400]); }
+        if (!is_array($event) || !self::matches_mode($event)) { return new WP_Error('oi_test_only', 'Événement du bon environnement requis.', ['status' => 400]); }
         if(in_array($event['type']??'',['charge.refunded','refund.updated'],true))return self::refund($event);
         if (!in_array($event['type'] ?? '', ['checkout.session.completed','checkout.session.async_payment_succeeded'],true)) { return ['received' => true, 'ignored' => true]; }
         $session = $event['data']['object']['id'] ?? '';
-        if (!preg_match('/^cs_test_[A-Za-z0-9]+$/', $session)) { return new WP_Error('oi_session', 'Session TEST invalide.', ['status' => 400]); }
+        if (!self::session_id($session)) { return new WP_Error('oi_session', 'Session de paiement invalide.', ['status' => 400]); }
         global $wpdb;
         $lock = 'oi_' . md5(DB_NAME . $wpdb->prefix . $session);
         if ((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s, 3)', $lock)) !== 1) { return new WP_Error('oi_busy', 'Traitement en cours, réessayez.', ['status' => 503]); }
@@ -89,8 +107,8 @@ final class OI_Stripe {
             if ($existing) { self::notify($existing); return ['received' => true, 'duplicate' => true]; }
             $verified = self::request('GET', 'checkout/sessions/' . rawurlencode($session));
             if (is_wp_error($verified)) { return $verified; }
-            if (($verified['id'] ?? '') !== $session || ($verified['livemode'] ?? true) !== false || ($verified['mode'] ?? '') !== 'payment' || ($verified['payment_status'] ?? '') !== 'paid' || ($verified['status'] ?? '') !== 'complete') {
-                return new WP_Error('oi_unpaid', 'Paiement TEST non confirmé.', ['status' => 400]);
+            if (($verified['id'] ?? '') !== $session || !self::matches_mode($verified) || !self::matches_site($verified) || ($verified['mode'] ?? '') !== 'payment' || ($verified['payment_status'] ?? '') !== 'paid' || ($verified['status'] ?? '') !== 'complete') {
+                return new WP_Error('oi_unpaid', 'Paiement non confirmé pour ce site.', ['status' => 400]);
             }
             if(($verified['metadata']['oi_purchase_kind']??'')==='ai_topup')return new WP_Error('oi_recharge_pending','Recharge en cours de préparation, réessayez.',['status'=>503]);
             $pack = absint($verified['metadata']['oi_pack_id'] ?? 0);
@@ -137,7 +155,7 @@ final class OI_Stripe {
         $id=($event['type']??'')==='charge.refunded'?($object['id']??''):($object['charge']??'');
         if(!is_string($id)||!preg_match('/^ch_[A-Za-z0-9]+$/',$id))return new WP_Error('oi_refund','Remboursement invalide.',['status'=>400]);
         $charge=self::request('GET','charges/'.rawurlencode($id));if(is_wp_error($charge))return $charge;
-        if(($charge['livemode']??true)!==false||($charge['id']??'')!==$id)return new WP_Error('oi_refund','Remboursement TEST non confirmé.',['status'=>400]);
+        if(!self::matches_mode($charge)||($charge['id']??'')!==$id)return new WP_Error('oi_refund','Remboursement non confirmé pour cet environnement.',['status'=>400]);
         global $wpdb;
         $payment=$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments WHERE payment_intent=%s",sanitize_text_field($charge['payment_intent']??'')));
         if(!$payment || !$payment->payment_intent)return ['received'=>true,'ignored'=>true];

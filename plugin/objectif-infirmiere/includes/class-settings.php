@@ -3,7 +3,7 @@ defined('ABSPATH') || exit;
 final class OI_Settings {
     public static function menu(): void {
         add_submenu_page('objectif-infirmiere','Réglages','Réglages','manage_options','oi-settings',[self::class,'page']);
-        add_submenu_page('objectif-infirmiere','Paiements Stripe TEST','Paiements Stripe','manage_options','oi-payments',[self::class,'payments']);
+        add_submenu_page('objectif-infirmiere','Paiements Stripe','Paiements Stripe','manage_options','oi-payments',[self::class,'payments']);
         add_submenu_page('objectif-infirmiere','Conseiller IA','IA et synchronisation','manage_options','oi-ai',[self::class,'ai']);
     }
     public static function register(): void {
@@ -19,7 +19,7 @@ final class OI_Settings {
     }
     public static function page(): void {
         if(!current_user_can('manage_options'))return;
-        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Configuration serveur (ou formulaires sécurisés ci-dessous pour Stripe et OpenAI) : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
+        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : configurez l’environnement dans le formulaire sécurisé ci-dessous, puis les Price IDs et Product IDs correspondants dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Configuration serveur (ou formulaires sécurisés ci-dessous pour Stripe et OpenAI) : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
         foreach(['OI_STRIPE_SECRET_KEY','OI_STRIPE_WEBHOOK_SECRET','OI_OPENAI_API_KEY'] as $name) echo '<li>'.esc_html($name).' : '.(OI_Stripe::secret($name)?'présent':'absent').'</li>';
         echo '</ul>'; OI_Stripe_Secrets::form(); OI_AI_Secrets::form();
         echo '<form method="post" action="options.php">';settings_fields('oi_settings');
@@ -37,7 +37,7 @@ final class OI_Settings {
         if(!current_user_can('manage_options'))return;
         global $wpdb;$page=max(1,absint($_GET['paged']??1));$offset=($page-1)*50;
         $rows=$wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}oi_payments ORDER BY id DESC LIMIT 50 OFFSET %d",$offset));
-        echo '<div class="wrap"><h1>Paiements Stripe TEST</h1><table class="widefat"><thead><tr><th>Date UTC</th><th>Compte</th><th>Pack</th><th>Montant</th><th>Session</th><th>État / remboursement</th><th>Email accepté</th></tr></thead><tbody>';
+        echo '<div class="wrap"><h1>Paiements Stripe</h1><table class="widefat"><thead><tr><th>Date UTC</th><th>Compte</th><th>Pack</th><th>Montant</th><th>Session</th><th>État / remboursement</th><th>Email accepté</th></tr></thead><tbody>';
         foreach($rows as $row) echo '<tr><td>'.esc_html($row->created_at).'</td><td>'.(int)$row->user_id.'</td><td>'.esc_html($row->purchase_kind==='ai_topup'?'Recharge de 100 crédits IA':get_the_title($row->pack_id)).'</td><td>'.esc_html(number_format($row->amount/100,2).' '.strtoupper($row->currency)).'</td><td>'.esc_html($row->session_id).'</td><td>'.esc_html($row->status.' / '.$row->refund_status).'</td><td>'.($row->purchase_kind==='ai_topup'?'Sans notification email':($row->notified?'Oui':'Non — vérifier SMTP et rejouer le webhook')).'</td></tr>';
         echo '</tbody></table><p>Les emails acceptés par WordPress ne prouvent pas leur livraison. Configurez et testez votre SMTP sur OVH.</p><p><a href="'.esc_url(add_query_arg(['page'=>'oi-payments','paged'=>$page+1],admin_url('admin.php'))).'">Page suivante</a></p></div>';
     }

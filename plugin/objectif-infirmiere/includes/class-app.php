@@ -77,7 +77,7 @@ final class OI_App {
         if (!get_option('oi_before_redesign_front')) {
             update_option('oi_before_redesign_front',['show_on_front'=>get_option('show_on_front'),'page_on_front'=>get_option('page_on_front')],false);
         }
-        if ((int)get_option('oi_page_home')) {
+        if ((int)get_option('oi_page_home') && apply_filters('oi_activate_home_on_install', true)) {
             update_option('show_on_front','page');update_option('page_on_front',(int)get_option('oi_page_home'));
         }
         $demo=(int)(get_option('oi_review_pack') ?: get_option('oi_demo_pack'));

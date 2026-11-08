@@ -12,7 +12,7 @@ final class OI_Admin {
         echo '<div class="wrap"><h1>Objectif Infirmière</h1><p>Créez vos fiches, organisez les taxonomies puis associez les fiches aux packs. Attribuez les packs depuis les profils utilisateurs.</p><p>Placez le shortcode <code>[objectif_infirmiere]</code> dans une page pour ouvrir l’espace étudiant.</p></div>';
     }
     public static function boxes(): void {
-        add_meta_box('oi-pack', 'Contenus et produit Stripe TEST', [self::class, 'pack_box'], 'oi_pack');
+        add_meta_box('oi-pack', 'Contenus et produit Stripe', [self::class, 'pack_box'], 'oi_pack');
     }
     public static function pack_box(WP_Post $post): void {
         wp_nonce_field('oi_pack', 'oi_nonce');

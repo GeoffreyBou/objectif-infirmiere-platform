@@ -1,4 +1,5 @@
 <?php
+$was_mode=get_option('oi_stripe_mode',false);update_option('oi_stripe_mode','test');
 $checks=0;
 $assert=static function($condition,$message)use(&$checks){if(!$condition)throw new RuntimeException($message);$checks++;};
 $names=['OI_STRIPE_SECRET_KEY'=>'stripe_api_key','OI_STRIPE_WEBHOOK_SECRET'=>'stripe_webhook_secret'];
@@ -41,8 +42,20 @@ try {
  $assert(OI_Stripe_Secrets::get('OI_STRIPE_SECRET_KEY')==='','Tampered ciphertext rejected');
  update_option('oi_encrypted_oi_stripe_secret_key',$stored,false);
  $assert(OI_Stripe_Secrets::get('OI_STRIPE_SECRET_KEY')===$api,'Original ciphertext remains readable');
+ $live='rk_live_'.wp_generate_password(32,false);$live_hook='whsec_'.wp_generate_password(32,false);
+ $assert(is_wp_error(OI_Stripe_Secrets::store(['stripe_mode'=>'live','stripe_api_key'=>$live])),'Mode switch requires new webhook');
+ $assert(OI_Stripe::mode()==='test','Failed switch preserves active mode');
+ $assert(OI_Stripe_Secrets::store(['stripe_mode'=>'live','stripe_api_key'=>$live,'stripe_webhook_secret'=>$live_hook])===true,'Explicit live configuration accepted');
+ $assert(OI_Stripe::mode()==='live'&&OI_Stripe::configured(),'Live mode active only with matching key and hook');
+ $assert(is_wp_error(OI_Stripe_Secrets::store(['stripe_api_key'=>$api])),'Test key rejected in live mode');
+ $assert(!OI_Stripe::matches_mode(['livemode'=>false])&&OI_Stripe::matches_mode(['livemode'=>true]),'Live mode rejects test objects');
+ $assert(!OI_Stripe::matches_mode([]),'Missing livemode rejected');
+ $assert(!OI_Stripe::matches_site([])&&!OI_Stripe::matches_site(['metadata'=>['oi_site'=>'other']]),'Live mode requires exact site binding');
+ $assert(OI_Stripe::session_id('cs_live_fixture')&&!OI_Stripe::session_id('cs_test_fixture'),'Session IDs isolated by environment');
+ $assert(OI_Stripe_Secrets::store(['stripe_mode'=>'test','stripe_api_key'=>$api,'stripe_webhook_secret'=>$hook])===true,'Explicit return to test supported');
  echo "Stripe secrets : $checks assertions réussies, aucune clé réelle utilisée.\n";
 }finally{
+ if($was_mode===false)delete_option('oi_stripe_mode');else update_option('oi_stripe_mode',$was_mode);
  foreach($before as $name=>$value){$option='oi_encrypted_'.strtolower($name);if($value===false)delete_option($option);else update_option($option,$value,false);}
  foreach($environment as $name=>$value){if($value===false)putenv($name);else putenv($name.'='.$value);}
  wp_set_current_user(0);require_once ABSPATH.'wp-admin/includes/user.php';wp_delete_user($admin);wp_delete_user($student);

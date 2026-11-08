@@ -11,11 +11,11 @@ final class OI_AI_Topups {
     public static function offer(): array {
         $price=(string)get_option('oi_ai_recharge_price','');
         $key=OI_Stripe::secret('OI_STRIPE_SECRET_KEY');
-        return ['amount'=>self::AMOUNT,'credits'=>self::CREDITS,'currency'=>'EUR','payment_mode'=>'test','available'=>(bool)(preg_match('/^price_[A-Za-z0-9]+$/',$price)&&$key&&!preg_match('/^(sk|rk)_live_/',$key)&&get_option('oi_ai_enabled',false)&&get_option('oi_vector_store')&&OI_Stripe::secret('OI_OPENAI_API_KEY'))];
+        return ['amount'=>self::AMOUNT,'credits'=>self::CREDITS,'currency'=>'EUR','payment_mode'=>OI_Stripe::mode(),'available'=>(bool)(preg_match('/^price_[A-Za-z0-9]+$/',$price)&&OI_Stripe::configured()&&get_option('oi_ai_enabled',false)&&get_option('oi_vector_store')&&OI_Stripe::secret('OI_OPENAI_API_KEY'))];
     }
     private static function url(array $session): string|WP_Error {
         $url=$session['url']??'';
-        if(($session['livemode']??true)!==false||!is_string($url)||wp_parse_url($url,PHP_URL_SCHEME)!=='https'||wp_parse_url($url,PHP_URL_HOST)!=='checkout.stripe.com')return new WP_Error('oi_checkout','Session de paiement TEST invalide.',['status'=>502]);
+        if(!OI_Stripe::matches_mode($session)||!is_string($url)||wp_parse_url($url,PHP_URL_SCHEME)!=='https'||wp_parse_url($url,PHP_URL_HOST)!=='checkout.stripe.com')return new WP_Error('oi_checkout','Session de paiement invalide.',['status'=>502]);
         return $url;
     }
     public static function checkout(): array|WP_Error {
@@ -36,16 +36,16 @@ final class OI_AI_Topups {
                 if($wpdb->update($wpdb->prefix.'oi_payments',['status'=>'expired'],['id'=>$pending->id])===false)return new WP_Error('oi_storage','Réessaie dans un instant.',['status'=>503]);
             }
             $price=(string)get_option('oi_ai_recharge_price','');$verified=OI_Stripe::request('GET','prices/'.rawurlencode($price));if(is_wp_error($verified))return $verified;
-            if(($verified['id']??'')!==$price||($verified['livemode']??true)!==false||($verified['active']??false)!==true||($verified['type']??'')!=='one_time'||($verified['unit_amount']??0)!==self::AMOUNT||strtolower($verified['currency']??'')!=='eur')return new WP_Error('oi_recharge_price','Un prix Stripe TEST ponctuel de 10 EUR est requis.',['status'=>400]);
+            if(($verified['id']??'')!==$price||!OI_Stripe::matches_mode($verified)||($verified['active']??false)!==true||($verified['type']??'')!=='one_time'||($verified['unit_amount']??0)!==self::AMOUNT||strtolower($verified['currency']??'')!=='eur')return new WP_Error('oi_recharge_price','Un prix Stripe ponctuel de 10 EUR du bon environnement est requis.',['status'=>400]);
             $session=OI_Stripe::request('POST','checkout/sessions',[
                 'mode'=>'payment','line_items[0][price]'=>$price,'line_items[0][quantity]'=>1,
                 'success_url'=>add_query_arg(['oi_payment'=>'recharged','view'=>'ai'],OI_App::url('member')).'&session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url'=>add_query_arg(['oi_payment'=>'cancelled','view'=>'recharge'],OI_App::url('member')),
                 'client_reference_id'=>$user,'customer_email'=>wp_get_current_user()->user_email,
-                'metadata[oi_user_id]'=>$user,'metadata[oi_purchase_kind]'=>'ai_topup',
+                'metadata[oi_user_id]'=>$user,'metadata[oi_site]'=>OI_Stripe::site_id(),'metadata[oi_purchase_kind]'=>'ai_topup',
             ]);
             if(is_wp_error($session))return $session;$url=self::url($session);if(is_wp_error($url))return $url;
-            if(!preg_match('/^cs_test_[A-Za-z0-9]+$/',$session['id']??''))return new WP_Error('oi_checkout','Session TEST invalide.',['status'=>502]);
+            if(!OI_Stripe::session_id($session['id']??''))return new WP_Error('oi_checkout','Session de paiement invalide.',['status'=>502]);
             $written=$wpdb->insert($wpdb->prefix.'oi_payments',['session_id'=>$session['id'],'event_id'=>'','user_id'=>$user,'pack_id'=>0,'purchase_kind'=>'ai_topup','stripe_price_id'=>$price,'credit_quantity'=>self::CREDITS,'amount'=>self::AMOUNT,'currency'=>'eur','status'=>'pending','notified'=>1,'created_at'=>gmdate('Y-m-d H:i:s')]);
             if(!$written)return new WP_Error('oi_storage','La recharge n’a pas pu être préparée. Réessaie.',['status'=>503]);
             return ['url'=>$url];
@@ -55,7 +55,7 @@ final class OI_AI_Topups {
     public static function complete(object $payment,array $event): array|WP_Error {
         if($payment->status==='paid'||$payment->status==='refunded')return ['received'=>true,'duplicate'=>true];
         $session=OI_Stripe::request('GET','checkout/sessions/'.rawurlencode($payment->session_id));if(is_wp_error($session))return $session;
-        if(($session['id']??'')!==$payment->session_id||($session['livemode']??true)!==false||($session['mode']??'')!=='payment'||($session['status']??'')!=='complete'||($session['payment_status']??'')!=='paid')return new WP_Error('oi_unpaid','Recharge non confirmée.',['status'=>400]);
+        if(($session['id']??'')!==$payment->session_id||!OI_Stripe::matches_site($session)||!OI_Stripe::matches_mode($session)||($session['mode']??'')!=='payment'||($session['status']??'')!=='complete'||($session['payment_status']??'')!=='paid')return new WP_Error('oi_unpaid','Recharge non confirmée.',['status'=>400]);
         if(($session['metadata']['oi_purchase_kind']??'')!=='ai_topup'||(string)($session['metadata']['oi_user_id']??'')!==(string)$payment->user_id||(string)($session['client_reference_id']??'')!==(string)$payment->user_id||!get_userdata((int)$payment->user_id)||($session['amount_total']??0)!==(int)$payment->amount||strtolower($session['currency']??'')!==$payment->currency)return new WP_Error('oi_purchase','Recharge incohérente.',['status'=>400]);
         $lines=OI_Stripe::request('GET','checkout/sessions/'.rawurlencode($payment->session_id).'/line_items');if(is_wp_error($lines))return $lines;
         if(count($lines['data']??[])!==1||($lines['has_more']??false)||($lines['data'][0]['price']['id']??'')!==$payment->stripe_price_id||($lines['data'][0]['quantity']??0)!==1)return new WP_Error('oi_product','Produit de recharge invalide.',['status'=>400]);
@@ -65,7 +65,7 @@ final class OI_AI_Topups {
         if(!is_string($intentId)||!preg_match('/^pi_[A-Za-z0-9]+$/',$intentId))return new WP_Error('oi_purchase','Paiement de recharge introuvable.',['status'=>400]);
         $intent=OI_Stripe::request('GET','payment_intents/'.rawurlencode($intentId).'?expand%5B0%5D=latest_charge');if(is_wp_error($intent))return $intent;
         $charge=$intent['latest_charge']??[];
-        if(($intent['id']??'')!==$intentId||($intent['livemode']??true)!==false||($intent['status']??'')!=='succeeded'||($intent['amount_received']??0)!==(int)$payment->amount||strtolower($intent['currency']??'')!==$payment->currency||!is_array($charge)||($charge['amount']??0)!==(int)$payment->amount)return new WP_Error('oi_purchase','Montant du paiement incohérent.',['status'=>400]);
+        if(($intent['id']??'')!==$intentId||!OI_Stripe::matches_mode($intent)||($intent['status']??'')!=='succeeded'||($intent['amount_received']??0)!==(int)$payment->amount||strtolower($intent['currency']??'')!==$payment->currency||!is_array($charge)||($charge['amount']??0)!==(int)$payment->amount)return new WP_Error('oi_purchase','Montant du paiement incohérent.',['status'=>400]);
         $refunded=min((int)$payment->amount,absint($charge['amount_refunded']??0));
         return OI_Credits::transaction((int)$payment->user_id,function()use($payment,$session,$event,$refunded){
             global $wpdb;
@@ -79,7 +79,7 @@ final class OI_AI_Topups {
     }
     public static function status(WP_REST_Request $r): array|WP_Error {
         $session=is_string($r['session_id'])?$r['session_id']:'';
-        if(!preg_match('/^cs_test_[A-Za-z0-9]+$/',$session))return new WP_Error('oi_session','Recharge introuvable.',['status'=>404]);
+        if(!OI_Stripe::session_id($session))return new WP_Error('oi_session','Recharge introuvable.',['status'=>404]);
         global $wpdb;$payment=$wpdb->get_row($wpdb->prepare("SELECT status,credit_quantity FROM {$wpdb->prefix}oi_payments WHERE session_id=%s AND user_id=%d AND purchase_kind='ai_topup'",$session,get_current_user_id()));
         if(!$payment)return new WP_Error('oi_session','Recharge introuvable.',['status'=>404]);
         return ['status'=>$payment->status,'credits'=>(int)$payment->credit_quantity];

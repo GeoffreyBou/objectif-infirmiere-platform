@@ -1,6 +1,6 @@
 <?php
 if(!in_array(wp_parse_url(home_url(),PHP_URL_HOST),['localhost','127.0.0.1'],true))throw new RuntimeException('Tests locaux uniquement.');
-define('OI_STRIPE_SECRET_KEY','sk_test_refund_fixture');define('OI_STRIPE_WEBHOOK_SECRET','whsec_refund_fixture');
+define('OI_STRIPE_SECRET_KEY','sk_test_refundFixture');define('OI_STRIPE_WEBHOOK_SECRET','whsec_refund_fixture');
 global $wpdb;$checks=0;$old=get_option('oi_premium_pack',false);
 $assert=function($v,$m)use(&$checks){if(!$v)throw new RuntimeException($m);$checks++;};
 $u=wp_insert_user(['user_login'=>'refund_'.wp_generate_password(12,false),'user_pass'=>wp_generate_password(32),'user_email'=>'refund_'.wp_generate_password(12,false).'@example.invalid','role'=>'oi_etudiant']);update_user_meta($u,'oi_email_verified',gmdate('c'));OI_Credits::welcome($u);
