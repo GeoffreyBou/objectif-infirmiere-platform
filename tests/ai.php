@@ -12,12 +12,13 @@ update_user_meta($user,'oi_email_verified',gmdate('c'));OI_Credits::welcome($use
 $GLOBALS['ai_response_calls']=0;$GLOBALS['ai_forbidden_citation']=true;$GLOBALS['ai_response_fail']=false;$GLOBALS['ai_uploads']=0;$GLOBALS['ai_body']=null;$GLOBALS['ai_attached']=[];$GLOBALS['ai_attaches']=0;$GLOBALS['ai_attach_fail_once']=false;
 $transport=function($pre,$args,$url)use($fiche) {
  if(!str_starts_with($url,'https://api.openai.com/v1/'))return $pre;
- if(str_ends_with($url,'/responses')) {
+ if(str_ends_with($url,'/search')) {$GLOBALS['ai_search_body']=json_decode($args['body'],true);$data=['data'=>[['file_id'=>get_post_meta($fiche,'oi_ai_file',true),'content'=>[['type'=>'text','text'=>'Surveillance infirmière de la kaliémie.']]]]];
+ } elseif(str_ends_with($url,'/responses')) {
   $GLOBALS['ai_response_calls']++;
   $GLOBALS['ai_body']=json_decode($args['body'],true);
   if($GLOBALS['ai_response_fail'])return new WP_Error('network','Timeout');
   $annotations=[['type'=>'file_citation','file_id'=>get_post_meta($fiche,'oi_ai_file',true)]];if($GLOBALS['ai_forbidden_citation'])$annotations[]=['type'=>'file_citation','file_id'=>'file_forbidden'];
-  $data=['output'=>[['type'=>'file_search_call','results'=>[['file_id'=>get_post_meta($fiche,'oi_ai_file',true)]]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'Le furosémide peut favoriser une perte de potassium.','source_ids'=>[$fiche],'sufficient_sources'=>true]),'annotations'=>$annotations]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>40]];
+  $data=['output'=>[['type'=>'file_search_call','results'=>[['file_id'=>get_post_meta($fiche,'oi_ai_file',true)]]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'Le furosémide peut favoriser une perte de potassium.','source_ids'=>[$fiche],'source_urls'=>[],'sufficient_sources'=>true]),'annotations'=>$annotations]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>40]];
  } elseif(str_ends_with($url,'/files') && $args['method']==='POST' && str_contains($args['headers']['Content-Type'],'multipart')) {
   $GLOBALS['ai_uploads']++;$data=['id'=>'file_test'.$GLOBALS['ai_uploads']];
  } elseif(preg_match('~/vector_stores/vs_fixture/files/(file_test[0-9]+)$~',$url,$matches)) {
@@ -39,7 +40,7 @@ try {
  $r=new WP_REST_Request('POST','/oi/v1/ai');$r->set_param('question','Pourquoi surveiller la kaliémie ?');$r->set_param('fiche_id',$forbidden);ai_check(rest_do_request($r)->get_status()===403,'Contexte interdit rejeté');
  $r->set_param('request_id',wp_generate_uuid4());$r->set_param('fiche_id',$fiche);ai_check(rest_do_request($r)->get_status()===502,'Réponse contenant une citation interdite rejetée');ai_check(OI_Credits::balances($user)['IA']===5,'Citation invalide : crédit restitué');$r->set_param('request_id',wp_generate_uuid4());$GLOBALS['ai_forbidden_citation']=false;$response=rest_do_request($r);ai_check($response->get_status()===200,'Réponse sourcée simulée');
  ai_check(count($response->get_data()['sources'])===1 && $response->get_data()['sources'][0]['id']===$fiche,'Citation interdite exclue');
- ai_check(count($GLOBALS['ai_body']['tools'][0]['filters']['value'])===1 && str_starts_with($GLOBALS['ai_body']['tools'][0]['filters']['value'][0],$fiche.':'),'Recherche bornée aux documents autorisés');
+ ai_check(count($GLOBALS['ai_search_body']['filters']['value'])===1 && str_starts_with($GLOBALS['ai_search_body']['filters']['value'][0],$fiche.':'),'Recherche bornée aux documents autorisés');
  ai_check(!str_contains(wp_json_encode($GLOBALS['ai_body']),get_userdata($user)->user_login),'Aucun identifiant utilisateur transmis');
  ai_check(OI_Credits::balances($user)['IA']===4,'Réponse réussie : un débit');
  $r->set_param('request_id',wp_generate_uuid4());$GLOBALS['ai_response_fail']=true;ai_check(rest_do_request($r)->get_status()===503,'Erreur API présentée proprement');

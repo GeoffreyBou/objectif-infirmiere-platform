@@ -1,6 +1,6 @@
 # Exemples de réponses réelles — relecture Anaïs & Geoffrey
 
-8 novembre 2026. GPT-4.1, corpus de 12 fiches. Sorties de recette à relire ; elles ne valent pas validation clinique. Les consignes ont été renforcées entre les essais. Le dernier exemple correspond à la configuration finale rc84.
+8 novembre 2026. GPT-4.1, corpus de 12 fiches. Sorties de recette à relire ; elles ne valent pas validation clinique. Les consignes ont été renforcées entre les essais. Le dernier exemple correspond au pilote rc84. Depuis, le catalogue a été étendu à 757 fiches et la recherche externe a été ajoutée : voir [la recette actuelle](RECETTE-IA.md).
 
 ## avc
 

@@ -1,6 +1,6 @@
 # Raccordement Stripe et préparation de l’assistant
 
-État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.84**. OpenAI est raccordé, le solde API a été rechargé et les réponses réelles ont été testées sur 12 fiches en mode administrateur. Voir [la recette IA](RECETTE-IA.md). Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
+État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.91**. OpenAI est raccordé, les 757 fiches sont indexées et le service est activé sur app-dev pour les essais membres. Voir [la recette IA](RECETTE-IA.md). Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
 
 ## Configuration Stripe
 
@@ -42,9 +42,9 @@ Validation automatisée : stockage et configuration 22 assertions, Stripe 20, re
 
 - Le code impose Stripe TEST : changer uniquement la clé ne suffit pas pour passer LIVE. Prévoir une configuration explicite, les tarifs/destination LIVE et les contrôles de séparation des environnements au moment de la bascule.
 - Exclure les comptes et achats de test lors de la migration du domaine principal.
-- La recharge IA n’a pas fait l’objet d’un achat Stripe réel pendant cette recette ; elle reste désactivée tant que l’assistant n’est pas activé.
-- Les essais OpenAI réels sont documentés dans [la recette IA](RECETTE-IA.md). La base de 12 fiches est indexée et GPT-4.1 est configuré pour la relecture administrateur ; le service étudiant reste désactivé.
-- Avant ouverture de l’IA, tester l’indexation, les citations autorisées, les débits/restaurations de crédits et adapter la limite actuelle de 100 fiches indexées par utilisateur au catalogue Premium.
+- La recharge IA n’a pas fait l’objet d’un achat Stripe réel pendant cette recette ; son activation nécessite également un tarif Stripe de recharge configuré. L’activation de l’assistant ne vaut pas validation de ce parcours d’achat.
+- Les essais OpenAI réels sont documentés dans [la recette IA](RECETTE-IA.md). Le catalogue de 757 fiches est indexé sans expiration, avec GPT-4.1 et une option de recherche sur des sites de santé sélectionnés.
+- La limite de 100 fiches a été supprimée. Les contrôles d’accès, de citations et de crédits sont détaillés dans la recette IA ; poursuivre la relecture pédagogique et les mesures de charge avant le lancement public.
 
 ## Retour arrière
 

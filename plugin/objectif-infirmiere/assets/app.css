@@ -760,3 +760,5 @@
 .oi-search{grid-template-columns:minmax(0,1fr)}
 
 .oi-app .oi-folder-trail button[aria-pressed=true]{background:#e5efff;border-color:#adcafa;color:#194fbf;font-weight:700}
+
+.oi-chat-composer .oi-ai-research{display:flex;align-items:center;gap:9px;font-size:12px;color:#284b78;margin:0 0 15px;line-height:1.5}.oi-chat-composer .oi-ai-research input{width:17px;height:17px;margin:0;accent-color:#3150e8}.oi-ai-web-reference{display:block;margin:10px 0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}.oi-ai-web-reference small{display:block;color:#57749a;font-size:11px}

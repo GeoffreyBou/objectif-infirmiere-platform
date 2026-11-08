@@ -10,9 +10,10 @@ foreach(['oi_ai_file'=>'file_contract','oi_ai_hash'=>OI_AI::hash($fiche),'oi_ai_
 wp_set_current_user($user);update_user_meta($user,'oi_email_verified',gmdate('c'));OI_Credits::welcome($user);
 $state='incomplete';$calls=0;$payload=[];$hit=true;$source_id=$fiche;
 $transport=function($pre,$args,$url)use(&$state,&$calls,&$payload,$fiche,&$hit,&$source_id){
+ if(str_ends_with($url,'/search'))return ['headers'=>[],'body'=>wp_json_encode(['data'=>$hit?[['file_id'=>'file_contract','content'=>[['type'=>'text','text'=>'750 mg à 100 mg/mL donne 7,5 mL.']]]]:[]]),'response'=>['code'=>200]];
  if(!str_ends_with($url,'/responses'))return $pre;
  $calls++;$payload=json_decode($args['body'],true);
- return ['headers'=>[],'body'=>wp_json_encode(['status'=>$state,'incomplete_details'=>['reason'=>'max_output_tokens'],'output'=>[['type'=>'file_search_call','results'=>$hit?[['file_id'=>'file_contract']]:[]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'7,5 mL.','source_ids'=>[$source_id],'sufficient_sources'=>true]),'annotations'=>[['type'=>'file_citation','file_id'=>'file_contract']]]]]],'usage'=>['input_tokens'=>111,'output_tokens'=>22]]),'response'=>['code'=>200]];
+ return ['headers'=>[],'body'=>wp_json_encode(['status'=>$state,'incomplete_details'=>['reason'=>'max_output_tokens'],'output'=>[['type'=>'file_search_call','results'=>$hit?[['file_id'=>'file_contract']]:[]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'7,5 mL.','source_ids'=>[$source_id],'source_urls'=>[],'sufficient_sources'=>true]),'annotations'=>[['type'=>'file_citation','file_id'=>'file_contract']]]]]],'usage'=>['input_tokens'=>111,'output_tokens'=>22]]),'response'=>['code'=>200]];
 };add_filter('pre_http_request',$transport,10,3);
 try {
  $r=new WP_REST_Request('POST','/oi/v1/ai-validation/ask');$r->set_param('question','Explique le calcul.');$r->set_param('request_id',wp_generate_uuid4());
@@ -30,10 +31,10 @@ try {
  $assert(rest_do_request($r)->get_status()===409&&$calls===2,'Replay rejected without extra provider call');
  $assert(OI_Credits::balances($user)['IA']===4,'Replay does not debit');
  $hit=false;$r->set_param('request_id',wp_generate_uuid4());$res=rest_do_request($r);
- $assert($res->get_status()===502&&OI_Credits::balances($user)['IA']===4,'Valid source ID without retrieval evidence rejected and refunded');
+ $assert($res->get_status()===422&&OI_Credits::balances($user)['IA']===4,'Valid source ID without retrieval evidence rejected and refunded');
  $hit=true;$source_id=999999999;$r->set_param('request_id',wp_generate_uuid4());$res=rest_do_request($r);
  $assert($res->get_status()===502&&OI_Credits::balances($user)['IA']===4,'Invented source ID rejected and refunded');
- $assert($payload['text']['format']['strict']===true&&in_array('file_search_call.results',$payload['include'],true),'Structured contract and retrieval proof requested');
+ $assert($payload['text']['format']['strict']===true&&str_contains($payload['input'],'Extraits de cours autorisés'),'Structured contract and retrieval proof requested');
  $assert(!(bool)get_option('oi_ai_enabled'),'Preview never changes general activation');
  echo "AI response contract : $n assertions réussies.\n";
 }finally{

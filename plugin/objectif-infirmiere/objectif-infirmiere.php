@@ -2,13 +2,13 @@
 /**
  * Plugin Name: Objectif Infirmière
  * Description: Application de révision et contenus premium pour étudiants infirmiers.
- * Version: 0.3.0-rc.84
+ * Version: 0.3.0-rc.91
  * Requires PHP: 8.3
  * Requires at least: 6.8
  * Text Domain: objectif-infirmiere
  */
 defined('ABSPATH') || exit;
-define('OI_VERSION', '0.3.0-rc.84');
+define('OI_VERSION', '0.3.0-rc.91');
 define('OI_DIR', plugin_dir_path(__FILE__));
 define('OI_URL', plugin_dir_url(__FILE__));
 require_once OI_DIR . 'includes/class-log.php';
@@ -58,8 +58,11 @@ add_action('rest_api_init', ['OI_Stripe', 'register']);
 add_action('init', function () { if ((int)get_option('oi_schema_version') !== 6) { OI_Storage::migrate(); } });
 require_once OI_DIR . 'includes/class-ai-journal.php';
 OI_AI_Journal::register();
+require_once OI_DIR . 'includes/class-ai-sources.php';
 require_once OI_DIR . 'includes/class-ai.php';
 add_action('rest_api_init', ['OI_AI', 'register']);
+require_once OI_DIR . 'includes/class-ai-catalogue.php';
+add_action('rest_api_init',[OI_AI_Catalogue::class,'register']);
 require_once OI_DIR . 'includes/class-ai-validation.php';
 add_action('rest_api_init', [OI_AI_Validation::class, 'register']);
 add_action('save_post_oi_fiche', ['OI_AI', 'queue']);
