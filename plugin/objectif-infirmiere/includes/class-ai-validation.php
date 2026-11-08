@@ -44,6 +44,7 @@ final class OI_AI_Validation {
     public static function ask(WP_REST_Request $r): array|WP_Error {
         // Defence in depth: the preview cannot be enabled by a public request parameter.
         if(!current_user_can('manage_options'))return new WP_Error('oi_forbidden','Accès administrateur requis.',['status'=>403]);
+        if($r['model']!==null && !in_array($r['model'],['gpt-4.1-mini','gpt-4.1'],true))return new WP_Error('oi_model','Modèle de test non autorisé.',['status'=>400]);
         return OI_AI::ask($r,true);
     }
     public static function panel(): void {

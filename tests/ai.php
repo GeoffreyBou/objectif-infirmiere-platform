@@ -17,7 +17,7 @@ $transport=function($pre,$args,$url)use($fiche) {
   $GLOBALS['ai_body']=json_decode($args['body'],true);
   if($GLOBALS['ai_response_fail'])return new WP_Error('network','Timeout');
   $annotations=[['type'=>'file_citation','file_id'=>get_post_meta($fiche,'oi_ai_file',true)]];if($GLOBALS['ai_forbidden_citation'])$annotations[]=['type'=>'file_citation','file_id'=>'file_forbidden'];
-  $data=['output'=>[['type'=>'message','content'=>[['type'=>'output_text','text'=>'Le furosémide peut favoriser une perte de potassium.','annotations'=>$annotations]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>40]];
+  $data=['output'=>[['type'=>'file_search_call','results'=>[['file_id'=>get_post_meta($fiche,'oi_ai_file',true)]]],['type'=>'message','content'=>[['type'=>'output_text','text'=>wp_json_encode(['answer'=>'Le furosémide peut favoriser une perte de potassium.','source_ids'=>[$fiche],'sufficient_sources'=>true]),'annotations'=>$annotations]]]],'usage'=>['input_tokens'=>100,'output_tokens'=>40]];
  } elseif(str_ends_with($url,'/files') && $args['method']==='POST' && str_contains($args['headers']['Content-Type'],'multipart')) {
   $GLOBALS['ai_uploads']++;$data=['id'=>'file_test'.$GLOBALS['ai_uploads']];
  } elseif(preg_match('~/vector_stores/vs_fixture/files/(file_test[0-9]+)$~',$url,$matches)) {

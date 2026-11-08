@@ -1,6 +1,6 @@
 # Raccordement Stripe et préparation de l’assistant
 
-État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.78**. La clé OpenAI est raccordée et 12 fiches sont indexées ; la génération est bloquée par un solde API épuisé. Voir [la recette IA](RECETTE-IA.md). Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
+État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.84**. OpenAI est raccordé, le solde API a été rechargé et les réponses réelles ont été testées sur 12 fiches en mode administrateur. Voir [la recette IA](RECETTE-IA.md). Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
 
 ## Configuration Stripe
 
@@ -43,7 +43,7 @@ Validation automatisée : stockage et configuration 22 assertions, Stripe 20, re
 - Le code impose Stripe TEST : changer uniquement la clé ne suffit pas pour passer LIVE. Prévoir une configuration explicite, les tarifs/destination LIVE et les contrôles de séparation des environnements au moment de la bascule.
 - Exclure les comptes et achats de test lors de la migration du domaine principal.
 - La recharge IA n’a pas fait l’objet d’un achat Stripe réel pendant cette recette ; elle reste désactivée tant que l’assistant n’est pas activé.
-- Les essais OpenAI sont reportés. La vérification du 7 novembre indiquait une clé expirée ; aucun vector store n’est configuré sur app-dev.
+- Les essais OpenAI réels sont documentés dans [la recette IA](RECETTE-IA.md). La base de 12 fiches est indexée et GPT-4.1 est configuré pour la relecture administrateur ; le service étudiant reste désactivé.
 - Avant ouverture de l’IA, tester l’indexation, les citations autorisées, les débits/restaurations de crédits et adapter la limite actuelle de 100 fiches indexées par utilisateur au catalogue Premium.
 
 ## Retour arrière
@@ -54,4 +54,4 @@ Archive rc.74 conservée hors Git. La réinstallation de rc.74 laisse les option
 
 Formulaire administrateur `wp-admin/admin.php?page=oi-settings#oi-ai-connection`, champ « Clé API OpenAI ». Enregistrement protégé par capacité `manage_options` et nonce, chiffrement AES-256-GCM avec contexte dédié, option non autoloadée. La clé n’est jamais réaffichée ; un champ vide conserve la valeur existante. Les constantes et variables serveur priment. Changer les salts impose de renseigner de nouveau la clé.
 
-Enregistrer ne modifie ni l’activation de l’assistant, ni le modèle, ni les sources. Aucun appel facturable n’est lancé à l’enregistrement. Tests : 21 assertions de configuration OpenAI, 22 de configuration Stripe, 21 IA avec OpenAI simulé. La validité de la nouvelle clé et la qualité des réponses réelles restent à vérifier après sa saisie par le propriétaire.
+Enregistrer ne modifie ni l’activation de l’assistant, ni le modèle, ni les sources. Aucun appel facturable n’est lancé à l’enregistrement. Tests : 21 assertions de configuration OpenAI, 22 de configuration Stripe, 21 IA avec OpenAI simulé. La nouvelle clé fonctionne. La recette réelle, les corrections et les limites avant ouverture sont consignées dans [RECETTE-IA.md](RECETTE-IA.md).
