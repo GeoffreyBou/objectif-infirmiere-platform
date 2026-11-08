@@ -1,6 +1,6 @@
 # Recette de l’assistant IA — app-dev
 
-État au 8 novembre 2026, version **0.3.0-rc.93**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
+État au 8 novembre 2026, version **0.3.0-rc.94**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
 
 ## Configuration actuelle
 
@@ -86,6 +86,14 @@ Après déploiement, la question exacte a été rejouée avec et sans recherche 
 Vérification navigateur du loader avec réponses simulées retardées : bureau et mobile, animations réduites, disparition après succès, erreur et changement de page, bouton réactivé et saisie conservée après erreur. Les appels réels de qualité ci-dessus sont distincts de ce test de présentation.
 
 L’attente apparaît dans la conversation, au-dessus du formulaire : mascotte, message de préparation, points et barre animés sans pourcentage fictif. Le composant disparaît à la réception ou à l’échec ; le texte saisi reste disponible après une erreur. Les animations respectent la préférence de réduction des mouvements.
+
+## Crédits épuisés (rc94)
+
+À zéro crédit IA, « Poser ma question » reste cliquable et ouvre une fenêtre expliquant le solde : recharge pour un membre Premium, offre Premium pour un compte gratuit. Le clic fonctionne aussi si le champ est vide, sans lancer d’appel IA. Le curseur d’attente est limité à une requête réellement en cours. Un refus serveur `oi_no_credit` après un changement de solde dans un autre onglet ouvre la même fenêtre et actualise le compteur.
+
+La fermeture (croix, Plus tard, Échap) conserve la saisie et restitue le focus. Le passage par le bouton de recharge/Premium mémorise temporairement la question et l’option de recherche en mémoire de la page pour les restaurer au retour dans l’assistant, sans stockage persistant ni envoi automatique. Ce brouillon ne survit pas au rechargement complet de la page.
+
+Recette navigateur bureau/mobile avec réponses API simulées : gratuit/Premium, champ vide ou rempli, consommation du dernier crédit, refus serveur 402, retour depuis les offres, saisie conservée et focus. Aucune requête IA facturable ni paiement lancé pour cette recette d’interface.
 
 ## À poursuivre avant le lancement sur le domaine principal
 

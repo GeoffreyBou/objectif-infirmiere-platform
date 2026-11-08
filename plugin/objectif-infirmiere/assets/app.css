@@ -784,3 +784,13 @@
 @keyframes oi-ai-search{0%{transform:translateX(-105%)}100%{transform:translateX(360%)}}
 @media(max-width:600px){.oi-ai-pending{gap:14px;padding:18px 16px}.oi-ai-pending-avatar{flex-basis:54px;width:54px;height:54px}.oi-ai-pending-avatar img{width:48px;height:48px}.oi-ai-pending-copy strong{font-size:13px}.oi-ai-pending-copy p{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.oi-ai-pending-dots i,.oi-ai-pending-track:after{animation:none}.oi-ai-pending-track:after{transform:translateX(70%)}}
+
+/* Empty AI wallet: actionable dialog, never a permanent loading cursor. */
+.oi-app .oi-chat-composer button:disabled{cursor:not-allowed}.oi-app .oi-chat-composer[aria-busy=true] button:disabled{cursor:wait}
+.oi-app .oi-ai-credit-dialog{box-sizing:border-box;width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow:auto;margin:auto;padding:30px;border:1px solid #d2e2ff;border-radius:24px;background:linear-gradient(150deg,#fff,#f0f6ff);color:#17365e;box-shadow:0 24px 80px #0c2b5c33;text-align:center}
+.oi-ai-credit-dialog::backdrop{background:#102b514d;backdrop-filter:blur(4px)}
+.oi-ai-credit-dialog>img{display:block;width:80px;height:80px;object-fit:contain;margin:0 auto 14px}.oi-ai-credit-dialog>.oi-eyebrow{font-size:9px;color:#5275a5;letter-spacing:1.4px}
+.oi-ai-credit-dialog h2{font-size:25px;line-height:1.25;margin:12px 0}.oi-ai-credit-dialog p{font-size:14px;line-height:1.75;color:#506c92;margin:0 0 23px}.oi-ai-credit-dialog small{display:block;font-size:11px;line-height:1.6;color:#6880a1;margin-top:17px}
+.oi-app .oi-ai-credit-close{position:absolute;right:12px;top:12px;display:grid;place-items:center;width:34px;height:34px;min-height:34px;padding:0;border:0;border-radius:50%;background:#eaf2ff;color:#42628f;font-size:24px;line-height:1}
+.oi-ai-credit-actions{display:grid;gap:10px}.oi-app .oi-ai-credit-actions button{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;white-space:normal;background:#3155df;border:1px solid #3155df;color:#fff;font-size:13px}.oi-app .oi-ai-credit-actions button:hover{background:#2446c7}.oi-app .oi-ai-credit-actions .oi-ai-credit-later{background:transparent;color:#46658e;border-color:#d1def1}.oi-app .oi-ai-credit-actions .oi-ai-credit-later:hover{background:#e8f0ff}
+@media(max-width:600px){.oi-app .oi-ai-credit-dialog{padding:28px 22px}.oi-ai-credit-dialog h2{font-size:23px}}
