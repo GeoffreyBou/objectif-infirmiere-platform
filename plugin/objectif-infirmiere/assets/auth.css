@@ -19,3 +19,6 @@
 /* Catalogue highlights shared by login and registration. */
 .oi-auth-reform{display:flex;align-items:center;gap:8px;width:fit-content;max-width:100%;margin:0 0 22px;padding:9px 12px;border:1px solid #d1e3ff;border-radius:9px;background:#e8f2ff;color:#215ab5;font-size:11px;font-weight:800;line-height:1.5}
 .oi-auth-reform>span{font-size:17px;line-height:1;flex-shrink:0}.oi-auth-preview h2{margin-top:0}.oi-auth-preview .oi-auth-mascot{margin-top:0}
+
+/* Keep both desktop columns close to the header, including on tall screens. */
+@media(min-width:761px){.oi-auth-story,.oi-auth-panel{padding-top:40px}.oi-auth-story h1{margin-top:0}.oi-auth-panel{justify-content:flex-start}}
