@@ -1,6 +1,6 @@
 # Raccordement Stripe et préparation de l’assistant
 
-État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.75**. L’utilisateur a reporté les essais IA. Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
+État vérifié le **8 novembre 2026**, sur app-dev, version **0.3.0-rc.76**. Le raccordement OpenAI est prêt à recevoir la nouvelle clé avant les essais IA. Stripe est raccordé en mode **TEST uniquement** ; aucun argent réel n’a été débité.
 
 ## Configuration Stripe
 
@@ -49,3 +49,9 @@ Validation automatisée : stockage et configuration 22 assertions, Stripe 20, re
 ## Retour arrière
 
 Archive rc.74 conservée hors Git. La réinstallation de rc.74 laisse les options chiffrées en base mais ne les lit plus ; le raccordement devient indisponible si les constantes serveur ne sont pas renseignées. Les paiements et remboursements doivent rester dans le journal ; ne pas restaurer aveuglément une ancienne base.
+
+## Raccordement OpenAI (rc76)
+
+Formulaire administrateur `wp-admin/admin.php?page=oi-settings#oi-ai-connection`, champ « Clé API OpenAI ». Enregistrement protégé par capacité `manage_options` et nonce, chiffrement AES-256-GCM avec contexte dédié, option non autoloadée. La clé n’est jamais réaffichée ; un champ vide conserve la valeur existante. Les constantes et variables serveur priment. Changer les salts impose de renseigner de nouveau la clé.
+
+Enregistrer ne modifie ni l’activation de l’assistant, ni le modèle, ni les sources. Aucun appel facturable n’est lancé à l’enregistrement. Tests : 21 assertions de configuration OpenAI, 22 de configuration Stripe, 21 IA avec OpenAI simulé. La validité de la nouvelle clé et la qualité des réponses réelles restent à vérifier après sa saisie par le propriétaire.

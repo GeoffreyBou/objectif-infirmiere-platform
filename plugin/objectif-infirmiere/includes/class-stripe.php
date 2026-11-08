@@ -4,7 +4,8 @@ final class OI_Stripe {
     public static function secret(string $name): string {
         if (defined($name)) { return (string)constant($name); }
         $value = (string)getenv($name);
-        return $value !== '' ? $value : OI_Stripe_Secrets::get($name);
+        if ($value !== '') { return $value; }
+        return $name === 'OI_OPENAI_API_KEY' ? OI_AI_Secrets::get($name) : OI_Stripe_Secrets::get($name);
     }
     public static function configured(): bool {
         $key = self::secret('OI_STRIPE_SECRET_KEY');

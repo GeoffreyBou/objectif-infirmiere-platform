@@ -18,9 +18,9 @@ final class OI_Settings {
     }
     public static function page(): void {
         if(!current_user_can('manage_options'))return;
-        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Configuration serveur (ou formulaire sécurisé ci-dessous pour Stripe) : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
+        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Configuration serveur (ou formulaires sécurisés ci-dessous pour Stripe et OpenAI) : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
         foreach(['OI_STRIPE_SECRET_KEY','OI_STRIPE_WEBHOOK_SECRET','OI_OPENAI_API_KEY'] as $name) echo '<li>'.esc_html($name).' : '.(OI_Stripe::secret($name)?'présent':'absent').'</li>';
-        echo '</ul>'; OI_Stripe_Secrets::form();
+        echo '</ul>'; OI_Stripe_Secrets::form(); OI_AI_Secrets::form();
         echo '<form method="post" action="options.php">';settings_fields('oi_settings');
         echo '<p><label>Pack Premium à 59 € <select name="oi_premium_pack"><option value="0">À configurer</option>';
         foreach(get_posts(['post_type'=>'oi_pack','post_status'=>'publish','numberposts'=>-1]) as $pack)echo '<option value="'.(int)$pack->ID.'" '.selected(OI_Offer::pack(),$pack->ID,false).'>'.esc_html($pack->post_title).'</option>';echo '</select></label></p><input type="hidden" name="oi_ai_enabled" value="0"><p><label><input type="checkbox" name="oi_ai_enabled" value="1" '.checked((bool)get_option('oi_ai_enabled',false),true,false).'> Activer le conseiller IA après validation réelle de Responses et des sources</label></p><p>Quand cette case n’est pas cochée, le conseiller reste présenté en préparation et aucun crédit IA n’est consommé.</p>';
