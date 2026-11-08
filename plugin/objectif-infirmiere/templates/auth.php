@@ -1,7 +1,5 @@
 <?php
 defined('ABSPATH') || exit;
-$interest = isset($_GET['interest']) && is_string($_GET['interest']) ? sanitize_key(wp_unslash($_GET['interest'])) : 'hygiene';
-if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'hygiene'; }
 ?>
 <main class="oi-auth">
     <a class="oi-auth-skip" href="#oi-auth-form">Aller au formulaire</a>
@@ -49,11 +47,6 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                             <div class="oi-auth-field"><label for="oi-register-first-name">Ton prénom</label><input id="oi-register-first-name" name="first_name" type="text" placeholder="Camille" autocomplete="given-name" maxlength="80" required></div>
                             <div class="oi-auth-field"><label for="oi-register-email">Ton adresse e-mail</label><input id="oi-register-email" name="email" type="email" placeholder="camille@exemple.fr" autocomplete="email" maxlength="100" required></div>
                             <div class="oi-auth-field"><label for="oi-register-password">Crée ton mot de passe</label><div class="oi-auth-password"><input id="oi-register-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="4096" aria-describedby="oi-password-help" required><button type="button" class="oi-auth-password-toggle" data-oi-password-toggle="oi-register-password" aria-controls="oi-register-password" aria-label="Afficher le mot de passe" aria-pressed="false" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path class="oi-auth-eye-slash" d="m4 4 16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div><small id="oi-password-help">12 caractères minimum. Une phrase facile à retenir, c’est encore mieux.</small></div>
-                            <fieldset class="oi-auth-topics"><legend>Par quoi tu aimerais commencer ? <span>Au choix</span></legend><div>
-                                <label><input name="interest" type="radio" value="hygiene" <?php checked($interest, 'hygiene'); ?>><span>Hygiène</span></label>
-                                <label><input name="interest" type="radio" value="calculs" <?php checked($interest, 'calculs'); ?>><span>Calculs de doses</span></label>
-                                <label><input name="interest" type="radio" value="cardio" <?php checked($interest, 'cardio'); ?>><span>Cardiologie</span></label>
-                            </div></fieldset>
                             <div class="oi-auth-trap" aria-hidden="true"><label for="oi-register-website">Votre site web</label><input id="oi-register-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
                             <label class="oi-auth-check"><input type="checkbox" name="consent" value="1" required><span>Je souhaite créer mon compte Objectif Infirmière pour accéder à mon espace de révision.<?php if (get_privacy_policy_url()) : ?> <a href="<?php echo esc_url(get_privacy_policy_url()); ?>">Confidentialité</a><?php endif; ?></span></label>
                             <button class="oi-auth-submit" type="submit">Créer mon compte gratuit <span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
@@ -68,7 +61,6 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                     <p class="oi-auth-switch"><?php if ($mode === 'login') : ?>Pas encore de compte ? <a href="<?php echo esc_url(OI_App::url('register')); ?>">Découvrir gratuitement</a><?php else : ?>Déjà dans l’aventure ? <a href="<?php echo esc_url(OI_App::url('login')); ?>">Se connecter</a><?php endif; ?></p>
                 </div>
             <?php endif; ?>
-            <p class="oi-auth-panel-footer"><span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span> Un espace personnel. Une ambition qui t’appartient.</p>
         </section>
     </div>
 </main>
