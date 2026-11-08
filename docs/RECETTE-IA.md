@@ -1,6 +1,6 @@
 # Recette de l’assistant IA — app-dev
 
-État au 8 novembre 2026, version **0.3.0-rc.95**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
+État au 8 novembre 2026, version **0.3.0-rc.96**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
 
 ## Configuration actuelle
 
@@ -100,6 +100,12 @@ Recette navigateur bureau/mobile avec réponses API simulées : gratuit/Premium,
 La même fenêtre traite désormais les trois types de crédit, avec le libellé et l’explication adaptés. Les cartes de fiches/QCM verrouillées, la série QCM au bas d’une fiche et la fiche associée à un QCM passent par l’endpoint de déblocage existant, y compris lorsque le solde affiché est nul : le serveur reste l’autorité sur les accès et les crédits. Un refus `oi_no_credit` ouvre la fenêtre sur place ; seul « Découvrir le Premium » mène à l’offre. « Plus tard » conserve le contenu, la recherche et le focus. Les accès déjà débloqués et les déblocages réussis suivent leur parcours habituel.
 
 Le bandeau orange de l’assistant est supprimé ; le compteur reste visible et la fenêtre explique le manque de crédits au clic. Recette navigateur avec crédits simulés : les quatre emplacements Fiche/QCM, aucun changement de page au refus, destination Premium sur action explicite, ouverture normale avec crédit, absence de bandeau et régression complète du dialogue IA gratuit/Premium. Aucun paiement ni déblocage réel pour ces tests d’interface.
+
+## Animation pendant l’attente (rc96)
+
+Le réglage `prefers-reduced-motion: reduce` arrêtait complètement les points et la barre, reproduisant le rendu figé signalé. Ce mode conserve désormais une variation lente d’opacité, sans déplacement ; le mode normal garde les points animés et la barre mobile. Un temps écoulé réel, mesuré côté navigateur, complète l’indicateur (« En cours · 4 s »), sans prétendre mesurer la progression du serveur. Il n’est pas annoncé toutes les secondes aux lecteurs d’écran. Le minuteur est arrêté après succès, échec ou changement de page.
+
+Vérification navigateur avec réponse différée simulée : comparaison de plusieurs images d’animation calculées en mode normal et réduit, variation d’opacité et absence de translation en mode réduit, progression du temps écoulé, nettoyage après succès/erreur/navigation, affichage mobile. Aucun appel IA facturable pour cette recette visuelle.
 
 ## À poursuivre avant le lancement sur le domaine principal
 
