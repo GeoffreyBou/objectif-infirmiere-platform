@@ -18,9 +18,10 @@ final class OI_Settings {
     }
     public static function page(): void {
         if(!current_user_can('manage_options'))return;
-        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Secrets à définir côté serveur, jamais ici ni dans Git : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
+        echo '<div class="wrap"><h1>Réglages Objectif Infirmière</h1><p>Stripe : mode TEST uniquement. Configurez les Price IDs et Product IDs dans chaque pack.</p><p>Webhook : <code>'.esc_html(rest_url('oi/v1/stripe/webhook')).'</code></p><p>Configuration serveur (ou formulaire sécurisé ci-dessous pour Stripe) : <code>OI_STRIPE_SECRET_KEY</code>, <code>OI_STRIPE_WEBHOOK_SECRET</code>, <code>OI_OPENAI_API_KEY</code>.</p><ul>';
         foreach(['OI_STRIPE_SECRET_KEY','OI_STRIPE_WEBHOOK_SECRET','OI_OPENAI_API_KEY'] as $name) echo '<li>'.esc_html($name).' : '.(OI_Stripe::secret($name)?'présent':'absent').'</li>';
-        echo '</ul><form method="post" action="options.php">';settings_fields('oi_settings');
+        echo '</ul>'; OI_Stripe_Secrets::form();
+        echo '<form method="post" action="options.php">';settings_fields('oi_settings');
         echo '<p><label>Pack Premium à 59 € <select name="oi_premium_pack"><option value="0">À configurer</option>';
         foreach(get_posts(['post_type'=>'oi_pack','post_status'=>'publish','numberposts'=>-1]) as $pack)echo '<option value="'.(int)$pack->ID.'" '.selected(OI_Offer::pack(),$pack->ID,false).'>'.esc_html($pack->post_title).'</option>';echo '</select></label></p><input type="hidden" name="oi_ai_enabled" value="0"><p><label><input type="checkbox" name="oi_ai_enabled" value="1" '.checked((bool)get_option('oi_ai_enabled',false),true,false).'> Activer le conseiller IA après validation réelle de Responses et des sources</label></p><p>Quand cette case n’est pas cochée, le conseiller reste présenté en préparation et aucun crédit IA n’est consommé.</p>';
         echo '<p><label>Recharge de 100 crédits IA — 10 € : Stripe Price ID TEST<br><input class="regular-text" name="oi_ai_recharge_price" value="'.esc_attr(get_option('oi_ai_recharge_price','')).'" placeholder="price_…"></label></p><p>Recharge ponctuelle réservée aux membres Premium sans crédit IA. La vente reste désactivée tant que le conseiller IA ou le paiement ne sont pas configurés.</p>';

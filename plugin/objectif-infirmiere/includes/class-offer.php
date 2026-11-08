@@ -28,7 +28,7 @@ final class OI_Offer {
     }
     public static function public_offer(): array {
         $ids=self::catalogue();$pack=self::pack();
-        return ['pack_id'=>$pack,'amount'=>5900,'currency'=>'EUR','payment_mode'=>'test','available'=>(bool)($pack&&get_post_meta($pack,'oi_price',true)&&OI_Stripe::secret('OI_STRIPE_SECRET_KEY')),'fiches'=>count($ids),'qcm'=>count(array_filter($ids,fn($id)=>(bool)OI_Revision::quiz($id))),'demo'=>(bool)($ids&&count(array_filter($ids,fn($id)=>str_contains((string)get_post_field('post_content',$id),'démonstration'))))];
+        return ['pack_id'=>$pack,'amount'=>5900,'currency'=>'EUR','payment_mode'=>'test','available'=>(bool)($pack&&get_post_meta($pack,'oi_price',true)&&OI_Stripe::configured()),'fiches'=>count($ids),'qcm'=>count(array_filter($ids,fn($id)=>(bool)OI_Revision::quiz($id))),'demo'=>(bool)($ids&&count(array_filter($ids,fn($id)=>str_contains((string)get_post_field('post_content',$id),'démonstration'))))];
     }
     public static function register(): void {
         register_rest_route('oi/v1','/account',['methods'=>'GET','permission_callback'=>[self::class,'member'],'callback'=>[self::class,'account']]);

@@ -2,7 +2,13 @@
 defined('ABSPATH') || exit;
 final class OI_Stripe {
     public static function secret(string $name): string {
-        return defined($name) ? (string)constant($name) : (string)getenv($name);
+        if (defined($name)) { return (string)constant($name); }
+        $value = (string)getenv($name);
+        return $value !== '' ? $value : OI_Stripe_Secrets::get($name);
+    }
+    public static function configured(): bool {
+        $key = self::secret('OI_STRIPE_SECRET_KEY');
+        return $key !== '' && !preg_match('/^(sk|rk)_live_/', $key) && self::secret('OI_STRIPE_WEBHOOK_SECRET') !== '';
     }
     public static function register(): void {
         register_rest_route('oi/v1', '/checkout', ['methods' => 'POST', 'permission_callback' => [OI_API::class, 'auth'], 'callback' => [self::class, 'checkout']]);
@@ -29,6 +35,7 @@ final class OI_Stripe {
         if (get_post_type($pack) !== 'oi_pack' || get_post_status($pack) !== 'publish' || !preg_match('/^price_[A-Za-z0-9]+$/', $price)) {
             return new WP_Error('oi_pack', 'Ce pack n’est pas disponible à l’achat.', ['status' => 400]);
         }
+        if (!self::configured()) { return new WP_Error('oi_stripe_config', 'Le raccordement Stripe TEST et son webhook ne sont pas encore configurés.', ['status'=>503]); }
         $verified_price = self::request('GET', 'prices/' . rawurlencode($price));
         if (is_wp_error($verified_price)) { return $verified_price; }
         if (($verified_price['livemode'] ?? true) !== false || ($verified_price['active'] ?? false) !== true || ($verified_price['type'] ?? '') !== 'one_time') { return new WP_Error('oi_price_test', 'Un prix Stripe TEST actif et ponctuel est requis.', ['status' => 400]); }
