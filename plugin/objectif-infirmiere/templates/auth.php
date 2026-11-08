@@ -13,17 +13,15 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
     </header>
     <div class="oi-auth-layout">
         <section class="oi-auth-story" aria-labelledby="oi-auth-title">
-            <span class="oi-auth-eyebrow"><span aria-hidden="true"></span> TON CAP : LE DIPLÔME INFIRMIER</span>
             <h1 id="oi-auth-title"><?php echo $mode === 'login' ? 'Ta prochaine <br>réussite commence<br><em>aujourd’hui.</em>' : 'De l’envie <br>de soigner à<br><em>la fierté de réussir.</em>'; ?></h1>
-            <p class="oi-auth-intro">Anatomie, hygiène, pharmacologie… Fais le lien entre tes cours d’IFSI et les notions que tu retrouveras en stage. Une révision à la fois.</p>
             <div class="oi-auth-preview" aria-label="Les outils de ton espace">
+                <div class="oi-auth-reform"><span aria-hidden="true">✦</span> Mise à jour Réforme 2026</div>
                 <img class="oi-auth-mascot" src="<?php echo esc_url(OI_URL . 'assets/brand/mascot.png'); ?>" width="500" height="500" alt="La mascotte infirmière d’Objectif Infirmière" loading="lazy">
-                <div class="oi-auth-preview-top"><span>DU COURS AUX SOINS</span><span class="oi-auth-preview-dot" aria-hidden="true"></span></div>
-                <h2>Un peu plus prête.<br>À chaque révision.</h2>
+                <h2>Une plateforme complète pour t’aider</h2>
                 <ul>
-                    <li><span aria-hidden="true">01</span><span><strong>5 fiches à choisir</strong><small>Organise tes connaissances, UE après UE.</small></span></li>
-                    <li><span aria-hidden="true">02</span><span><strong>5 séries de QCM à débloquer</strong><small>Comprends tes erreurs et progresse.</small></span></li>
-                    <li><span aria-hidden="true">03</span><span><strong>5 crédits pour ton conseiller IA</strong><small>L’espace IA se prépare pour tes questions.</small></span></li>
+                    <li><span aria-hidden="true">01</span><span><strong>760 Fiches en ligne</strong><small>Organise tes connaissances, UE après UE.</small></span></li>
+                    <li><span aria-hidden="true">02</span><span><strong>14.000 QCM pour s’entraîner</strong><small>Comprends tes erreurs et progresse.</small></span></li>
+                    <li><span aria-hidden="true">03</span><span><strong>Un conseiller soignant IA</strong><small>Approfondit les notions et s’adapte à ton profil.</small></span></li>
                 </ul>
                 <div class="oi-auth-preview-bottom"><span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Objectif diplôme. Un pas après l’autre.</div>
             </div>
@@ -59,7 +57,7 @@ if (!in_array($interest, ['hygiene','calculs','cardio'], true)) { $interest = 'h
                             <div class="oi-auth-trap" aria-hidden="true"><label for="oi-register-website">Votre site web</label><input id="oi-register-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
                             <label class="oi-auth-check"><input type="checkbox" name="consent" value="1" required><span>Je souhaite créer mon compte Objectif Infirmière pour accéder à mon espace de révision.<?php if (get_privacy_policy_url()) : ?> <a href="<?php echo esc_url(get_privacy_policy_url()); ?>">Confidentialité</a><?php endif; ?></span></label>
                             <button class="oi-auth-submit" type="submit">Créer mon compte gratuit <span aria-hidden="true"><svg class="oi-auth-symbol" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 18 12-12M6 6h12v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
-                            <p class="oi-auth-footnote">Les crédits sont offerts une seule fois après vérification de ton e-mail. Le conseiller IA reste en préparation.</p>
+                            <p class="oi-auth-footnote">Les crédits sont offerts une seule fois après vérification de ton e-mail.</p>
                         <?php else : ?>
                             <div class="oi-auth-field"><label for="user_login">Adresse e-mail ou identifiant</label><input id="user_login" name="log" type="text" autocomplete="username" placeholder="camille@exemple.fr" maxlength="254" required></div>
                             <div class="oi-auth-field"><label for="user_pass">Mot de passe</label><div class="oi-auth-password"><input id="user_pass" name="pwd" type="password" autocomplete="current-password" maxlength="4096" required><button type="button" class="oi-auth-password-toggle" data-oi-password-toggle="user_pass" aria-controls="user_pass" aria-label="Afficher le mot de passe" aria-pressed="false" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path class="oi-auth-eye-slash" d="m4 4 16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div></div>
