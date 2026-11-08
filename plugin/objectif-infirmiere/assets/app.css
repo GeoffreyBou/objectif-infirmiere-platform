@@ -778,15 +778,13 @@
 .oi-ai-pending-avatar{display:grid;place-items:center;flex:0 0 76px;width:76px;height:76px;border-radius:50%;background:#e2edff;box-shadow:0 0 0 6px #eef5ff}
 .oi-ai-pending-avatar img{width:64px;height:64px;object-fit:contain}
 .oi-ai-pending-copy{flex:1;min-width:0}.oi-ai-pending-copy strong{display:flex;align-items:center;flex-wrap:wrap;gap:10px;color:#193f73;font-size:15px;line-height:1.5}
-.oi-ai-pending-copy p{margin:6px 0 14px;color:#58769c;font-size:12px;line-height:1.7}
-.oi-ai-pending-dots{display:inline-flex;gap:4px;align-items:center;height:12px}.oi-ai-pending-dots i{width:5px;height:5px;border-radius:50%;background:#4169e1;animation:oi-loading-dot 1.5s ease-in-out infinite}.oi-ai-pending-dots i:nth-child(2){animation-delay:.18s}.oi-ai-pending-dots i:nth-child(3){animation-delay:.36s}
-.oi-ai-pending-track{display:block;height:3px;max-width:240px;border-radius:4px;background:#dce8fa;overflow:hidden}.oi-ai-pending-track:after{content:"";display:block;width:40%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7db3ff,#4162df);animation:oi-ai-search 1.8s ease-in-out infinite}
-@keyframes oi-ai-search{0%{transform:translateX(-105%)}100%{transform:translateX(360%)}}
+.oi-ai-pending-copy p{margin:6px 0 0;color:#58769c;font-size:12px;line-height:1.7}
+.oi-ai-pending-dots{display:inline-flex;gap:5px;align-items:center;height:18px;--oi-dot-jump:-5px}.oi-app .oi-ai-pending-dots i{display:block;width:6px;height:6px;border-radius:50%;background:#4169e1;animation:oi-ai-dot-hop 1.5s ease-in-out infinite!important}.oi-app .oi-ai-pending-dots i:nth-child(2){animation-delay:.5s!important}.oi-app .oi-ai-pending-dots i:nth-child(3){animation-delay:1s!important}
+@keyframes oi-ai-dot-hop{0%,32%,100%{opacity:.5;transform:translateY(0)}16%{opacity:1;transform:translateY(var(--oi-dot-jump))}}
 @media(max-width:600px){.oi-ai-pending{gap:14px;padding:18px 16px}.oi-ai-pending-avatar{flex-basis:54px;width:54px;height:54px}.oi-ai-pending-avatar img{width:48px;height:48px}.oi-ai-pending-copy strong{font-size:13px}.oi-ai-pending-copy p{font-size:11px}}
-.oi-ai-pending-progress{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.oi-ai-pending-progress .oi-ai-pending-track{flex:1 1 100px;width:240px}.oi-ai-pending-time{font-size:11px;font-variant-numeric:tabular-nums;line-height:1.5;color:#58769c;white-space:nowrap}
-@keyframes oi-ai-soft-pulse{0%,100%{opacity:.35}50%{opacity:1}}
-/* Reduced motion retains a slow opacity cue, with no bouncing or travelling bar. */
-@media(prefers-reduced-motion:reduce){.oi-app .oi-ai-pending-dots i{animation:oi-ai-soft-pulse 2.4s ease-in-out infinite!important;transform:none!important}.oi-app .oi-ai-pending-dots i:nth-child(2){animation-delay:.3s!important}.oi-app .oi-ai-pending-dots i:nth-child(3){animation-delay:.6s!important}.oi-ai-pending-track:after{animation:oi-ai-soft-pulse 2.4s ease-in-out infinite;transform:translateX(70%)}}
+/* A smaller, slower hop keeps the requested waiting cue legible with reduced motion. */
+@media(prefers-reduced-motion:reduce){.oi-ai-pending-dots{--oi-dot-jump:-3px}.oi-app .oi-ai-pending-dots i{animation-duration:1.8s!important}.oi-app .oi-ai-pending-dots i:nth-child(2){animation-delay:.6s!important}.oi-app .oi-ai-pending-dots i:nth-child(3){animation-delay:1.2s!important}}
+
 
 /* Empty AI wallet: actionable dialog, never a permanent loading cursor. */
 .oi-app .oi-chat-composer button:disabled{cursor:not-allowed}.oi-app .oi-chat-composer[aria-busy=true] button:disabled{cursor:wait}

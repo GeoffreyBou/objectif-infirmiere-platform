@@ -413,15 +413,9 @@
       const buttonLabel=button.innerHTML;
       button.disabled=true;button.textContent='Réponse en cours…';e.target.setAttribute('aria-busy','true');status();
       const pending=document.createElement('div');pending.className='oi-ai-pending';pending.setAttribute('role','status');pending.setAttribute('aria-atomic','true');
-      pending.innerHTML=`<div class="oi-ai-pending-avatar"><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="64" height="64"></div><div class="oi-ai-pending-copy"><strong>Ton assistant prépare ta réponse<span class="oi-ai-pending-dots" aria-hidden="true"><i></i><i></i><i></i></span></strong><p>${research?'Il croise tes fiches avec les références de santé pour t’aider à comprendre.':'Il explore tes fiches pour t’aider à comprendre et faire les liens.'}</p><div class="oi-ai-pending-progress" aria-hidden="true"><span class="oi-ai-pending-track"></span><span class="oi-ai-pending-time">En cours</span></div></div>`;
+      pending.innerHTML=`<div class="oi-ai-pending-avatar"><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="64" height="64"></div><div class="oi-ai-pending-copy"><strong>Ton assistant prépare ta réponse<span class="oi-ai-pending-dots" aria-hidden="true"><i></i><i></i><i></i></span></strong><p>${research?'Il croise tes fiches avec les références de santé pour t’aider à comprendre.':'Il explore tes fiches pour t’aider à comprendre et faire les liens.'}</p></div>`;
       document.querySelector('#oi-answer').append(pending);
       pending.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-      const pendingStarted=performance.now();
-      const pendingTimer=setInterval(()=>{
-        if(!pending.isConnected||sequence!==routeSequence){clearInterval(pendingTimer);pending.remove();return;}
-        const elapsed=Math.floor((performance.now()-pendingStarted)/1000);
-        pending.querySelector('.oi-ai-pending-time').textContent=`En cours · ${elapsed<60?elapsed+' s':Math.floor(elapsed/60)+' min '+String(elapsed%60).padStart(2,'0')+' s'}`;
-      },1000);
       try {
         aiRequestId ||= crypto.randomUUID();
         const answer=await api('ai',{question,fiche_id:context?.id || 0,request_id:aiRequestId,research});
@@ -439,7 +433,7 @@
             account.balances.IA=0;syncAccountNavigation();document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent='0');status();showEmptyCredits();
           }else error(e);
         }
-      } finally {clearInterval(pendingTimer);pending.remove();e.target.removeAttribute('aria-busy');button.innerHTML=buttonLabel;button.disabled=!account.ai_available;}
+      } finally {pending.remove();e.target.removeAttribute('aria-busy');button.innerHTML=buttonLabel;button.disabled=!account.ai_available;}
     });
     window.scrollTo({top:0,behavior:'smooth'});
   }

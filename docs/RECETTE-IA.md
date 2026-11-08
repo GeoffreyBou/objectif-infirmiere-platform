@@ -1,6 +1,6 @@
 # Recette de l’assistant IA — app-dev
 
-État au 8 novembre 2026, version **0.3.0-rc.96**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
+État au 8 novembre 2026, version **0.3.0-rc.98**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
 
 ## Configuration actuelle
 
@@ -106,6 +106,12 @@ Le bandeau orange de l’assistant est supprimé ; le compteur reste visible et 
 Le réglage `prefers-reduced-motion: reduce` arrêtait complètement les points et la barre, reproduisant le rendu figé signalé. Ce mode conserve désormais une variation lente d’opacité, sans déplacement ; le mode normal garde les points animés et la barre mobile. Un temps écoulé réel, mesuré côté navigateur, complète l’indicateur (« En cours · 4 s »), sans prétendre mesurer la progression du serveur. Il n’est pas annoncé toutes les secondes aux lecteurs d’écran. Le minuteur est arrêté après succès, échec ou changement de page.
 
 Vérification navigateur avec réponse différée simulée : comparaison de plusieurs images d’animation calculées en mode normal et réduit, variation d’opacité et absence de translation en mode réduit, progression du temps écoulé, nettoyage après succès/erreur/navigation, affichage mobile. Aucun appel IA facturable pour cette recette visuelle.
+
+## Loader simplifié à trois points (rc98)
+
+À la demande du propriétaire, la barre et le temps écoulé de rc96 sont retirés, ainsi que le minuteur JavaScript. Seuls trois points sautent successivement, avec un décalage d’un tiers de cycle. Le mode réduit conserve un saut plus petit et plus lent. La mascotte et les textes restent en place.
+
+Recette navigateur avec réponse différée simulée : absence de barre et de compteur, trois phases calculées montrant un seul point levé à la fois, animation effectivement active dans les deux modes, bureau/mobile et disparition après succès, erreur ou navigation. Aucun appel IA facturable.
 
 ## À poursuivre avant le lancement sur le domaine principal
 
