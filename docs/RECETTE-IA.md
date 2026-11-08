@@ -1,6 +1,6 @@
 # Recette de l’assistant IA — app-dev
 
-État au 8 novembre 2026, version **0.3.0-rc.94**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
+État au 8 novembre 2026, version **0.3.0-rc.95**. Les **757 fiches publiées** sont indexées et à jour. La base documentaire n’expire plus. Le service est activé sur app-dev pour les essais membres, avec GPT-4.1. Aucun changement sur le domaine principal.
 
 ## Configuration actuelle
 
@@ -94,6 +94,12 @@ L’attente apparaît dans la conversation, au-dessus du formulaire : mascotte, 
 La fermeture (croix, Plus tard, Échap) conserve la saisie et restitue le focus. Le passage par le bouton de recharge/Premium mémorise temporairement la question et l’option de recherche en mémoire de la page pour les restaurer au retour dans l’assistant, sans stockage persistant ni envoi automatique. Ce brouillon ne survit pas au rechargement complet de la page.
 
 Recette navigateur bureau/mobile avec réponses API simulées : gratuit/Premium, champ vide ou rempli, consommation du dernier crédit, refus serveur 402, retour depuis les offres, saisie conservée et focus. Aucune requête IA facturable ni paiement lancé pour cette recette d’interface.
+
+## Fenêtre commune Fiche / QCM / IA (rc95)
+
+La même fenêtre traite désormais les trois types de crédit, avec le libellé et l’explication adaptés. Les cartes de fiches/QCM verrouillées, la série QCM au bas d’une fiche et la fiche associée à un QCM passent par l’endpoint de déblocage existant, y compris lorsque le solde affiché est nul : le serveur reste l’autorité sur les accès et les crédits. Un refus `oi_no_credit` ouvre la fenêtre sur place ; seul « Découvrir le Premium » mène à l’offre. « Plus tard » conserve le contenu, la recherche et le focus. Les accès déjà débloqués et les déblocages réussis suivent leur parcours habituel.
+
+Le bandeau orange de l’assistant est supprimé ; le compteur reste visible et la fenêtre explique le manque de crédits au clic. Recette navigateur avec crédits simulés : les quatre emplacements Fiche/QCM, aucun changement de page au refus, destination Premium sur action explicite, ouverture normale avec crédit, absence de bandeau et régression complète du dialogue IA gratuit/Premium. Aucun paiement ni déblocage réel pour ces tests d’interface.
 
 ## À poursuivre avant le lancement sur le domaine principal
 

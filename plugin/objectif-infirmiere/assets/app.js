@@ -63,15 +63,6 @@
     const target = document.querySelector('#oi-status');
     if (target) { target.setAttribute('role','status'); target.textContent = message; }
   }
-  function notifyEmptyCredits(kind) {
-    document.querySelector('.oi-credit-notice')?.remove();
-    const notice=document.createElement('aside');
-    notice.className='oi-credit-notice';
-    const quiz=kind==='QCM';
-    notice.innerHTML=`<span class="oi-credit-notice-icon">${icon('lock')}</span><div role="status" aria-live="polite"><strong>Tes crédits ${quiz?'QCM':'Fiche'} sont épuisés.</strong><p>Tu as été redirigé vers l’offre Premium pour débloquer ${quiz?'cette série et accéder à tous les QCM':'cette fiche et accéder à toutes les fiches'}.</p></div><button type="button" aria-label="Fermer la notification">×</button>`;
-    notice.querySelector('button').addEventListener('click',()=>notice.remove());
-    view.append(notice);
-  }
   function navButton(tab, label, glyph) {
     return `<button type="button" data-tab="${tab}" ${currentTab===tab?'aria-current="page"':''}>${icon(glyph)}<span>${label}</span>${tab==='ai'?'<span class="oi-nav-tag">IA</span>':''}</button>`;
   }
@@ -83,7 +74,6 @@
     if (loading) screen().append(loading);
   }
   function setTab(tab, ficheId=null) {
-    document.querySelector('.oi-credit-notice')?.remove();
     const url=new URL(location.href);
     const sameReader=ficheId!==null&&url.searchParams.get('view')===tab&&url.searchParams.get('fiche')===String(ficheId);
     url.searchParams.set('view',tab);
@@ -148,7 +138,7 @@
   function card(item, quizMode=false) {
     const topic = subject(item), kind=quizMode?'QCM':'FICHE';
     const accessible=!!item.access?.[kind], available=Number(account?.balances?.[kind]||0);
-    const action=accessible?`data-${quizMode?'quiz-fiche':'fiche'}="${Number(item.id)}"`:available>0?`data-unlock="${Number(item.id)}" data-kind="${kind}"`:'data-tab="premium"';
+    const action=accessible?`data-${quizMode?'quiz-fiche':'fiche'}="${Number(item.id)}"`:`data-unlock="${Number(item.id)}" data-kind="${kind}"`;
     const label=accessible?(quizMode?'Commencer le QCM':item.state?.revised?'Révisée':'Ouvrir la fiche'):(available>0?`Débloquer ${quizMode?'l’entraînement':'la fiche'}`:'Passer Premium');
     return `<button type="button" class="oi-card oi-fiche-card oi-tone-${topic.color} ${accessible?'is-unlocked':'is-locked'}" data-art="${artFamily(item)}" ${action}><span class="oi-card-top">${item.cover?`<img class="oi-card-cover" src="${esc(item.thumbnail||item.cover)}" alt="" loading="lazy" width="88" height="88">`:`<span class="oi-subject-icon">${icon(quizMode?'quiz':topic.icon)}</span>`}<span class="oi-card-badge">${accessible?(account?.administrator?'Accès administrateur':account?.premium?'Inclus dans mon accès':'Débloquée'):icon('lock')+' Verrouillée'}</span></span><span class="oi-eyebrow">${esc(topic.name)}</span><h3>${esc(item.title)}</h3><span class="oi-card-description">${quizMode?`${Number(item.quiz_count)} question(s) · Correction expliquée`:'Les repères pour comprendre et retenir.'}</span><span class="oi-card-bottom"><span>${label}</span><span class="oi-card-action-end">${!accessible&&available>0?'<span class="oi-credit-cost">1 crédit</span>':''}${icon('arrow')}</span></span>${item.state?.favorite?'<span class="oi-card-favorite" aria-label="En favori">'+icon('heart')+'</span>':''}</button>`;
   }
@@ -309,7 +299,7 @@
   }
   function associatedFiche(data) {
     const accessible=!!data.access?.FICHE, credits=Number(account?.balances?.FICHE||0);
-    const action=accessible?`data-fiche="${Number(data.id)}"`:credits?`data-unlock="${Number(data.id)}" data-kind="FICHE"`:'data-tab="premium"';
+    const action=accessible?`data-fiche="${Number(data.id)}"`:`data-unlock="${Number(data.id)}" data-kind="FICHE"`;
     const label=accessible?'Ouvrir la fiche':credits?'Débloquer la fiche — 1 crédit Fiche':'Découvrir le Premium';
     return `<section class="oi-qcm-associated" aria-labelledby="oi-qcm-associated-title"><div class="oi-qcm-associated-art" aria-hidden="true">${data.cover?`<img src="${esc(data.thumbnail||data.cover)}" alt="" width="100" height="100" loading="lazy">`:icon('book')}</div><div class="oi-qcm-associated-copy"><p class="oi-eyebrow">Fiche associée au QCM</p><h2 id="oi-qcm-associated-title">${esc(data.title)}</h2><p>Retrouve les notions clés et les explications du cours.</p></div><button type="button" ${action}>${label}${icon(accessible?'arrow':'lock')}</button></section>`;
   }
@@ -374,18 +364,20 @@
       } catch(e) { if (sequence === routeSequence) error(e); } finally { button.disabled=false; }
     });
   }
-  function showEmptyAICredits() {
+  function showEmptyCredits(kind='IA', origin=document.activeElement) {
+    if(!['IA','FICHE','QCM'].includes(kind))return;
     if(document.querySelector('.oi-ai-credit-dialog'))return;
-    const premiumMember=!!account?.premium;
-    const origin=document.activeElement;
+    const isAI=kind==='IA', premiumMember=isAI&&!!account?.premium;
+    const title=`Tu n’as plus de crédits ${kind==='FICHE'?'Fiche':kind}.`;
+    const description=isAI?(premiumMember?'Recharge ton assistant pour continuer à poser tes questions. Tes fiches et tes QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 crédits IA supplémentaires et l’accès aux fiches et aux QCM en illimité.'):`Passe en Premium pour débloquer ${kind==='QCM'?'cette série de QCM':'cette fiche'} et accéder aux fiches et aux QCM en illimité. Tes contenus déjà débloqués restent accessibles.`;
     const dialog=document.createElement('dialog');dialog.className='oi-ai-credit-dialog';
     dialog.setAttribute('aria-labelledby','oi-ai-credit-title');dialog.setAttribute('aria-describedby','oi-ai-credit-description');
-    dialog.innerHTML=`<button type="button" class="oi-ai-credit-close" aria-label="Fermer">×</button><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="80" height="80"><span class="oi-eyebrow">ON CONTINUE ENSEMBLE ?</span><h2 id="oi-ai-credit-title">Tu n’as plus de crédits IA.</h2><p id="oi-ai-credit-description">${premiumMember?'Recharge ton assistant pour continuer à poser tes questions. Tes fiches et tes QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 crédits IA supplémentaires et l’accès aux fiches et aux QCM en illimité.'}</p><div class="oi-ai-credit-actions"><button type="button" data-credit-continue>${premiumMember?'Recharger mon assistant':'Découvrir le Premium'} ${icon('arrow')}</button><button type="button" class="oi-ai-credit-later">Plus tard</button></div><small>Tu peux fermer cette fenêtre sans perdre ta question.</small>`;
+    dialog.innerHTML=`<button type="button" class="oi-ai-credit-close" aria-label="Fermer">×</button><img src="${esc(OI.brandUrl)}mascot.png" alt="" width="80" height="80"><span class="oi-eyebrow">ON CONTINUE ENSEMBLE ?</span><h2 id="oi-ai-credit-title">${title}</h2><p id="oi-ai-credit-description">${description}</p><div class="oi-ai-credit-actions"><button type="button" data-credit-continue>${premiumMember?'Recharger mon assistant':'Découvrir le Premium'} ${icon('arrow')}</button><button type="button" class="oi-ai-credit-later">Plus tard</button></div><small>${isAI?'Tu peux fermer cette fenêtre sans perdre ta question.':'Tu peux fermer cette fenêtre et continuer tes révisions.'}</small>`;
     dialog.addEventListener('close',()=>{dialog.remove();if(origin?.isConnected)origin.focus();},{once:true});
     for(const button of dialog.querySelectorAll('.oi-ai-credit-close,.oi-ai-credit-later'))button.addEventListener('click',()=>dialog.close());
     dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(e.clientX<rect.left||e.clientX>rect.right||e.clientY<rect.top||e.clientY>rect.bottom)dialog.close();});
     dialog.querySelector('[data-credit-continue]').addEventListener('click',async()=>{
-      aiDraft={question:document.querySelector('#oi-question')?.value||'',research:!!document.querySelector('#oi-research')?.checked};
+      if(isAI)aiDraft={question:document.querySelector('#oi-question')?.value||'',research:!!document.querySelector('#oi-research')?.checked};
       dialog.close();try{if(premiumMember)await recharge();else await premium();}catch(e){error(e);}
     });
     view.append(dialog);dialog.showModal();
@@ -405,16 +397,16 @@
     if(!await loadAccount())return;
     if(openingSequence!==routeSequence)return;
     aiRequestId=null;
-    screen().innerHTML = `<nav class="oi-breadcrumb"><button type="button" data-home>${icon('back')} Mes révisions</button><span>Ton espace pour comprendre</span></nav><section class="oi-chat-page"><header class="oi-chat-header"><div class="oi-chat-identity"><img class="oi-chat-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="112" height="112"><span class="oi-eyebrow">TON ASSISTANT PERSONNEL SOIGNANT</span></div><h1>Une question.<br><em>Un nouveau déclic.</em></h1></header>${!account.ai_available?'<p class="oi-chat-availability">L’assistant est en préparation. Découvre son espace ; les réponses seront disponibles prochainement.</p>':''}${Number(account.balances.IA)===0?`<p class="oi-credit-empty">${account.premium?'Tes crédits IA sont épuisés. Tes fiches et QCM restent accessibles.':'Tes questions gratuites sont épuisées. Le Premium inclut 100 questions supplémentaires.'}</p>`:''}<p class="oi-chat-intro">Reformuler une notion, relier deux idées, préparer une révision.<br>Tu n’as plus à rester bloqué devant ton cours.</p>${goalContext?`<div class="oi-chat-context">${icon('pulse')} Mon objectif : <strong>${esc(goalContext.title)}</strong></div>`:''}${context?`<div class="oi-chat-context">${icon('book')} On parle de : <strong>${esc(context.title)}</strong></div>`:''}<div class="oi-chat-suggestions"><button type="button" data-prompt="Aide-moi à approfondir le rôle de la surveillance infirmière et les liens entre observations, risques et actions.">${icon('book')} Approfondir une notion ${icon('arrow')}</button><button type="button" data-prompt="Aide-moi à réviser les points clés de la surveillance des traitements.">${icon('quiz')} Préparer ma révision ${icon('arrow')}</button><button type="button" data-prompt="Comment relier les effets d’un médicament à sa surveillance infirmière ?">${icon('pulse')} Faire le lien avec les soins ${icon('arrow')}</button></div><div id="oi-answer" class="oi-conversation" aria-live="polite"></div><p class="oi-question-balance"><strong data-balance="IA">${Number(account.balances.IA)}</strong> question(s) IA disponible(s) · 1 crédit par réponse réussie</p><button type="button" class="oi-recharge-entry" data-recharge-shortcut data-tab="recharge" ${canRecharge()?'':'hidden'}>${icon('spark')}Recharger mon assistant ${icon('arrow')}</button><form id="oi-chat" class="oi-chat-composer"><label for="oi-question">Qu’est-ce que tu veux éclaircir ?</label><textarea id="oi-question" required maxlength="2000" rows="3" placeholder="Explique-moi cette notion simplement…"></textarea>${account.ai_research_available?'<label class="oi-ai-research"><input type="checkbox" id="oi-research"> Consulter aussi les recommandations officielles</label>':''}<div><span>Un assistant pour apprendre, à ton rythme.</span><button type="submit" ${!account.ai_available?'disabled':''}>Poser ma question ${icon('send')}</button></div></form><p id="oi-status" role="status"></p><p class="oi-ai-privacy">${icon('shield')} Assistant IA automatisé dédié aux révisions et aux soins. N’indiquer aucune donnée de patient. Les réponses sont produites à partir de nos fiches et de recherches approfondies mais restent à vérifier avec tes cours et les protocoles ; elles ne remplacent en aucun cas l’avis d’un professionnel de santé.</p></section>`;
+    screen().innerHTML = `<nav class="oi-breadcrumb"><button type="button" data-home>${icon('back')} Mes révisions</button><span>Ton espace pour comprendre</span></nav><section class="oi-chat-page"><header class="oi-chat-header"><div class="oi-chat-identity"><img class="oi-chat-mascot" src="${esc(OI.brandUrl)}mascot.png" alt="" width="112" height="112"><span class="oi-eyebrow">TON ASSISTANT PERSONNEL SOIGNANT</span></div><h1>Une question.<br><em>Un nouveau déclic.</em></h1></header>${!account.ai_available?'<p class="oi-chat-availability">L’assistant est en préparation. Découvre son espace ; les réponses seront disponibles prochainement.</p>':''}<p class="oi-chat-intro">Reformuler une notion, relier deux idées, préparer une révision.<br>Tu n’as plus à rester bloqué devant ton cours.</p>${goalContext?`<div class="oi-chat-context">${icon('pulse')} Mon objectif : <strong>${esc(goalContext.title)}</strong></div>`:''}${context?`<div class="oi-chat-context">${icon('book')} On parle de : <strong>${esc(context.title)}</strong></div>`:''}<div class="oi-chat-suggestions"><button type="button" data-prompt="Aide-moi à approfondir le rôle de la surveillance infirmière et les liens entre observations, risques et actions.">${icon('book')} Approfondir une notion ${icon('arrow')}</button><button type="button" data-prompt="Aide-moi à réviser les points clés de la surveillance des traitements.">${icon('quiz')} Préparer ma révision ${icon('arrow')}</button><button type="button" data-prompt="Comment relier les effets d’un médicament à sa surveillance infirmière ?">${icon('pulse')} Faire le lien avec les soins ${icon('arrow')}</button></div><div id="oi-answer" class="oi-conversation" aria-live="polite"></div><p class="oi-question-balance"><strong data-balance="IA">${Number(account.balances.IA)}</strong> question(s) IA disponible(s) · 1 crédit par réponse réussie</p><button type="button" class="oi-recharge-entry" data-recharge-shortcut data-tab="recharge" ${canRecharge()?'':'hidden'}>${icon('spark')}Recharger mon assistant ${icon('arrow')}</button><form id="oi-chat" class="oi-chat-composer"><label for="oi-question">Qu’est-ce que tu veux éclaircir ?</label><textarea id="oi-question" required maxlength="2000" rows="3" placeholder="Explique-moi cette notion simplement…"></textarea>${account.ai_research_available?'<label class="oi-ai-research"><input type="checkbox" id="oi-research"> Consulter aussi les recommandations officielles</label>':''}<div><span>Un assistant pour apprendre, à ton rythme.</span><button type="submit" ${!account.ai_available?'disabled':''}>Poser ma question ${icon('send')}</button></div></form><p id="oi-status" role="status"></p><p class="oi-ai-privacy">${icon('shield')} Assistant IA automatisé dédié aux révisions et aux soins. N’indiquer aucune donnée de patient. Les réponses sont produites à partir de nos fiches et de recherches approfondies mais restent à vérifier avec tes cours et les protocoles ; elles ne remplacent en aucun cas l’avis d’un professionnel de santé.</p></section>`;
     if(!goalContext&&!draftPrompt&&aiDraft){draftPrompt=aiDraft.question;if(document.querySelector('#oi-research'))document.querySelector('#oi-research').checked=aiDraft.research;aiDraft=null;}
     if(goalContext||draftPrompt){document.querySelector('#oi-question').value=goalContext?goalContext.assistant_prompt:draftPrompt;document.querySelector('#oi-question').focus();}
-    document.querySelector('#oi-chat button[type=submit]').addEventListener('click',e=>{if(Number(account.balances.IA)===0&&!e.currentTarget.disabled){e.preventDefault();showEmptyAICredits();}});
+    document.querySelector('#oi-chat button[type=submit]').addEventListener('click',e=>{if(Number(account.balances.IA)===0&&!e.currentTarget.disabled){e.preventDefault();showEmptyCredits();}});
     document.querySelector('#oi-chat').addEventListener('submit', async e=>{
       e.preventDefault();
       const button=e.target.querySelector('button[type=submit]');
       const question=document.querySelector('#oi-question').value.trim();
       if(button.disabled)return;
-      if(Number(account.balances.IA)===0){showEmptyAICredits();return;}
+      if(Number(account.balances.IA)===0){showEmptyCredits();return;}
       if(!question)return;
       const sequence=routeSequence;
       const research=!!document.querySelector('#oi-research')?.checked;
@@ -438,7 +430,7 @@
         if(e.status)aiRequestId=null;
         if(sequence===routeSequence){
           if(e.code==='oi_no_credit'){
-            account.balances.IA=0;syncAccountNavigation();document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent='0');status();showEmptyAICredits();
+            account.balances.IA=0;syncAccountNavigation();document.querySelectorAll('[data-balance=IA]').forEach(el=>el.textContent='0');status();showEmptyCredits();
           }else error(e);
         }
       } finally {pending.remove();e.target.removeAttribute('aria-busy');button.innerHTML=buttonLabel;button.disabled=!account.ai_available;}
@@ -454,9 +446,18 @@
       if(b.hasAttribute('data-refresh-account'))await dashboard();
       if(b.hasAttribute('data-resend')){b.disabled=true;try{await api('verify/resend',{});status('Un nouveau lien a été envoyé. Vérifie ta boîte mail et les indésirables.');}finally{b.disabled=false;}}
       if(b.dataset.unlock){
-        if(!await loadAccount())return;
+        const kind=b.dataset.kind, sequence=routeSequence;
         b.disabled=true;
-        try{const result=await api('unlock',{id:Number(b.dataset.unlock),kind:b.dataset.kind});account=result.account;syncAccountNavigation();await fiche(Number(b.dataset.unlock),b.dataset.kind==='QCM');}catch(e){if(e.code==='oi_no_credit'){await premium();if(currentTab==='premium'&&!account.premium){notifyEmptyCredits(b.dataset.kind);status('Tes contenus déjà débloqués restent accessibles.');}}else throw e;}finally{b.disabled=false;}
+        try{
+          if(!await loadAccount())return;
+          const result=await api('unlock',{id:Number(b.dataset.unlock),kind});account=result.account;syncAccountNavigation();
+          if(sequence===routeSequence)await fiche(Number(b.dataset.unlock),kind==='QCM');
+        }catch(e){
+          if(e.code==='oi_no_credit'){
+            if(account?.balances&&['FICHE','QCM'].includes(kind)){account.balances[kind]=0;syncAccountNavigation();}
+            if(sequence===routeSequence){status();showEmptyCredits(kind,b);}
+          }else throw e;
+        }finally{b.disabled=false;}
       }
       if(b.hasAttribute('data-print-fiche')&&activeFiche&&document.querySelector('.oi-reader .oi-content'))window.print();
       if((b.hasAttribute('data-reader-unit')||b.hasAttribute('data-reader-theme'))&&activeFiche){
