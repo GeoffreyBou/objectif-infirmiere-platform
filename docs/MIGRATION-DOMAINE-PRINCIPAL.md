@@ -1,6 +1,18 @@
 # Bascule vers objectif-infirmiere.fr
 
-État du 8 novembre 2026 : préparation en cours. **Le domaine principal n’a pas été modifié.**
+## Reprise du 10 novembre 2026
+
+Selon le compte rendu du propriétaire, la plateforme est désormais installée sur `objectif-infirmiere.fr` : 757 fiches, leurs illustrations et QCM ont été importés, les connexions OpenAI et Google Drive transférées, les articles historiques et l’ancienne page d’accueil conservés. Les sauvegardes des deux sites et le relevé SEO avaient été téléchargés et vérifiés dans l’environnement précédent. **Cet état distant reste à revérifier après l’interruption.**
+
+La nouvelle instance a retrouvé sur GitHub la branche `feature/freemium-premium`, commit `0046959`, version `0.3.0-rc.102`. La branche `main` est restée en 0.2.2. Les sauvegardes, lots et manifestes privés de l’ancienne instance ne sont pas présents dans ce checkout ; ne pas les considérer perdus ni les remplacer sans rechercher leur stockage d’origine. D’éventuelles modifications de code non poussées dans l’ancienne instance restent à récupérer et comparer au plugin installé.
+
+À la reprise, le proxy refuse les connexions aux deux domaines (CONNECT 403) et aucun binding WordPress n’est déclaré dans cette instance. Rétablir les accès réseau et les bindings existants `OI_WP_PROD_APPLICATION_PASSWORD` (principal) et `OI_WP_APPLICATION_PASSWORD` (app-dev), sans saisir de secrets dans Git ou le chat. Faire ensuite l’inventaire distant en lecture seule et récupérer la version installée avant toute mise à jour.
+
+Ordre de poursuite : vérifier le catalogue et relier le Premium ; configurer et valider Stripe LIVE ; créer l’index IA propre au principal et tester les crédits ; vérifier les pages publiques et les parcours ; basculer l’accueil et contrôler le SEO ; retirer les outils temporaires après validation. Préserver les URL des articles, leurs canoniques et un lien discret vers les articles. Aucun changement de DNS prévu.
+
+## Préparation historique du 8 novembre 2026
+
+Les sections suivantes décrivent la préparation avant l’import, et ne constituent pas un inventaire actuel du domaine principal.
 
 ## Architecture retenue
 
